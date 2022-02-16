@@ -12,7 +12,7 @@ code {
 }
 
 :root {
-  --main-bg-color: black;
+  --main-bg-color: transparent;
 }
 
 html {

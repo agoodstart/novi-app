@@ -1,14 +1,31 @@
 import "./Login.css";
 import React, { useState } from 'react';
 import axios from "axios";
+import { useAuth } from "../auth";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [user, setUser] = useState("");
 
-  const handleSubmit = (event) => {
-    console.log(event);
-    alert('Form submitted: ' + event.target.value);
+  const auth = useAuth();
+
+  const handleLogin = () => {
+    auth.login(user);
+  }
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    const user = {username, password};
+    const response = await axios.post('https://frontend-educational-backend.herokuapp.com/api/auth/signin', 
+    user
+    );
+
+    setUser(user);
+
+    localStorage.setItem('user', response.data);
+    console.log(response.data);
   }
 
     return (
@@ -18,11 +35,21 @@ export default function Login() {
             <form onSubmit={handleSubmit}>
               <label>
                 <p>Username</p>
-                <input type="text" id="username" name="username" />
+                <input 
+                  type="text" 
+                  id="username" 
+                  value={username} 
+                  name="username"
+                  onChange={({ target }) => setUsername(target.value)} />
               </label>
               <label>
                 <p>Password</p>
-                <input type="password" id="password" name="password" />
+                <input 
+                  type="password" 
+                  id="password" 
+                  value={password} 
+                  name="password"
+                  onChange={({ target }) => setPassword(target.value)} />
               </label>
               <div>
                 <button type="submit">Submit</button>

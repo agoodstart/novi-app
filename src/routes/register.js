@@ -5,7 +5,7 @@ export default function Register() {
           <h1>Registreer je account</h1>
             <form>
               <label>
-                <p>Username</p>
+                <p>Gebruikersnaam</p>
                 <input type="text" />
               </label>
               <label>
