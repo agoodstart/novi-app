@@ -8,8 +8,6 @@ import {
 
 import './index.css';
 import App from './App';
-import Expenses from "./routes/expenses";
-import Invoices from "./routes/invoices";
 
 import reportWebVitals from './reportWebVitals';
 
@@ -17,13 +15,7 @@ const rootElement = document.getElementById("root");
 
 render(
   <React.StrictMode>
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<App />} />
-      <Route path="expenses" element={<Expenses />} />
-      <Route path="invoices" element={<Invoices />} />
-    </Routes>
-  </BrowserRouter>,
+    <App />
   </React.StrictMode>,
   rootElement
 );

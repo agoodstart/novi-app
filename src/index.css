@@ -11,6 +11,10 @@ code {
     box-sizing: inherit;
 }
 
+:root {
+  --main-bg-color: black;
+}
+
 html {
   font-size: 62.5%;
 }
