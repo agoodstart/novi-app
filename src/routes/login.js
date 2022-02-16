@@ -6,33 +6,34 @@ import { useAuth } from "../auth";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState("");
 
   const auth = useAuth();
 
-  const handleLogin = () => {
-    auth.login(user);
-  }
-
-  const handleSubmit = async e => {
+  const handleLogin = async e => {
     e.preventDefault();
-
     const user = {username, password};
-    const response = await axios.post('https://frontend-educational-backend.herokuapp.com/api/auth/signin', 
-    user
-    );
-
-    setUser(user);
-
-    localStorage.setItem('user', response.data);
-    console.log(response.data);
+    await auth.login(user);
   }
+
+  // const handleSubmit = async e => {
+  //   e.preventDefault();
+
+    
+  //   const response = await axios.post('https://frontend-educational-backend.herokuapp.com/api/auth/signin', 
+  //   user
+  //   );
+
+  //   setUser(user);
+
+  //   localStorage.setItem('user', response.data);
+  //   console.log(response.data);
+  // }
 
     return (
       <main style={{ padding: "1rem 0" }}>
         <div className="login-wrapper">
           <h1>Please Log In</h1>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleLogin}>
               <label>
                 <p>Username</p>
                 <input 
