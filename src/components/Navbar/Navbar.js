@@ -8,7 +8,7 @@ const Navbar = () => {
   const menuList = MenuList.map(({ url, title }, index) => {
     return (
       <li key={index}>
-        <NavLink exact to={url} activeClassName="active">
+        <NavLink to={url}>
           {title}
         </NavLink>
       </li>

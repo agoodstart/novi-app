@@ -1,6 +1,5 @@
 import "./Login.css";
 import React, { useState } from 'react';
-import axios from "axios";
 import { useAuth } from "../auth";
 
 export default function Login() {
@@ -14,20 +13,6 @@ export default function Login() {
     const user = {username, password};
     await auth.login(user);
   }
-
-  // const handleSubmit = async e => {
-  //   e.preventDefault();
-
-    
-  //   const response = await axios.post('https://frontend-educational-backend.herokuapp.com/api/auth/signin', 
-  //   user
-  //   );
-
-  //   setUser(user);
-
-  //   localStorage.setItem('user', response.data);
-  //   console.log(response.data);
-  // }
 
     return (
       <main style={{ padding: "1rem 0" }}>

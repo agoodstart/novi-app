@@ -1,25 +1,30 @@
 import { createContext, useContext, useState } from "react";
-import axios from "axios";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
 
-    const login = async userIn => {
-        const response = await axios.post('https://frontend-educational-backend.herokuapp.com/api/auth/signin', 
-        {
-            username: userIn.username,
-            password: userIn.password
+    const login = async credentials => {
+        const response = await fetch('https://frontend-educational-backend.herokuapp.com/api/auth/signin', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(credentials)
         });
 
-        console.log(response.data);
-
-        setUser(response.data);
+        // const responseData = await response.json();
+        
+        // if(responseData)
     }
 
     const logout = () => {
         setUser(null);
+    }
+
+    const register = () => {
+        
     }
 
     return (
