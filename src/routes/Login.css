@@ -1,3 +1,11 @@
 .login-wrapper {
+    margin-top: 3rem;
     background-color: var(--main-bg-color);
+}
+
+main {
+    padding: 1rem 0px;
+    display: flex;
+    font-size: 1.5rem;
+    justify-content: center;
 }

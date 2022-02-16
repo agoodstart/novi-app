@@ -14,9 +14,7 @@ export const AuthProvider = ({ children }) => {
             body: JSON.stringify(credentials)
         });
 
-        // const responseData = await response.json();
-        
-        // if(responseData)
+        console.log(response.status);
     }
 
     const logout = () => {
