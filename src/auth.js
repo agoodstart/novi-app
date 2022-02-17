@@ -1,21 +1,10 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import jwt_decode from 'jwt-decode';
-import axios from 'axios';
 
 const AuthContext = createContext(null);
 
-axios.interceptors.response.use((res) => {
-    console.log(res);
-    return res;
-})
-
-
-axios.interceptors.request.use((req) => {
-    console.log(req);
-    return req;
-})
-
 export const AuthProvider = ({ children }) => {
+    const [authToken, setAuthToken] = useState(null);
     const [user, setUser] = useState(null);
 
     const login = async credentials => {
@@ -26,13 +15,13 @@ export const AuthProvider = ({ children }) => {
             },
             body: JSON.stringify(credentials)
         });
-        let data = await response.json();
+        let token = (await response.json()).accessToken;
 
         if (response.status === 200) {
-            let decoded = jwt_decode(data.accessToken)
-            console.log(decoded);
-            setUser(data);
-            console.log(data)
+            console.log(token);
+            console.log(jwt_decode(token));
+            setAuthToken(token)
+            setUser(jwt_decode(token));
         } else if (response.status === 401) {
             console.log(response);
             console.log('Gegevens onjuist, of het account is nog niet geregistreerd. Probeer het opnieuw, of maak een account aan.');
@@ -40,6 +29,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const logout = () => {
+        setAuthToken(null);
         setUser(null);
     }
 
@@ -47,8 +37,19 @@ export const AuthProvider = ({ children }) => {
         
     }
 
+    useEffect(() => {
+      if(authToken) {
+          console.log('authtoken set')
+          console.log(authToken);
+          console.log(user);
+      } else{
+          console.log('authtoken not set yet')
+      }
+    }, [authToken])
+    
+
     return (
-        <AuthContext.Provider value={{ user, login, logout}}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={{ user, authToken, login, logout}}>{children}</AuthContext.Provider>
     )
 }
 
