@@ -4,7 +4,7 @@ import jwt_decode from 'jwt-decode';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    const [authToken, setAuthToken] = useState(null);
+    const [accessToken, setAccessToken] = useState(null);
     const [user, setUser] = useState(null);
 
     const login = async credentials => {
@@ -18,18 +18,15 @@ export const AuthProvider = ({ children }) => {
         let token = (await response.json()).accessToken;
 
         if (response.status === 200) {
-            console.log(token);
-            console.log(jwt_decode(token));
-            setAuthToken(token)
+            setAccessToken(token)
             setUser(jwt_decode(token));
         } else if (response.status === 401) {
-            console.log(response);
             console.log('Gegevens onjuist, of het account is nog niet geregistreerd. Probeer het opnieuw, of maak een account aan.');
         }
     }
 
     const logout = () => {
-        setAuthToken(null);
+        setAccessToken(null);
         setUser(null);
     }
 
@@ -38,18 +35,20 @@ export const AuthProvider = ({ children }) => {
     }
 
     useEffect(() => {
-      if(authToken) {
+      if(accessToken) {
           console.log('authtoken set')
-          console.log(authToken);
-          console.log(user);
+          console.log(accessToken);
+          console.log(user.sub);
       } else{
           console.log('authtoken not set yet')
       }
-    }, [authToken])
+    }, [user])
     
 
     return (
-        <AuthContext.Provider value={{ user, authToken, login, logout}}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={{ user, accessToken, login, logout}}>
+            {children}
+        </AuthContext.Provider>
     )
 }
 

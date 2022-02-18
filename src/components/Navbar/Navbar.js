@@ -24,10 +24,12 @@ const Navbar = () => {
       <div className="logo">
         VPN<font>Lab</font>
       </div>
-      <div className="menu-icon" onClick={handleClick}>
-        <i className={clicked ? "fas fa-times" : "fas fa-bars"}></i>
-      </div>
-      <ul className={clicked ? "menu-list" : "menu-list close"}>{menuList}</ul>
+      <ul className={clicked ? "menu-list" : "menu-list close"}>
+        {menuList}
+        <li>
+          <NavLink to='/profile'>profiel</NavLink>
+        </li>
+      </ul>
     </nav>
   );
 };
