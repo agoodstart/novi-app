@@ -7,9 +7,12 @@ import Home from './routes/Home';
 import Dashboard from './routes/Dashboard';
 import Login from './routes/Login.js';
 import Register from './routes/Register';
-import { AuthProvider } from './auth';
+import { AuthProvider } from './context/AuthContext';
+// import { AuthProvider } from './auth';
 
 export default function App() {
+  console.log(process.env.REACT_APP_API_URL);
+
   return (
     <AuthProvider>
       <div className="container">

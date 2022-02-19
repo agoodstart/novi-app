@@ -1,7 +1,8 @@
 import "./Login.css";
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../auth";
+// import { useAuth } from "../auth";
+import { useAuth } from "../context/AuthContext";
 import useHeader from "../services/auth-header";
 
 export default function Login() {
@@ -18,9 +19,8 @@ export default function Login() {
       username: e.target.username.value, 
       password: e.target.password.value
     };
-    
-    await auth.login(credentials);
-    navigate('/');
+    auth.login(credentials);
+    // navigate('/');
   }
 
   const fetchData = useCallback(async () => {
@@ -36,11 +36,11 @@ export default function Login() {
       <main style={{ padding: "1rem 0" }}>
         <div className="login-wrapper">
           <h1>Please Log In</h1>
-          {auth.user ? (
+          {/* {auth.user ? (
                  <p>{auth.user.sub} has logged in</p>
             ): (
                 <p>log in</p>
-            )}
+            )} */}
             <form onSubmit={handleLogin}>
               <label>
                 <p>Username</p>
