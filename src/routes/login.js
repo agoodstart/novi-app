@@ -30,7 +30,7 @@ export default function Login() {
     } catch(err) {
       console.log(err);
     }
-  });
+  }, []);
 
     return (
       <main style={{ padding: "1rem 0" }}>
