@@ -9,12 +9,16 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
 
     const login = (credentials) => {
-        AuthService.login(credentials)
+        return AuthService.login(credentials)
             .then(data => {
                 console.log(data)
+                return Promise.resolve('Login succeeded')
                 // setAccessToken(data.accessToken)
                 // setUser(jwt_decode(data.accessToken))
-            }, )
+            }, 
+            errorStatus => {
+                return Promise.reject(errorStatus);
+            })
     }
 
     const logout = () => {

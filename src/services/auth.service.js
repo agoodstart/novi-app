@@ -7,7 +7,10 @@ class AuthService {
             .then(response => {
 
                 return response.data;
-            });
+            }, 
+            err => {
+                return err.response.status;
+            }).catch(err => {console.log(err)});
     }
     logout() {
         let rememberMe = false;
