@@ -1,7 +1,8 @@
+import "@fontsource/roboto";
 import React from 'react';
 import {render} from 'react-dom';
 
-import './index.css';
+import './css/base/base.css';
 import App from './App';
 
 import reportWebVitals from './reportWebVitals';

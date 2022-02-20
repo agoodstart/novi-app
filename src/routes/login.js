@@ -1,8 +1,8 @@
-import "./Login.css";
-import React, { useState, useCallback, useReducer, useEffect } from 'react';
+import '../css/components/form.css'
+
+import React, { useReducer, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import useHeader from "../services/auth-header";
 
 const initialState = {
   username: '',
@@ -101,8 +101,8 @@ export default function Login() {
   }
 
   return (
-    <main style={{ padding: "1rem 0" }}>
-      <div className="login-wrapper">
+    <main>
+      <div className="form-wrapper">
         <h1>Log In</h1>
           <form onSubmit={e => e.preventDefault()}>
             <div className="form-group">
