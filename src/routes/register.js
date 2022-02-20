@@ -9,7 +9,15 @@ export default function Register() {
                 <input type="text" />
               </label>
               <label>
-                <p>Password</p>
+                <p>E-mail adres</p>
+                <input type="email" />
+              </label>
+              <label>
+                <p>Wachtwoord</p>
+                <input type="password" />
+              </label>
+              <label>
+                <p>Herhaal Wachtwoord</p>
                 <input type="password" />
               </label>
               <div>

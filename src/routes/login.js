@@ -1,72 +1,137 @@
 import "./Login.css";
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useReducer, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../auth";
+import { useAuth } from "../context/AuthContext";
 import useHeader from "../services/auth-header";
 
+const initialState = {
+  username: '',
+  password: '',
+  isButtonDisabled: true,
+  helperText: '',
+  isError: false,
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'setUsername':
+        return {
+            ...state,
+            username: action.payload
+        };
+    case 'setPassword':
+        return {
+            ...state,
+            password: action.payload
+        }
+    case 'setIsButtonDisabled':
+        return {
+            ...state,
+            isButtonDisabled: action.payload
+        }
+    case 'loginSuccess':
+        return {
+            ...state,
+            helperText: action.payload,
+            isError: false
+        };
+    case 'loginFailed':
+        return {
+            ...state,
+            helperText: action.payload,
+            isError: true
+        };
+    case 'setIsError':
+        return {
+            ...state,
+            isError: action.payload
+        };
+  }
+}
+
 export default function Login() {
-  const [requestError, setRequestError] = useState(null);
   const navigate = useNavigate();
-
   const auth = useAuth();
-  const api = useHeader();
 
-  const handleLogin = async e => {
-    e.preventDefault();
+  const [state, dispatch] = useReducer(reducer, initialState);
 
+  useEffect(() => {
+    if(state.username.trim() && state.password.trim()) {
+      dispatch({
+        type: 'setIsButtonDisabled',
+        payload: false
+      })
+    } else {
+      dispatch({
+        type: 'setIsButtonDisabled',
+        payload: true
+      })
+    }
+  }, [state.username, state.password]);
+
+  const handleLogin = () => {
     const credentials = {
-      username: e.target.username.value, 
-      password: e.target.password.value
+      username: state.username, 
+      password: state.password
     };
     
-    await auth.login(credentials);
-    navigate('/');
+    auth.login(credentials)
+      .then(lol => {
+        console.log(lol);
+      },
+      error => {
+        console.log(error);
+        console.log('Gegevens onjuist, of het account is nog niet geregistreerd. Probeer het opnieuw, of maak een account aan.');
+      })
+    // navigate('/');
   }
 
-  const fetchData = useCallback(async () => {
-    try {
-      const result = await api.get('/admin/all');
-      console.log(result.data);
-    } catch(err) {
-      console.log(err);
-    }
-  }, []);
+  const handleUserNameInput = e => {
+    dispatch({
+      type: 'setUsername',
+      payload: e.target.value
+    })
+  }
 
-    return (
-      <main style={{ padding: "1rem 0" }}>
-        <div className="login-wrapper">
-          <h1>Please Log In</h1>
-          {auth.user ? (
-                 <p>{auth.user.sub} has logged in</p>
-            ): (
-                <p>log in</p>
-            )}
-            <form onSubmit={handleLogin}>
-              <label>
-                <p>Username</p>
+  const handlePasswordInput = e => {
+    dispatch({
+      type: 'setPassword',
+      payload: e.target.value
+    })
+  }
+
+  return (
+    <main style={{ padding: "1rem 0" }}>
+      <div className="login-wrapper">
+        <h1>Log In</h1>
+          <form onSubmit={e => e.preventDefault()}>
+            <div className="form-group">
+              <label htmlFor="username">Username</label>
                 <input 
-                  type="text" 
+                  type="text"
                   id="username" 
-                  // value={username} 
                   name="username"
+                  onChange={handleUserNameInput}
                   />
-              </label>
-              <label>
-                <p>Password</p>
-                <input 
-                  type="password" 
-                  id="password" 
-                  // value={password} 
-                  name="password"
-                  />
-              </label>
-              <div>
-                <button type="submit">Submit</button>
-              </div>
-            </form>
-
-            <button onClick={() => fetchData()}>Fetch users</button>
-        </div>
-      </main>
-    );
-  }
+            </div>
+            <div className="form-group">
+            <label htmlFor="password">Password</label>
+              <input 
+                type="password" 
+                id="password"
+                name="password"
+                onChange={handlePasswordInput}
+                />
+            </div>
+            <div>
+              <button 
+                type="submit"
+                disabled={state.isButtonDisabled}
+                onClick={handleLogin}
+                >Submit</button>
+            </div>
+          </form>
+      </div>
+    </main>
+  );
+}
