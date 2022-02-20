@@ -12,9 +12,9 @@ export const AuthProvider = ({ children }) => {
         return AuthService.login(credentials)
             .then(data => {
                 console.log(data)
-                return Promise.resolve('Login succeeded')
                 // setAccessToken(data.accessToken)
                 // setUser(jwt_decode(data.accessToken))
+                return Promise.resolve('Login succeeded')
             }, 
             errorStatus => {
                 return Promise.reject(errorStatus);
@@ -24,6 +24,10 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         setAccessToken(null);
         setUser(null);
+    }
+
+    const register = () => {
+        return AuthService.register
     }
 
     useEffect(() => {
@@ -38,7 +42,7 @@ export const AuthProvider = ({ children }) => {
       
   
       return (
-          <AuthContext.Provider value={{ user, accessToken, login, logout}}>
+          <AuthContext.Provider value={{ user, accessToken, login, register, logout}}>
               {children}
           </AuthContext.Provider>
       )

@@ -3,6 +3,12 @@
     background-color: var(--main-bg-color);
 }
 
+.form-group {
+    display: flex;
+    flex-flow: column wrap;
+    margin-bottom: 1rem;
+}
+
 main {
     padding: 1rem 0px;
     display: flex;

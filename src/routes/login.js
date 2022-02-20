@@ -12,14 +12,7 @@ const initialState = {
   isError: false,
 };
 
-const Action = { type: 'setUsername', payload: String }
-  | { type: 'setPassword', payload: String }
-  | { type: 'setIsButtonDisabled', payload: Boolean }
-  | { type: 'loginSuccess', payload: String }
-  | { type: 'loginFailed', payload: String }
-  | { type: 'setIsError', payload: Boolean };
-
-const reducer = (state, action = Action) => {
+const reducer = (state, action) => {
   switch (action.type) {
     case 'setUsername':
         return {
@@ -59,7 +52,6 @@ const reducer = (state, action = Action) => {
 export default function Login() {
   const navigate = useNavigate();
   const auth = useAuth();
-  const api = useHeader();
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -94,12 +86,6 @@ export default function Login() {
     // navigate('/');
   }
 
-  const handleKeyPress = e => {
-    if(e.keyCode === 13 || e.which === 13) {
-      state.isButtonDisabled || handleLogin();
-    }
-  }
-
   const handleUserNameInput = e => {
     dispatch({
       type: 'setUsername',
@@ -114,56 +100,38 @@ export default function Login() {
     })
   }
 
-  const fetchData = useCallback(async () => {
-    try {
-      const result = await api.get('/admin/all');
-      console.log(result.data);
-    } catch(err) {
-      console.log(err);
-    }
-  }, []);
-
-    return (
-      <main style={{ padding: "1rem 0" }}>
-        <div className="login-wrapper">
-          <h1>Please Log In</h1>
-          {/* {auth.user ? (
-                 <p>{auth.user.sub} has logged in</p>
-            ): (
-                <p>log in</p>
-            )} */}
-            <form onSubmit={e => e.preventDefault()}>
-              <label>
-                <p>Username</p>
+  return (
+    <main style={{ padding: "1rem 0" }}>
+      <div className="login-wrapper">
+        <h1>Log In</h1>
+          <form onSubmit={e => e.preventDefault()}>
+            <div className="form-group">
+              <label htmlFor="username">Username</label>
                 <input 
-                  type="text" 
+                  type="text"
                   id="username" 
                   name="username"
                   onChange={handleUserNameInput}
-                  onKeyPress={handleKeyPress}
                   />
-              </label>
-              <label>
-                <p>Password</p>
-                <input 
-                  type="password" 
-                  id="password"
-                  name="password"
-                  onChange={handlePasswordInput}
-                  onKeyPress={handleKeyPress}
-                  />
-              </label>
-              <div>
-                <button 
-                  type="submit"
-                  disabled={state.isButtonDisabled}
-                  onClick={handleLogin}
-                  >Submit</button>
-              </div>
-            </form>
-
-            <button onClick={() => fetchData()}>Fetch users</button>
-        </div>
-      </main>
-    );
-  }
+            </div>
+            <div className="form-group">
+            <label htmlFor="password">Password</label>
+              <input 
+                type="password" 
+                id="password"
+                name="password"
+                onChange={handlePasswordInput}
+                />
+            </div>
+            <div>
+              <button 
+                type="submit"
+                disabled={state.isButtonDisabled}
+                onClick={handleLogin}
+                >Submit</button>
+            </div>
+          </form>
+      </div>
+    </main>
+  );
+}
