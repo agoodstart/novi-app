@@ -11,7 +11,6 @@ export const AuthProvider = ({ children }) => {
     const login = (credentials) => {
         return AuthService.login(credentials)
             .then(data => {
-                console.log(data)
                 // setAccessToken(data.accessToken)
                 // setUser(jwt_decode(data.accessToken))
                 return Promise.resolve('Login succeeded')
@@ -26,8 +25,15 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     }
 
-    const register = () => {
-        return AuthService.register
+    const register = (credentials) => {
+        return AuthService.register(credentials)
+            .then(_data => {
+                
+                return Promise.resolve('Registration success');
+            },
+            errorStatus => {
+                return Promise.reject(errorStatus);
+            })
     }
 
     useEffect(() => {

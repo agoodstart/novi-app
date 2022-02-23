@@ -18,4 +18,9 @@ body {
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
+    background-color: var(--white);
+}
+
+main {
+    padding: 1rem 0;
+}

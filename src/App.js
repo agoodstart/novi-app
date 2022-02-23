@@ -10,17 +10,17 @@ import { AuthProvider } from './context/AuthContext';
 export default function App() {
   return (
     <AuthProvider>
-      <div className="container">
-        <BrowserRouter>
-          <Navbar />
+      <BrowserRouter>
+        <Navbar />
+        <main>
           <Routes>
             <Route path="/" exact element={<Home />} />
             <Route path="/dashboard" exact element={<Dashboard />} />
             <Route path="/login" exact element={<Login />} />
-            <Route path="/registreren" exact element={<Register />} />
+            <Route path="/registreren" exact element={<Register />} />      
           </Routes>
-        </BrowserRouter>
-      </div>
+        </main>
+      </BrowserRouter>
     </AuthProvider>
   );
 }

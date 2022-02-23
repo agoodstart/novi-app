@@ -11,6 +11,7 @@ httpClient.interceptors.response.use(
         return res.data
     },
     err => {
+        console.log(err.response);
         const status = err.response?.status || 500;
 
         switch (status) {
@@ -32,7 +33,6 @@ class AuthService {
     login(credentials) {
         return httpClient.post('/auth/signin', credentials)
             .then(data => {
-                console.log(data);
                 return Promise.resolve(data);
             },
             err => {
@@ -47,6 +47,12 @@ class AuthService {
     }
     register(credentials) {
         return httpClient.post('/auth/signup', credentials)
+            .then(data => {
+                return Promise.resolve(data);
+            },
+            err => {
+                return Promise.reject(err);
+            })
     }
 }
 

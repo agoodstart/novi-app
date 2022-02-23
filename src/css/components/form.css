@@ -3,15 +3,17 @@
     background-color: var(--main-bg-color);
 }
 
-.form-group {
+.form__group {
     display: flex;
     flex-flow: column wrap;
-    margin-bottom: 1rem;
 }
 
-main {
-    padding: 1rem 0px;
-    display: flex;
-    font-size: 1.5rem;
-    justify-content: center;
+.form__group:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+
+.form__input {
+    padding: 1.5rem 2rem;
+    border-radius: 2px;
+    border: none;
 }

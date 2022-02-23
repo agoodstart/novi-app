@@ -101,37 +101,35 @@ export default function Login() {
   }
 
   return (
-    <main>
-      <div className="form-wrapper">
-        <h1>Log In</h1>
-          <form onSubmit={e => e.preventDefault()}>
-            <div className="form-group">
-              <label htmlFor="username">Username</label>
-                <input 
-                  type="text"
-                  id="username" 
-                  name="username"
-                  onChange={handleUserNameInput}
-                  />
-            </div>
-            <div className="form-group">
-            <label htmlFor="password">Password</label>
+    <div className="row">
+      <h1>Log In</h1>
+        <form onSubmit={e => e.preventDefault()}>
+          <div className="form__group">
+            <label htmlFor="username">Username</label>
               <input 
-                type="password" 
-                id="password"
-                name="password"
-                onChange={handlePasswordInput}
+                type="text"
+                id="username" 
+                name="username"
+                onChange={handleUserNameInput}
                 />
-            </div>
-            <div>
-              <button 
-                type="submit"
-                disabled={state.isButtonDisabled}
-                onClick={handleLogin}
-                >Submit</button>
-            </div>
-          </form>
-      </div>
-    </main>
+          </div>
+          <div className="form-group">
+          <label htmlFor="password">Password</label>
+            <input 
+              type="password" 
+              id="password"
+              name="password"
+              onChange={handlePasswordInput}
+              />
+          </div>
+          <div>
+            <button 
+              type="submit"
+              disabled={state.isButtonDisabled}
+              onClick={handleLogin}
+              >Submit</button>
+          </div>
+        </form>
+    </div>
   );
 }
