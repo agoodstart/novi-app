@@ -21,8 +21,11 @@ export default function App() {
             <Route path="/registreren" exact element={<Register />} />      
           </Routes>
         </main>
-        <Modal />
+ 
       </BrowserRouter>
+      <Modal >
+          This is modal content
+        </Modal>
     </AuthProvider>
   );
 }

@@ -1,28 +1,38 @@
 import { createPortal } from 'react-dom';
 import { useLayoutEffect, useState } from 'react';
 
-
+// Creating modalRootelement if it doesn't exist
 const createModalRoot = (modalRootId) => {
-    const modalRoot = document.createElement('div');
-    modalRoot.setAttribute('id', modalRootId);
-    document.body.appendChild(modalRootId);
-    return modalRoot;
+    const element = document.createElement('div');
+    element.setAttribute('id', modalRootId);
+    document.body.appendChild(element);
+    return element;
 }
 
 function ReactPortal({ children, modalRootId}) {
-    const [modalWrapperElement, setModalWrapperElement] = useState(null)
+    const [modalWrapperElement, setModalWrapperElement] = useState(null);
+    const [systemCreated, setSystemCreated] = useState(false);
 
-    let modalRoot = document.getElementById(modalRootId) ?? createModalRoot(modalRootId);
-
+    // Because the program mutates the DOM directly, it's best to use useLayoutEffect
     useLayoutEffect(() => {
-      first
-    
-      return () => {
-        second
-      };
-    }, [modal])
+        // Nullish coalescing operator.
+        // element === modalWrapperElement
+        let element = document.getElementById(modalRootId) ?? (() => {
+            setSystemCreated(true);
+            return createModalRoot(modalRootId);
+        });
+        setModalWrapperElement(element);
 
-    return createPortal(children, document.getElementById(modalRootId))
+        return () => {
+            if(systemCreated && element.parentNode) {
+                element.parentNode.removeChild(element);
+            }
+        };
+    }, [modalRootId])
+
+    if(modalWrapperElement === null) return null;
+
+    return createPortal(children, modalWrapperElement)
 }
 
 export default ReactPortal;
