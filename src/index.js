@@ -1,6 +1,6 @@
 import "@fontsource/roboto";
 import React from 'react';
-import {render} from 'react-dom';
+import ReactDOM from 'react-dom';
 
 import './css/variables.css';
 import './css/base/base.css';
@@ -10,8 +10,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const rootElement = document.getElementById("root");
+const portalElement = document.getElementById("modal")
 
-render(
+ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,

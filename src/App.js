@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Home from './routes/Home';
 import Dashboard from './routes/Dashboard';
 import Login from './routes/Login.js';
 import Register from './routes/Register';
+import Modal from './components/modal/Modal';
 import { AuthProvider } from './context/AuthContext';
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
             <Route path="/registreren" exact element={<Register />} />      
           </Routes>
         </main>
+        <Modal />
       </BrowserRouter>
     </AuthProvider>
   );

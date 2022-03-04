@@ -5,8 +5,14 @@ import jwt_decode from 'jwt-decode';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
+    const [signInModalIsOpen, setSignInModalIsOpen] = useState(false)
+
     const [accessToken, setAccessToken] = useState(null);
     const [user, setUser] = useState(null);
+
+    const toggleSignInModal = (toggle) => {
+        setSignInModalIsOpen(toggle);
+    }
 
     const login = (credentials) => {
         return AuthService.login(credentials)
@@ -37,6 +43,10 @@ export const AuthProvider = ({ children }) => {
     }
 
     useEffect(() => {
+        console.log('signinmodal toggled');
+    }, [signInModalIsOpen])
+
+    useEffect(() => {
         if(accessToken) {
             console.log('authtoken set')
             console.log(accessToken);
@@ -48,7 +58,7 @@ export const AuthProvider = ({ children }) => {
       
   
       return (
-          <AuthContext.Provider value={{ user, accessToken, login, register, logout}}>
+          <AuthContext.Provider value={{ user, accessToken, toggleSignInModal, login, register, logout}}>
               {children}
           </AuthContext.Provider>
       )
