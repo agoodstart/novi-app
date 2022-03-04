@@ -1,14 +1,28 @@
 import { createPortal } from 'react-dom';
+import { useLayoutEffect, useState } from 'react';
 
-const createModalRoot = (rootId) => {
+
+const createModalRoot = (modalRootId) => {
     const modalRoot = document.createElement('div');
-    modalRoot.setAttribute('id', rootId);
-    document.body.appendChild(rootId);
+    modalRoot.setAttribute('id', modalRootId);
+    document.body.appendChild(modalRootId);
     return modalRoot;
 }
 
-function ReactPortal({ children, wrapperId}) {
-    return createPortal(children, document.getElementById(wrapperId))
+function ReactPortal({ children, modalRootId}) {
+    const [modalWrapperElement, setModalWrapperElement] = useState(null)
+
+    let modalRoot = document.getElementById(modalRootId) ?? createModalRoot(modalRootId);
+
+    useLayoutEffect(() => {
+      first
+    
+      return () => {
+        second
+      };
+    }, [modal])
+
+    return createPortal(children, document.getElementById(modalRootId))
 }
 
 export default ReactPortal;
