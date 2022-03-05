@@ -9,12 +9,13 @@ const createModalRoot = (modalRootId) => {
     return element;
 }
 
-function ReactPortal({ children, modalRootId}) {
+function ReactPortal({ children, modalRootId = "modal-container"}) {
     const [modalWrapperElement, setModalWrapperElement] = useState(null);
     const [systemCreated, setSystemCreated] = useState(false);
 
     // Because the program mutates the DOM directly, it's best to use useLayoutEffect
     useLayoutEffect(() => {
+        console.log('testing uselayouteffect')
         // Nullish coalescing operator.
         // element === modalWrapperElement
         let element = document.getElementById(modalRootId) ?? (() => {

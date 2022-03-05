@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Home from './routes/Home';
@@ -9,8 +9,11 @@ import Modal from './components/modal/Modal';
 import { AuthProvider } from './context/AuthContext';
 
 export default function App() {
+  console.log('App component rendered');
+  const modalRef = useRef();
+  
   return (
-    <AuthProvider>
+    <AuthProvider modalRef={modalRef}>
       <BrowserRouter>
         <Navbar />
         <main>
@@ -21,11 +24,8 @@ export default function App() {
             <Route path="/registreren" exact element={<Register />} />      
           </Routes>
         </main>
- 
       </BrowserRouter>
-      <Modal >
-          This is modal content
-        </Modal>
+      <Modal ref={modalRef} />
     </AuthProvider>
   );
 }

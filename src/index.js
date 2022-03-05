@@ -10,7 +10,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const rootElement = document.getElementById("root");
-const portalElement = document.getElementById("modal")
 
 ReactDOM.render(
   <React.StrictMode>

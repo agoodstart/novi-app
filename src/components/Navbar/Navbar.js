@@ -1,19 +1,9 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { MenuList } from "./MenuList";
 import "./Navbar.css";
 
 const Navbar = () => {
   const [clicked, setClicked] = useState(false);
-  const menuList = MenuList.map(({ url, title }, index) => {
-    return (
-      <li key={index}>
-        <NavLink to={url}>
-          {title}
-        </NavLink>
-      </li>
-    );
-  });
 
   const handleClick = () => {
     setClicked(!clicked);
@@ -22,12 +12,21 @@ const Navbar = () => {
   return (
     <nav>
       <div className="logo">
-        VPN<font>Lab</font>
+        NOVI App
       </div>
       <ul className={clicked ? "menu-list" : "menu-list close"}>
-        {menuList}
+        {/* {menuList} */}
         <li>
-          <NavLink to='/profile'>profiel</NavLink>
+          <NavLink to='/'>Home</NavLink>
+        </li>
+        <li>
+          <NavLink to='/dashboard'>Dashboard</NavLink>
+        </li>
+        <li>
+          <button onClick={() => {}}>Login</button>
+        </li>
+        <li>
+          <NavLink to='/registreren'>Registeren</NavLink>
         </li>
       </ul>
     </nav>

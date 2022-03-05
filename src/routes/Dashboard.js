@@ -1,12 +1,16 @@
 import { useAuth } from "../context/AuthContext";
 
 export default function Dashboard() {
-  const auth = useAuth();
+  const { modalRef } = useAuth();
+
+  const handleOpenModal = () => {
+    modalRef.current.openModal();
+  }
 
   return (
       <section className="section-dashboard">
         <div className="row">
-            <button onClick={() => auth.toggleSignInModal(true)}>Open Modal</button>
+            <button onClick={handleOpenModal}>Open Modal</button>
         </div>
       </section>
     );
