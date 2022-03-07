@@ -70,6 +70,7 @@ const reducer = (state, action) => {
 }
 
 export default function Register() {
+  console.log('register route rendered');
   const navigate = useNavigate();
   const auth = useAuth();
 

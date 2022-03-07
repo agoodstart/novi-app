@@ -1,6 +1,7 @@
 import { useAuth } from "../context/AuthContext";
 
 export default function Dashboard() {
+  console.log('dashboard route rendered');
   const { modalRef } = useAuth();
 
   const handleOpenModal = () => {

@@ -50,6 +50,7 @@ const reducer = (state, action) => {
 }
 
 export default function Login() {
+  console.log('login route rendered');
   const navigate = useNavigate();
   const auth = useAuth();
 

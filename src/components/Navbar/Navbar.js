@@ -3,6 +3,8 @@ import { NavLink } from "react-router-dom";
 import "./Navbar.css";
 
 const Navbar = () => {
+  console.log('navbar component rendered');
+
   const [clicked, setClicked] = useState(false);
 
   const handleClick = () => {

@@ -15,9 +15,15 @@ const Modal = (props, ref) => {
 
 	useEffect(() => {
 		const closeOnEscapeKey = (e) => (e.key === "Escape" ? setIsOpen(false) : null);
+		// const closeOnClick = (_e) => ( setIsOpen(false) );
+		
+		// const modalOverlay = document.querySelector("div.modal");
+		
+		// modalOverlay.addEventListener("click", closeOnClick)
 		document.body.addEventListener("keydown", closeOnEscapeKey);
 		return () => {
 			document.body.removeEventListener("keydown", closeOnEscapeKey);
+			// modalOverlay.removeEventListener("click", closeOnClick);
 		};
 	}, [setIsOpen]);
 
