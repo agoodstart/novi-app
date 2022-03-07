@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-// import "./Navbar.css";
 import styles from './Navbar.module.scss'
 
 const Navbar = () => {
@@ -12,7 +11,7 @@ const Navbar = () => {
     setClicked(!clicked);
   };
 
-  const checkIfActive = isActive => isActive ? `${styles['navigation__link']} ${styles['navigation__link--active']}` : `${styles['navigation__link']}`;
+  const checkIfActive = ({ isActive }) => ( `${styles.navigation__link} ` + ( isActive ? `${styles['navigation__link--active']}` : "" ) );
 
   return (
     <nav className={styles.navigation}>
@@ -23,18 +22,22 @@ const Navbar = () => {
         <li className={styles.navigation__item}>
           <NavLink 
             to='/'
-            className={isActive => isActive ? `${styles['navigation__link']} ${styles['navigation__link--active']}` : `${styles['navigation__link']}`} >Home</NavLink>
+            className={checkIfActive} >Home</NavLink>
+        </li>
+        <li className={styles.navigation__item}>
+          <NavLink 
+            to='/dashboard'
+            className={checkIfActive}>Dashboard</NavLink>
         </li>
         <li>
           <NavLink 
-            to='/dashboard'
-            className={isActive => isActive ? `${styles['navigation__link']} ${styles['navigation__link--active']}` : `${styles['navigation__link']}`}>Dashboard</NavLink>
+            to='/login'
+            className={checkIfActive}>Inloggen</NavLink>
         </li>
         <li>
-          <button onClick={() => {}}>Login</button>
-        </li>
-        <li>
-          <NavLink to='/registreren'>Registeren</NavLink>
+          <NavLink 
+            to='/registreren'
+            className={checkIfActive}>Registeren</NavLink>
         </li>
       </ul>
     </nav>
