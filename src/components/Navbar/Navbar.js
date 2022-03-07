@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import "./Navbar.css";
+// import "./Navbar.css";
+import styles from './Navbar.module.scss'
 
 const Navbar = () => {
   console.log('navbar component rendered');
@@ -11,18 +12,23 @@ const Navbar = () => {
     setClicked(!clicked);
   };
 
+  const checkIfActive = isActive => isActive ? `${styles['navigation__link']} ${styles['navigation__link--active']}` : `${styles['navigation__link']}`;
+
   return (
-    <nav>
-      <div className="logo">
+    <nav className={styles.navigation}>
+      <div className={styles.navigation__logo}>
         NOVI App
       </div>
-      <ul className={clicked ? "menu-list" : "menu-list close"}>
-        {/* {menuList} */}
-        <li>
-          <NavLink to='/'>Home</NavLink>
+      <ul className={styles.navigation__list}>
+        <li className={styles.navigation__item}>
+          <NavLink 
+            to='/'
+            className={isActive => isActive ? `${styles['navigation__link']} ${styles['navigation__link--active']}` : `${styles['navigation__link']}`} >Home</NavLink>
         </li>
         <li>
-          <NavLink to='/dashboard'>Dashboard</NavLink>
+          <NavLink 
+            to='/dashboard'
+            className={isActive => isActive ? `${styles['navigation__link']} ${styles['navigation__link--active']}` : `${styles['navigation__link']}`}>Dashboard</NavLink>
         </li>
         <li>
           <button onClick={() => {}}>Login</button>

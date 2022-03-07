@@ -5,7 +5,7 @@ import Home from './routes/Home';
 import Dashboard from './routes/Dashboard';
 import Login from './routes/Login.js';
 import Register from './routes/Register';
-import Modal from './components/modal/Modal';
+import Modal from './components/Modal/Modal';
 import { AuthProvider } from './context/AuthContext';
 
 export default function App() {

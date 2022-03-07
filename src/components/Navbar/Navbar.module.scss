@@ -1,0 +1,50 @@
+.navigation {
+    font-size: 2rem;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    color: #fff;
+    position: relative;
+    z-index: 99;
+
+    &__logo {
+        font-weight: 600;
+        font-size: 25px;
+        color: tomato;
+    }
+
+    &__list {
+        list-style-type: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__item {
+        margin-left: 2rem;
+    }
+
+    &__link {
+        text-decoration: none;
+        color: #fff;
+        font-weight: 300;
+        padding: 5px 10px;
+
+        &--active,
+        &:hover {
+            background-color: #fff;
+            border-radius: 2px;
+            color: #000;
+            transition: all 0.5s ease-in-out;
+        }
+    }
+}
+//   .menu-list li:last-child a {
+//     font-weight: 300;
+//     padding: 5px 10px;
+//     background-color: #01aacd;
+//     transition: all 0.5s ease-in-out;
+//     margin-left: 20px;
+//     border-radius: 2px;
+//   }

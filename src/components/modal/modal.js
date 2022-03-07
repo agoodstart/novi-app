@@ -1,6 +1,6 @@
 import { useEffect, useRef, forwardRef, useImperativeHandle, useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import ReactPortal from "../portal/ReactPortal";
+import ReactPortal from "../Portal/ReactPortal";
 import "../../css/components/modal.css";
 
 const Modal = (props, ref) => {
