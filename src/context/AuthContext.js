@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import AuthService from "../services/auth.service";
 import jwt_decode from 'jwt-decode';
 
-const AuthContext = createContext(null);
+export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children, modalRef }) => {
 
