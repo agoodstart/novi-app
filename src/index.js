@@ -1,4 +1,4 @@
-import "@fontsource/roboto";
+import "@fontsource/ubuntu";
 import React from 'react';
 import ReactDOM from 'react-dom';
 

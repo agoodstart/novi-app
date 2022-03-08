@@ -208,7 +208,7 @@ export default function Register() {
               </div>
               <div className={styles['form__group']}>
                 <input 
-                  className={`${styles['btn']} ${styles['btn-registered']}`}
+                  className={`${styles['btn']} ${styles['btn-register']}`}
                   type="submit"
                   disabled={state.isButtonDisabled}
                   onClick={handleRegistration}
