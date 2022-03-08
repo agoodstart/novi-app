@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
-import Home from './routes/Home';
-import Dashboard from './routes/Dashboard';
-import Login from './routes/Login.js';
-import Register from './routes/Register';
-import Modal from './components/modal/Modal';
+import Home from './pages/Home/Home';
+import Dashboard from './pages/Dashboard/Dashboard';
+import Login from './pages/Login/Login.js';
+import Register from './pages/Register/Register';
+import Modal from './components/Modal/Modal';
 import { AuthProvider } from './context/AuthContext';
 
 export default function App() {

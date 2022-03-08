@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@fontsource/roboto": "^4.5.3",
+    "@fontsource/ubuntu": "^4.5.3",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
@@ -16,6 +17,7 @@
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
     "react-transition-group": "^4.4.2",
+    "sass": "^1.49.9",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

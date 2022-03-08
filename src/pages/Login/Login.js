@@ -1,8 +1,6 @@
-import '../css/components/form.css'
-
 import React, { useReducer, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 const initialState = {
   username: '',
