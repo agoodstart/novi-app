@@ -1,10 +1,8 @@
-import '../css/pages/register.css';
-import '../css/components/form.css';
-import '../css/components/button.css';
+import styles from './Register.module.scss'
 
 import { useReducer, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 const initialState = {
   username: '',
@@ -163,25 +161,25 @@ export default function Register() {
   }
 
   return (
-    <section className="section-register">
+    <section className={styles['section-register']}>
       <div className="row">
-        <div className="register">
-          <div className="register__form">
+        <div className={styles['register']}>
+          <div className={styles['register__form']}>
           <h1>Registreer je account</h1>
             { state.isError ? <h2>{state.helperText}</h2> : '' }
             <form className="form" onSubmit={e => e.preventDefault()}>
-              <div className="form__group">
+              <div className={styles['form__group']}>
                 <input
-                  className="form__input"
+                  className={styles['form__input']}
                   placeholder="Gebruikersnaam" 
                   type="text"
                   id="username"
                   name="username"
                   onChange={handleInput.bind(null, 'setUsername')} />
               </div>
-              <div className="form__group">
+              <div className={styles['form__group']}>
                 <input 
-                  className="form__input" 
+                  className={styles['form__input']} 
                   placeholder="E-mail"
                   type="email"
                   id="email"
@@ -189,18 +187,18 @@ export default function Register() {
                   onChange={handleInput.bind(null, 'setEmail')} />
                 {state.emailInvalid ? <span className="text-danger">Geen geldig email adres</span> : ''}
               </div>
-              <div className="form__group">
+              <div className={styles['form__group']}>
                 <input 
-                  className="form__input"
+                  className={styles['form__input']}
                   placeholder="Wachtwoord" 
                   type="password"
                   id="password"
                   name="password"
                   onChange={handleInput.bind(null, 'setPassword')} />
               </div>
-              <div className="form__group">
+              <div className={styles['form__group']}>
                 <input 
-                  className="form__input" 
+                  className={styles['form__input']} 
                   placeholder="Herhaal wachtwoord"
                   type="password"
                   id="password-confirm"
@@ -208,9 +206,9 @@ export default function Register() {
                   onChange={handleInput.bind(null, 'setPasswordConfirm')} />
                   {state.passwordMismatch ? <span className="text-danger">De wachtwoorden komen niet overeen</span> : ''}
               </div>
-              <div className="form__group">
+              <div className={styles['form__group']}>
                 <input 
-                  className="btn btn-register"
+                  className={`${styles['btn']} ${styles['btn-registered']}`}
                   type="submit"
                   disabled={state.isButtonDisabled}
                   onClick={handleRegistration}

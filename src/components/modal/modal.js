@@ -1,7 +1,7 @@
 import { useEffect, useRef, forwardRef, useImperativeHandle, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import ReactPortal from "../Portal/ReactPortal";
-import "../../css/components/modal.css";
+import styles from './Modal.module.scss';
 
 const Modal = (props, ref) => {
 	console.log('modal component rendered');
@@ -33,14 +33,17 @@ const Modal = (props, ref) => {
 				in={isOpen}
 				timeout={{ entry: 0, exit: 300 }}
 				unmountOnExit
-				classNames="modal"
+				classNames={{
+					enterDone: styles['modal-enter-done'],
+					exit: styles['modal-exit']
+				}}
 				nodeRef={nodeRef}
 			>
-				<div className="modal" ref={nodeRef}>
+				<div className={styles.modal} ref={nodeRef}>
 					<button onClick={() => setIsOpen(false)} className="close-btn">
 						Close
 					</button>
-					<div className="modal-content">This is modal content!</div>
+					<div className={styles.modal__content}> This is modal content!</div>
 				</div>
 			</CSSTransition>
 		</ReactPortal>

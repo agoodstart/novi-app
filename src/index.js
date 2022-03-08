@@ -2,9 +2,7 @@ import "@fontsource/roboto";
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import './css/variables.css';
-import './css/base/base.css';
-import './css/layout/grid.css';
+import './index.scss'
 import App from './App';
 
 import reportWebVitals from './reportWebVitals';
