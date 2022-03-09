@@ -1,6 +1,6 @@
 import React, { useReducer, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../../hooks/useAuth";
 
 const initialState = {
   username: '',

@@ -1,10 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
-import Layout from './components/Layout/Layout';
-import Home from './pages/Home/Home';
-import Dashboard from './pages/Dashboard/Dashboard';
-import Login from './pages/Login/Login.js';
-import Register from './pages/Register/Register';
-import NotFound from './pages/NotFound/NotFound';
+import Layout from './layout/Layout';
+import Home from './layout/pages/Home/Home';
+import Dashboard from './layout/pages/Dashboard/Dashboard';
+import Login from './layout/pages/Login/Login.js';
+import Register from './layout/pages/Register/Register';
+import NotFound from './layout/pages/NotFound/NotFound';
 
 export default function App() {
   return (

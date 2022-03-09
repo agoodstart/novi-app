@@ -21,7 +21,7 @@ function ReactPortal({ children, modalRootId = "modal-container"}) {
         let element = document.getElementById(modalRootId) ?? (() => {
             setSystemCreated(true);
             return createModalRoot(modalRootId);
-        });
+        })();
         setModalWrapperElement(element);
 
         return () => {

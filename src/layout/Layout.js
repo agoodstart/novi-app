@@ -1,8 +1,8 @@
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 import { Outlet } from "react-router-dom";
-import Navbar from "../Navbar/Navbar";
-import Footer from "../Footer/Footer";
-import Modal from "../Modal/Modal";
+import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/Footer/Footer";
+import Modal from "./components/Modal/Modal";
 
 export default function Layout() {
     const { modalRef } = useAuth();
@@ -15,6 +15,6 @@ export default function Layout() {
             </main>
         <Footer />
         <Modal ref={modalRef} />
-    </>
+    </> 
     )
 }
