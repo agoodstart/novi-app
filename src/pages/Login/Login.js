@@ -1,6 +1,6 @@
 import React, { useReducer, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import useAuth from "../../hooks/useAuth";
 
 const initialState = {
   username: '',
@@ -50,7 +50,9 @@ const reducer = (state, action) => {
 export default function Login() {
   console.log('login route rendered');
   const navigate = useNavigate();
-  const auth = useAuth();
+  const {auth} = useAuth();
+
+  console.log(auth);
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -73,15 +75,26 @@ export default function Login() {
       username: state.username, 
       password: state.password
     };
-    
-    auth.login(credentials)
-      .then(lol => {
-        console.log(lol);
+
+    console.log(credentials);
+
+    auth
+      .signin(credentials)
+      .then(res => {
+        console.log(res);
       },
-      error => {
-        console.log(error);
-        console.log('Gegevens onjuist, of het account is nog niet geregistreerd. Probeer het opnieuw, of maak een account aan.');
+      err => {
+        console.log(err);
       })
+    
+    // auth.login(credentials)
+    //   .then(lol => {
+    //     console.log(lol);
+    //   },
+    //   error => {
+    //     console.log(error);
+    //     console.log('Gegevens onjuist, of het account is nog niet geregistreerd. Probeer het opnieuw, of maak een account aan.');
+    //   })
     // navigate('/');
   }
 

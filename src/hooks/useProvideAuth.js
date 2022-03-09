@@ -1,7 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AuthService from '../api/services/Auth';
 
 export default function useProvideAuth() {
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+      console.log('user is logged in: ', user)
+    }, [user])
+    
     // const signin = (credentials) => {
     //     return AuthService.login(credentials).then(
     //         data => {
@@ -33,15 +39,16 @@ export default function useProvideAuth() {
     const signin = (credentials) => {
         return AuthService
             .signInWithUsernameAndPassword(credentials)
-            .then(res => {
-                return res;
+            .then(data => {
+                setUser(data)
+                return data;
             },
             err => {
                 return err;
             })
     }
 
-    const register = (credentials) => {
+    const signup = (credentials) => {
         return AuthService
             .createUserWithUsernameEmailAndPassword(credentials)
             .then(res => {
@@ -50,5 +57,11 @@ export default function useProvideAuth() {
             err => {
                 return err;
             })
+    }
+
+    return {
+        user,
+        signin,
+        signup,
     }
 }
