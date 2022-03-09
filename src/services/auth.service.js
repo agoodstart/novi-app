@@ -11,7 +11,6 @@ httpClient.interceptors.response.use(
         return res.data
     },
     err => {
-        console.log(err.response);
         const status = err.response?.status || 500;
 
         switch (status) {
