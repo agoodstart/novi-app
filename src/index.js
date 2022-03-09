@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 
 import './index.scss'
 import App from './App';
+import { AuthProvider } from "./context/AuthProvider";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import reportWebVitals from './reportWebVitals';
 
@@ -11,7 +13,13 @@ const rootElement = document.getElementById("root");
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/*" element={<App />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   rootElement
 );

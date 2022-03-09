@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from "../auth";
+import { useAuth } from "../../auth";
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 
