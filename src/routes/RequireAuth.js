@@ -1,6 +1,8 @@
-import {Navigate, useLocation} from 'react-router-dom';
-import {useAuth} from '../auth';
+import {Outlet} from 'react-router-dom';
+import useRequireAuth from '../hooks/useRequireAuth';
 
-export const RequireAuth = ({ children }) => {
+export default function RequireAuth() {
+  const auth = useRequireAuth();
 
+  return <Outlet context={auth?.user?.username} />
 }

@@ -81,7 +81,8 @@ export default function Login() {
     auth
       .signin(credentials)
       .then(res => {
-        console.log(res);
+        navigate('/profile')
+        // console.log(res);
       },
       err => {
         console.log(err);
