@@ -1,0 +1,15 @@
+
+.form__group {
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.form__group:not(:last-child) {
+  margin-bottom: 2rem;
+}
+
+.form__input {
+  padding: 1.5rem 2rem;
+  border-radius: 2px;
+  border: none;
+}

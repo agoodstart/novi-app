@@ -6,11 +6,19 @@ import Login from './layout/pages/Login/Login.js';
 import Register from './layout/pages/Register/Register';
 import Unauthorized from './layout/pages/Unauthorized/Unauthorized';
 import NotFound from './layout/pages/NotFound/NotFound';
+import Test from './layout/pages/Test/Test'
 
 import RequireAuth from './routes/RequireAuth';
 import Profile from './layout/pages/Profile/Profile';
 
 export default function App() {
+  const locale = navigator.geolocation;
+  locale.getCurrentPosition(res => {
+    console.log(res); 
+  }, err => {
+    console.log(err)
+  })
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -19,6 +27,7 @@ export default function App() {
         <Route path="login" element={<Login />} />
         <Route path="registreren" element={<Register />} />
         <Route path="unauthorized" element={<Unauthorized />} />
+        <Route path="test" element={<Test />} />
 
         <Route element={<RequireAuth />}>
           <Route path="profile" element={<Profile />} />
