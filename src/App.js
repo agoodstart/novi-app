@@ -17,7 +17,9 @@ export default function App() {
     console.log(res); 
   }, err => {
     console.log(err)
-  })
+  });
+
+  console.log('test');
 
   return (
     <Routes>
