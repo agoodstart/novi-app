@@ -2,6 +2,8 @@ version: '3.3'
 
 services:
   novi-app:
+    container_name: reactjs
+    command: npm start
     build: .
     ports:
       - "3000:3000"
