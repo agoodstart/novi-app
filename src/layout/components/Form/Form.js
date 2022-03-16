@@ -1,17 +1,39 @@
-import React from 'react';
-import * as PropTypes from 'prop-types'
+import React, {useReducer} from 'react';
+import { validationReducer } from '../../../utils/reducers';
 
 import styles from './Form.module.scss';
 
-function Form(props) {
+/**
+ * creates and returns object representation of form field
+ *
+ * @param {string} label - label to show with the form input
+ * @param {string} name - input name
+ * @param {string} type - input type
+ * @param {string} defaultValue - default value for the input
+ */
+function Form({children}) {
+
   return (
-    <form className="" onSubmit={e => e.preventDefault()}>
-      {props.children}
-    </form>
+    <div className={styles['form__wrapper']}>
+      <form className="" onSubmit={e => e.preventDefault()}>
+        {children}
+      </form>
+    </div>
   )
 }
 
-export function Input({placeholder, type, name}) {
+export function Input({placeholder, type, name, validators}) {
+  const initialState = {
+    inputName: '',
+    inputValue: '',
+  }
+
+  const validateRequired = () => {
+    
+  }
+
+  const [state, dispatch] = useReducer(validationReducer, initialState);
+
   return (
     <div className={styles['form__group']}>
       <input
@@ -40,13 +62,5 @@ export function Select() {
     </div>
   )
 }
-
-Form.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.instanceOf(Input),
-    PropTypes.instanceOf(Checkbox),
-    PropTypes.instanceOf(Select),
-  ])
-};
 
 export default Form;

@@ -74,8 +74,6 @@ export default function Register() {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const validEmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-
   useEffect(() => {
     if(
       state.username.trim() &&
