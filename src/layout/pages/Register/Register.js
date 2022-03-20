@@ -115,6 +115,7 @@ export default function Register() {
   }, [state.password, state.passwordConfirm]);
 
   useEffect(() => {
+    const validEmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if(state.email.match(validEmailRegex)) {
         dispatch({
           type: 'emailInvalid',

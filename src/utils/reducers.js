@@ -3,24 +3,30 @@
 */
 
 export const validationReducer = (state, action) => {
-    switch(action.type) {
-        case 'required':
-            return {
-                errorMessage: `${state.name} required`,
-                validator: action.func
-            }
-        case 'minLength':
-            return {
-                errorMessage: `${state.name} should at least contain 6 characters`,
-                validator: action.func
-            }
-        case 'passwordMatch':
-            return {
-                errorMessage: `Passwords do not match`,
-                validator: action.func
-            }
-        default:
-            throw new Error('');
+  console.log(action)
+    switch(action.rule) {
+      case 'required':
+        return {
+          errorMessage: `${action.payload.name} required`,
+          isValid: false,
+        }
+      case 'minLength':
+        return {
+            errorMessage: `${state.name} should at least contain 6 characters`,
+            validator: action.func
+        }
+      case 'passwordMatch':
+        return {
+            errorMessage: `Passwords do not match`,
+            validator: action.func
+        }
+      case 'noError':
+        return {
+          errorMessage: '',
+          isValid: true
+        }
+      default:
+        throw new Error('This action does not exist');
     }
 }
 

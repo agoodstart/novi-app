@@ -1,5 +1,6 @@
 import Form, { Input } from "../../components/Form/Form";
 import { registerReducer } from "../../../utils/reducers";
+import Validate from "../../components/Form/validationRules";
 
 export default function Test() {
   console.log('Test page rendered');
@@ -9,7 +10,12 @@ export default function Test() {
         <Input
           placeholder="Username"
           type="text"
-          name="username" />
+          name="username"
+          validations={[
+            Validate.isRequired(),
+            Validate.minLength(6)
+          ]}
+        />
       </Form>
     );
   }
