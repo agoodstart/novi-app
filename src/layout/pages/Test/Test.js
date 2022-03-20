@@ -1,4 +1,4 @@
-import Form, { TextInput, EmailInput, NumberInput } from "../../components/Form/Form";
+import Form, { TextInput, EmailInput } from "../../components/Form/Form";
 import { registerReducer } from "../../../utils/reducers";
 import Validate from "../../components/Form/validationRules";
 
@@ -10,14 +10,6 @@ export default function Test() {
         <TextInput
           placeholder="Username"
           name="username"
-          validations={[
-            Validate.isRequired(),
-            Validate.minLength(6)
-          ]}
-        />
-        <EmailInput
-          placeholder="Email"
-          name="email"
           validations={[
             Validate.isRequired(),
             Validate.minLength(6)

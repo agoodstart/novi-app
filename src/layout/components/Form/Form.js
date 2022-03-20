@@ -6,9 +6,7 @@ function Form({children}) {
   const [form, setForm] = useState({})
 
   const formComponents = [
-    TextInput,
-    EmailInput,
-    NumberInput
+    TextInput
   ]
 
   useEffect(() => {
@@ -26,68 +24,8 @@ function Form({children}) {
   )
 }
 
-function FormComponent({children}) {
-  return (
-    <div className={styles['form__group']}>
-      {children}
-    </div>
-  )
-}
-
-export function TextInput({placeholder, name, validations, setForm}) {
-  const initialState = {
-    errorMessage: '',
-    isValid: true
-  }
-
-  const [state, dispatch] = useReducer(validationReducer, initialState);
-
-  useEffect(() => {
-    console.log('State has changed');
-  }, [state.isValid])
-  
-
-  const isInputFieldValid = useCallback(
-    (obj) => {
-      for (const validation of obj.validations) {
-        if(!validation.validate(obj.field)) {
-          dispatch({
-            rule: validation.name,
-            payload: obj.field
-          });
-          return false;
-        }
-      }
-
-      return true;
-    }, [dispatch]
-  )
-
-  const checkValidations = useCallback(
-    (e) => {
-      const validObj = {
-        field: {
-          name: e.target.name,
-          value: e.target.value
-        },
-        validations
-      }
-
-      const isValidInput = isInputFieldValid(validObj)
-
-      if(isValidInput) {
-        dispatch({
-          rule: 'noError'
-        })
-      }
-
-      setForm({
-        name,
-        isValid: state.isValid
-      })
-    }, [state.isValid]
-  ) 
-
+const Text = React.memo(({placeholder, name, checkValidations}) => {
+  console.log('renderrr')
   return (
     <div className={styles['form__group']}>
       <input
@@ -99,156 +37,75 @@ export function TextInput({placeholder, name, validations, setForm}) {
         onChange={checkValidations} />
     </div>
   )
-}
+})
 
-export function EmailInput({placeholder, name, validations, setForm}) {
-  const initialState = {
-    errorMessage: '',
-    isValid: true
+function HOC(Component) {
+  function Wrapper({placeholder, name, validations, setForm}) {
+    const initialState = {
+      errorMessage: '',
+      isValid: true
+    }
+
+    const [state, dispatch] = useReducer(validationReducer, initialState);
+  
+    useEffect(() => {
+      console.log('State has changed');
+    }, [state.isValid])
+    
+  
+    const isInputFieldValid = useCallback(
+      (obj) => {
+        for (const validation of obj.validations) {
+          if(!validation.validate(obj.field)) {
+            dispatch({
+              rule: validation.name,
+              payload: obj.field
+            });
+            return false;
+          }
+        }
+  
+        return true;
+      }, [dispatch]
+    )
+  
+    const checkValidations = useCallback(
+      (e) => {
+        const validObj = {
+          field: {
+            name: e.target.name,
+            value: e.target.value
+          },
+          validations
+        }
+  
+        const isValidInput = isInputFieldValid(validObj)
+  
+        if(isValidInput) {
+          dispatch({
+            rule: 'noError'
+          })
+        }
+  
+        setForm({
+          name,
+          isValid: state.isValid
+        })
+      }, [state.isValid]
+    ) 
+
+    return <Component placeholder={placeholder} name={name} checkValidations={checkValidations} />
   }
 
-  const [state, dispatch] = useReducer(validationReducer, initialState);
-
-  useEffect(() => {
-    console.log('State has changed');
-  }, [state.isValid])
-  
-
-  const isInputFieldValid = useCallback(
-    (obj) => {
-      for (const validation of obj.validations) {
-        if(!validation.validate(obj.field)) {
-          dispatch({
-            rule: validation.name,
-            payload: obj.field
-          });
-          return false;
-        }
-      }
-
-      return true;
-    }, [dispatch]
-  )
-
-  const checkValidations = useCallback(
-    (e) => {
-      const validObj = {
-        field: {
-          name: e.target.name,
-          value: e.target.value
-        },
-        validations
-      }
-
-      const isValidInput = isInputFieldValid(validObj)
-
-      if(isValidInput) {
-        dispatch({
-          rule: 'noError'
-        })
-      }
-
-      setForm({
-        name,
-        isValid: state.isValid
-      })
-    }, [state.isValid]
-  ) 
-
-  return (
-    <div className={styles['form__group']}>
-      <input
-        className={styles['form__input']}
-        placeholder={placeholder} 
-        type="email"
-        id="username"
-        name={name}
-        onChange={checkValidations} />
-    </div>
-  )
+  return Wrapper;
 }
 
-export function NumberInput({placeholder, name, validations, setForm}) {
-  const initialState = {
-    errorMessage: '',
-    isValid: true
-  }
-
-  const [state, dispatch] = useReducer(validationReducer, initialState);
-
-  useEffect(() => {
-    console.log('State has changed');
-  }, [state.isValid])
-  
-
-  const isInputFieldValid = useCallback(
-    (obj) => {
-      for (const validation of obj.validations) {
-        if(!validation.validate(obj.field)) {
-          dispatch({
-            rule: validation.name,
-            payload: obj.field
-          });
-          return false;
-        }
-      }
-
-      return true;
-    }, [dispatch]
-  )
-
-  const checkValidations = useCallback(
-    (e) => {
-      const validObj = {
-        field: {
-          name: e.target.name,
-          value: e.target.value
-        },
-        validations
-      }
-
-      const isValidInput = isInputFieldValid(validObj)
-
-      if(isValidInput) {
-        dispatch({
-          rulreturne: 'noError'
-        })
-      }
-
-      setForm({
-        name,
-        isValid: state.isValid
-      })
-    }, [state.isValid]
-  ) 
-
-  return (
-    <div className={styles['form__group']}>
-      <input
-        className={styles['form__input']}
-        placeholder={placeholder} 
-        type="number"
-        id="username"
-        name={name}
-        onChange={checkValidations} />
-    </div>
-  )
-}
-
-export function Checkbox() {
-  return (
-    <div className={styles['form__group']}>
-      
-    </div>
-  )
-}
-
-export function Select() {
-  return (
-    <div className={styles['form__group']}>
-      
-    </div>
-  )
-}
+export const TextInput = HOC((props) => {
+  return <Text
+    placeholder={props.placeholder}
+    name={props.name}
+    checkValidations={props.checkValidations}
+  />
+})
 
 export default Form;
