@@ -9,10 +9,6 @@ function Form({children}) {
     TextInput
   ]
 
-  useEffect(() => {
-    console.log(form);
-  }, [form])
-
   return (
     <div className={styles['form__wrapper']}>
       <form className="" onSubmit={e => e.preventDefault()}>
@@ -23,6 +19,21 @@ function Form({children}) {
     </div>
   )
 }
+
+// const Text = React.memo(({placeholder, name, checkValidations}) => {
+//   console.log('renderrr')
+//   return (
+//     <div className={styles['form__group']}>
+//       <input
+//         className={styles['form__input']}
+//         placeholder={placeholder} 
+//         type="text"
+//         id="username"
+//         name={name}
+//         onChange={checkValidations} />
+//     </div>
+//   )
+// })
 
 const Text = React.memo(({placeholder, name, checkValidations}) => {
   console.log('renderrr')
@@ -94,18 +105,14 @@ function HOC(Component) {
       }, [state.isValid]
     ) 
 
+    
+
     return <Component placeholder={placeholder} name={name} checkValidations={checkValidations} />
   }
 
   return Wrapper;
 }
 
-export const TextInput = HOC((props) => {
-  return <Text
-    placeholder={props.placeholder}
-    name={props.name}
-    checkValidations={props.checkValidations}
-  />
-})
+export const TextInput = HOC(Text);
 
 export default Form;
