@@ -19,8 +19,6 @@ export default function App() {
     console.log(err)
   });
 
-  console.log('test');
-
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
