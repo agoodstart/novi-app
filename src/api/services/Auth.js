@@ -19,8 +19,12 @@ novi.interceptors.response.use(
                 return Promise.reject('Permission Error');
             }
 
-            default: {
+            case 400: {
                 return Promise.reject(err.response.data)
+            }
+
+            default: {
+                return Promise.reject('Unknown Error occured');
             }
         }
     }

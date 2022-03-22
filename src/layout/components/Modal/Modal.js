@@ -43,7 +43,7 @@ const Modal = (props, ref) => {
 					<button onClick={() => setIsOpen(false)} className="close-btn">
 						Close
 					</button>
-					<div className={styles.modal__content}> This is modal content!</div>
+					<div className={styles.modal__content}>{props.children}</div>
 				</div>
 			</CSSTransition>
 		</ReactPortal>

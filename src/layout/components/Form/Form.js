@@ -2,21 +2,21 @@ import React, {useReducer, useEffect, useState, useMemo, useRef} from 'react';
 import { validationReducer } from '../../../utils/reducers';
 import styles from './Form.module.scss';
 
-const Form = React.memo(({children}) => {
+const Form = ({children}) => {
+  /* 
+  the validationstate of the form depends on its children so we need to reference their states
+  but useRef does not cause a rerender, so I use a simple usestate hook to force a rerender.
+  */
   let formRef = useRef({});
-  const [update, forceUpdate] = useState(true)
-
-  useEffect(() => {
-    forceUpdate(false)
-  }, [update])
+  const [update, toggleForceUpdate] = useState(true)
 
   const updateComponentState = (name, isValid) => {
-    console.log('hello')
     formRef.current = {...formRef.current, [name]: isValid}
-    forceUpdate(true);
+    toggleForceUpdate(!update);
   }
 
-  const isFormValid = useMemo(() => {
+  // useMemo will cache the variable. useMemo will only run when the dependency changes
+  const isFormInvalid = useMemo(() => {
     for (const property in formRef.current) {
       if (!formRef.current[property]) return false
     }
@@ -28,21 +28,29 @@ const Form = React.memo(({children}) => {
     TextInput
   ]
 
+  const formSubmission = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const formProps = Object.fromEntries(formData);
+
+    console.log(formProps);
+  }
+
   return (
     <div className={styles['form__wrapper']}>
-      <form className="" onSubmit={e => e.preventDefault()}>
+      <form className="" onSubmit={formSubmission}>
         {React.Children.map(children, (child) => 
-          (formComponents.includes(child.type) ? React.cloneElement(child, { formRef, updateComponentState }) : child)
+          (formComponents.includes(child.type) ? React.cloneElement(child, { updateComponentState }) : child)
         )}
 
       <input 
         type="submit"
-        disabled={!isFormValid}
+        disabled={!isFormInvalid}
         />
       </form>
     </div>
   )
-})
+}
 
 function HOC(FormComponent) {
   function Wrapper({placeholder, name, validations, type, ...rest}) {
