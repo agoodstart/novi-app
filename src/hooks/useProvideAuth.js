@@ -5,7 +5,7 @@ export default function useProvideAuth() {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-      console.log('user is logged in: ', user)
+    //   console.log('user is logged in: ', user)
     }, [user])
     
     // const signin = (credentials) => {

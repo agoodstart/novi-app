@@ -1,8 +1,12 @@
 import Form, { TextInput, EmailInput } from "../../components/Form/Form";
 import Validate from "../../components/Form/validationRules";
+import React, {useEffect} from 'react';
+
 
 export default function Test() {
-  console.log('Test page rendered');
+  useEffect(() => {
+    console.log('test page rendered');
+  })
     return (
       <Form>
         <h3>Is this allowed?</h3>

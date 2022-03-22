@@ -1,31 +1,28 @@
-import React, {useReducer, useEffect, useState, useCallback, useMemo} from 'react';
+import React, {useReducer, useEffect, useState, useMemo, useRef} from 'react';
 import { validationReducer } from '../../../utils/reducers';
 import styles from './Form.module.scss';
 
-function Form({children}) {
-  const [form, setForm] = useState({})
+const Form = React.memo(({children}) => {
+  let formRef = useRef({});
+  const [update, forceUpdate] = useState(true)
 
-  // The setFormCallback function only causes component rerendering,
-  // when the setForm function changes 
-  const setFormCallback = useCallback((obj) => {
-    setForm({
-      obj
-    })
-  }, [setForm])
+  useEffect(() => {
+    forceUpdate(false)
+  }, [update])
+
+  const updateComponentState = (name, isValid) => {
+    console.log('hello')
+    formRef.current = {...formRef.current, [name]: isValid}
+    forceUpdate(true);
+  }
 
   const isFormValid = useMemo(() => {
-    for (const component in form) {
-      if (!component.isValid) return false
+    for (const property in formRef.current) {
+      if (!formRef.current[property]) return false
     }
 
     return true;
-  }, [form])
-
-  console.log(isFormValid)
-
-  useEffect(() => {
-    console.log(form)
-  }, [form])
+  }, [update])
 
   const formComponents = [
     TextInput
@@ -35,34 +32,30 @@ function Form({children}) {
     <div className={styles['form__wrapper']}>
       <form className="" onSubmit={e => e.preventDefault()}>
         {React.Children.map(children, (child) => 
-          (formComponents.includes(child.type) ? React.cloneElement(child, { setFormCallback }) : child)
+          (formComponents.includes(child.type) ? React.cloneElement(child, { formRef, updateComponentState }) : child)
         )}
 
       <input 
         type="submit"
-        disabled={isFormValid}
+        disabled={!isFormValid}
         />
       </form>
     </div>
   )
-}
+})
 
 function HOC(FormComponent) {
-  function Wrapper({placeholder, name, validations, type, ...rem}) {
+  function Wrapper({placeholder, name, validations, type, ...rest}) {
     const initialState = {
       errorMessage: '',
-      isValid: true
+      isValid: false
     }
 
     const [state, dispatch] = useReducer(validationReducer, initialState);
   
     useEffect(() => {
-      rem.setFormCallback({
-        name,
-        isValid: state.isValid
-      })
-    }, [state.isValid, name, rem.setFormCallback])
-    
+      rest.updateComponentState(name, state.isValid)
+    }, [state.isValid])
   
     const isInputFieldValid = (obj) => {
       if (!obj.validations) return true;
