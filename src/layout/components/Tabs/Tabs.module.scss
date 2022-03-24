@@ -1,14 +1,18 @@
 .tabs {
     background-color: var(--grey-light-1);
     width: 60%;
-    margin: 4rem auto 0 auto;
+    // margin: 4rem auto 0 auto;
     display: flex;
     flex-direction: column;
-    border-radius: 50px;
 
     &__item {
         display: flex;
         flex-grow: 1;
+        background-color: var(--cadetgray-medium);
+
+        &-active {
+            background-color: var(--cadetgray-light);
+        }
     }
 
     &__link {
@@ -35,7 +39,11 @@
     }
 
     &__panel {
-        display: block;
+        display: none;
+
+        &-active {
+            display: block;
+        }
     }
 
     
