@@ -29,7 +29,7 @@ export default function Test() {
           <RegisterForm />
         </TabPanel>
 
-        <TabPanel></TabPanel>
+        <TabPanel><h1>test</h1></TabPanel>
       </Tabs>
     );
   }

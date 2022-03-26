@@ -1,59 +1,71 @@
-import React, { useState, useEffect, useRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useImperativeHandle } from 'react';
 import styles from './Tabs.module.scss'
 
-const FilterChildren = (children, Type, propsObject = {}) => {
-    return React.Children.map(children, (child, index) => {
-        if (child.type === Type) return React.cloneElement(child, {index, ...propsObject});
-    })
-}
-
 export function Tabs({children, customStyles}) {
-    const tabRef = useRef(); 
+    const panelRefs = useRef([]);
+    let realIndex = 0;
 
     return (
         <div className={styles['tabs']}>
-            {FilterChildren(children, TabList, { panelRef: tabRef})}
-            <PanelControl ref={tabRef} children={FilterChildren(children, TabPanel)} />
+            {React.Children.map(children, (child, index) => {
+                if (child.type === TabPanel) {
+                    panelRefs.current.push(React.createRef());
+                    return React.cloneElement(child, { ref: panelRefs.current[realIndex++] })
+                };
+                return React.cloneElement(child, { panelRefs: panelRefs });
+            }
+        )}
         </div>
     )
 }
 
-const PanelControl = React.forwardRef((props, ref) => {
-    const [index, setIndex] = useState(0)
+export const TabPanel = React.forwardRef((props, ref) => {
+    const [active, setActive] = useState(false)
 
     useImperativeHandle(ref, () => ({
-        togglePanel: (selectedIndex) => setIndex(selectedIndex)
-        })
-    );
+        toggleActive: (isActive) => {
+            setActive(isActive);
+        }
+    }));
 
     return (
-        props.children[index]
+        <React.Fragment>
+            {active ?         
+                <div className={styles['tabs__panel']}>
+                    {props.children}
+                </div>: 
+            null}
+        </React.Fragment>
     )
 })
 
-export const TabPanel = (props) => {
-    return (
-        <div className={styles['tabs__panel']}>
-            {props.children}
-        </div>
-    )
-}
-
-export function TabList({children, panelRef}) {
+export function TabList({children, panelRefs}) {
     const [tabValues, setTabValues] = useState(Array.from(children, () => {
         return false
     }));
 
     const toggleState = (selectedIndex) => {
-        panelRef.current.togglePanel(selectedIndex);
-        setTabValues(tabValues.map((_, index) => {
+        console.log(selectedIndex);
+        setTabValues(tabValues.map((_tabValue, index) => {
             return index !== selectedIndex ? tabValues[index] = false : tabValues[index] = true
         }));
+    }
+    
+    useEffect(() => {
+        panelRefs.current.forEach((panelRef, index) => {
+            panelRef.current.toggleActive(tabValues[index]);
+        })
+    }, [tabValues])
+
+    const MapThroughChildren = () => {
+        return React.Children.map(children, (child, index) => {  
+            return React.cloneElement(child, { toggleState, index, isActive: tabValues[index] })
+        })
     }
 
     return (
         <ul className={styles['tabs__list']}>
-            {FilterChildren(children, Tab, { toggleState, tabValues })}
+            <MapThroughChildren />
         </ul>
     )
 }
@@ -64,7 +76,7 @@ export const Tab = (props) => {
     }
 
     return (
-        <li className={`${styles['tabs__item']} ${props.tabValues[props.index] ? "active" : ""}`}>
+        <li className={`${styles['tabs__item']} ${props.isActive ? "active" : ""}`}>
             <a
             onClick={activate} 
             className={styles['tabs__link']}
