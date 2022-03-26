@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, useRef, useImperativeHandle } from 'react';
 import styles from './Tabs.module.scss'
 
 export function Tabs({children, customStyles}) {
@@ -6,7 +6,7 @@ export function Tabs({children, customStyles}) {
     let realIndex = 0;
 
     return (
-        <div className={styles['tabs']}>
+        <div className={styles['tabs']} style={customStyles}>
             {React.Children.map(children, (child, index) => {
                 if (child.type === TabPanel) {
                     panelRefs.current.push(React.createRef());
@@ -30,7 +30,7 @@ export const TabPanel = React.forwardRef((props, ref) => {
 
     return (
         <React.Fragment>
-            {active ?         
+            {active ?
                 <div className={styles['tabs__panel']}>
                     {props.children}
                 </div>: 
@@ -40,13 +40,13 @@ export const TabPanel = React.forwardRef((props, ref) => {
 })
 
 export function TabList({children, panelRefs}) {
-    const [tabValues, setTabValues] = useState(Array.from(children, () => {
-        return false
+    const [tabValues, setTabValues] = useState(Array.from(children, (_, k) => {
+        if(k === 0) return true;
+        return false;
     }));
 
     const toggleState = (selectedIndex) => {
-        console.log(selectedIndex);
-        setTabValues(tabValues.map((_tabValue, index) => {
+        setTabValues(tabValues.map((_, index) => {
             return index !== selectedIndex ? tabValues[index] = false : tabValues[index] = true
         }));
     }
@@ -76,7 +76,7 @@ export const Tab = (props) => {
     }
 
     return (
-        <li className={`${styles['tabs__item']} ${props.isActive ? "active" : ""}`}>
+        <li className={`${styles['tabs__item']} ${props.isActive || props.default ? styles['tabs__item-active'] : ""}`}>
             <a
             onClick={activate} 
             className={styles['tabs__link']}

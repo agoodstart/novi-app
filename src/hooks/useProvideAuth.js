@@ -1,61 +1,32 @@
 import { useState, useEffect } from 'react';
-import AuthService from '../api/services/Auth';
+import Novi from '../api/services/Auth';
+import useLocalStorage from './useLocalStorage';
 
 export default function useProvideAuth() {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useLocalStorage("user", null);
 
     useEffect(() => {
     //   console.log('user is logged in: ', user)
     }, [user])
-    
-    // const signin = (credentials) => {
-    //     return AuthService.login(credentials).then(
-    //         data => {
-    //             // setAccessToken(data.accessToken)
-    //             // setUser(jwt_decode(data.accessToken))
-    //             return Promise.resolve('Login succeeded')
-    //         }, 
-    //         errorStatus => {
-    //             return Promise.reject(errorStatus);
-    //         })
-    // }
-    
-    // const logout = () => {
-    //     setAccessToken(null);
-    //     setUser(null);
-    // }
-
-    // const register = (credentials) => {
-    //     return AuthService.register(credentials)
-    //         .then(_data => {
-                
-    //             return Promise.resolve('Registration success');
-    //         },
-    //         errorStatus => {
-    //             return Promise.reject(errorStatus);
-    //         })
-    // }
 
     const signin = (credentials) => {
-        return AuthService
-            .signInWithUsernameAndPassword(credentials)
+        return Novi.post('/auth/signin', credentials)
             .then(data => {
                 setUser(data)
                 return data;
             },
             err => {
-                return err;
+                return Promise.reject(err);
             })
     }
 
     const signup = (credentials) => {
-        return AuthService
-            .createUserWithUsernameEmailAndPassword(credentials)
-            .then(res => {
-                return res;
+        return Novi.post('/auth/signup', credentials)
+            .then(data => {
+                return data;
             },
             err => {
-                return err;
+                return Promise.reject(err);
             })
     }
 

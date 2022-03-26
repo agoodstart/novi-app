@@ -14,10 +14,10 @@ export default function ModalContent() {
                 <Tab>Registeren</Tab>
             </TabList>
             <TabPanel>
-                <RegisterForm />
+                <LoginForm />
             </TabPanel>
             <TabPanel>
-                <LoginForm />
+                <RegisterForm />
             </TabPanel>
       </Tabs>
     )

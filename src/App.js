@@ -24,8 +24,6 @@ export default function App() {
       <Route path="/" element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="login" element={<Login />} />
-        <Route path="registreren" element={<Register />} />
         <Route path="unauthorized" element={<Unauthorized />} />
         <Route path="test" element={<Test />} />
 

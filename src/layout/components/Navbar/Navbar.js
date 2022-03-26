@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styles from './Navbar.module.scss'
+import useAuth from "../../../hooks/useAuth";
 
 const Navbar = () => {
+  const {modalRef} = useAuth();
   console.log('navbar component rendered');
 
   const [clicked, setClicked] = useState(false);
 
   const handleClick = () => {
-    setClicked(!clicked);
+    modalRef.current.openModal()
   };
 
   const checkIfActive = ({ isActive }) => ( `${styles.navigation__link} ` + ( isActive ? `${styles['navigation__link--active']}` : "" ) );
@@ -30,14 +32,10 @@ const Navbar = () => {
             className={checkIfActive}>Dashboard</NavLink>
         </li>
         <li>
-          <NavLink 
-            to='/login'
-            className={checkIfActive}>Inloggen</NavLink>
+          <button onClick={handleClick}>Inloggen</button>
         </li>
         <li>
-          <NavLink 
-            to='/registreren'
-            className={checkIfActive}>Registeren</NavLink>
+          <button onClick={handleClick}>Registreren</button>
         </li>
       </ul>
     </nav>

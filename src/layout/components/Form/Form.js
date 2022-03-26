@@ -2,7 +2,7 @@ import React, {useReducer, useEffect, useState, useMemo, useRef} from 'react';
 import { validationReducer } from '../../../utils/reducers';
 import styles from './Form.module.scss';
 
-const Form = ({children}) => {
+const Form = ({children, onSubmit}) => {
   /* 
   the validationstate of the form depends on its children so we need to reference their states
   but useRef does not cause a rerender, so I use a simple usestate hook to force a rerender.
@@ -33,7 +33,7 @@ const Form = ({children}) => {
     const formData = new FormData(e.target);
     const formProps = Object.fromEntries(formData);
 
-    console.log(formProps);
+    onSubmit(formProps)
   }
 
   return (

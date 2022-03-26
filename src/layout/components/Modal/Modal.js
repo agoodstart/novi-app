@@ -10,7 +10,8 @@ const Modal = (props, ref) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	useImperativeHandle(ref, () => ({
-		openModal: () => setIsOpen(true)
+		openModal: () => setIsOpen(true),
+		closeModal: () => setIsOpen(false)
 	}));
 
 	useEffect(() => {
