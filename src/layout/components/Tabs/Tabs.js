@@ -1,68 +1,65 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useImperativeHandle } from 'react';
 import styles from './Tabs.module.scss'
 
 export function Tabs({children, customStyles}) {
-    const generateTabsControl = () => {
-        let checkLength = [0, 0];
-        React.Children.map(children, (child, _index) => {
-            if (child.type === TabList) {
-                checkLength[0] = child.props.children.length;
-            } else {
-                checkLength[1] += 1;
+    const panelRefs = useRef([]);
+    let realIndex = 0;
+
+    return (
+        <div className={styles['tabs']}>
+            {React.Children.map(children, (child, index) => {
+                if (child.type === TabPanel) {
+                    panelRefs.current.push(React.createRef());
+                    return React.cloneElement(child, { ref: panelRefs.current[realIndex++] })
+                };
+                return React.cloneElement(child, { panelRefs: panelRefs });
             }
-        })
-
-        if (checkLength[0] !== checkLength[1]) throw Error('Tabs and panel must be the same length');
-
-        return Array.from({length: checkLength[0]}, (_, index) => {
-            if (index === 0) return true;
-
-            return false
-        })
-    }
-    
-    const [tabsControl, setTabsControl] = useState(generateTabsControl())
-    
-    const MapThroughChildren = () => {
-        let mutateTabsControl = [...tabsControl]
-
-        return React.Children.map(children, (child, index) => {
-            if (child.type === TabList) return React.cloneElement(child, { tabsControl, setTabsControl })
-
-            return React.cloneElement(child, { isActive: mutateTabsControl.shift() ?? false })
-        })
-    }
-
-    useEffect(() => {
-        console.log(tabsControl);
-    }, [tabsControl])
-
-    return (
-        <div className={styles['tabs']} style={customStyles}>
-            <MapThroughChildren />
+        )}
         </div>
     )
 }
 
-export function TabPanel(props) {
-    console.log('is tabPanel active:', props.isActive)
-    return (
-        <div className={props.isActive ? styles['tabs__panel-active'] : styles['tabs__panel']}>
-            {props.children}
-        </div>
-    )
-}
+export const TabPanel = React.forwardRef((props, ref) => {
+    const [active, setActive] = useState(false)
 
-export function TabList(props) {
+    useImperativeHandle(ref, () => ({
+        toggleActive: (isActive) => {
+            setActive(isActive);
+        }
+    }));
+
+    return (
+        <React.Fragment>
+            {active ?         
+                <div className={styles['tabs__panel']}>
+                    {props.children}
+                </div>: 
+            null}
+        </React.Fragment>
+    )
+})
+
+export function TabList({children, panelRefs}) {
+    const [tabValues, setTabValues] = useState(Array.from(children, () => {
+        return false
+    }));
+
     const toggleState = (selectedIndex) => {
-        props.setTabsControl(props.tabsControl.map((_tabValue, index) => {
-            return index !== selectedIndex ? props.tabsControl[index] = false : props.tabsControl[index] = true
+        console.log(selectedIndex);
+        setTabValues(tabValues.map((_tabValue, index) => {
+            return index !== selectedIndex ? tabValues[index] = false : tabValues[index] = true
         }));
     }
+    
+    useEffect(() => {
+        panelRefs.current.forEach((panelRef, index) => {
+            panelRef.current.toggleActive(tabValues[index]);
+        })
+    }, [tabValues])
 
     const MapThroughChildren = () => {
-        return React.Children.map(props.children, (child, index) => {  
-            return React.cloneElement(child, { toggleState, index, isActive: props.tabsControl[index] })
+        return React.Children.map(children, (child, index) => {  
+            return React.cloneElement(child, { toggleState, index, isActive: tabValues[index] })
         })
     }
 
@@ -79,7 +76,7 @@ export const Tab = (props) => {
     }
 
     return (
-        <li className={`${styles['tabs__item']} ${props.isActive || props.default ? styles['tabs__item-active'] : ""}`}>
+        <li className={`${styles['tabs__item']} ${props.isActive ? "active" : ""}`}>
             <a
             onClick={activate} 
             className={styles['tabs__link']}
