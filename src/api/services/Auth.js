@@ -6,7 +6,7 @@ const Novi = axios.create({
 });
 
 Novi.interceptors.response.use(
-    res => res.data,
+    res => res.data.accessToken,
     err => {
         const status = err.response?.status || 500;
 
@@ -31,25 +31,3 @@ Novi.interceptors.response.use(
 )
 
 export default Novi;
-// class AuthService {
-//     signInWithUsernameAndPassword(credentials) {
-//         return novi.post('/auth/signin', credentials).then(
-//             data => Promise.resolve(data),
-//             err => Promise.reject(err)
-//         )
-//     }
-
-//     signOut() {
-//         // This function won't do anything regarding the api
-//         return Promise.resolve('Logging out...');
-//     }
-    
-//     createUserWithUsernameEmailAndPassword(credentials) {
-//         return novi.post('/auth/signup', credentials).then(
-//             data => Promise.resolve(data),
-//             err => Promise.reject(err)
-//         )
-//     }
-// }
-
-// export default new AuthService();

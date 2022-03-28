@@ -14,8 +14,7 @@ export default function LoginForm() {
         }
 
         auth.signin(credentials)
-            .then(data => {
-                console.log(data);
+            .then(() => {
                 modalRef.current.closeModal();
                 navigate('/profile')
             },
@@ -26,7 +25,7 @@ export default function LoginForm() {
 
     return (
         <Form onSubmit={loginUser}>
-            <TextInput placeholder="Username" name="loginusername" type="text" validations={[ Validate.isRequired(), Validate.minLength(6) ]} />
+            <TextInput placeholder="Username" name="loginusername" type="text" validations={[ Validate.isRequired(), Validate.minLength(5) ]} />
             <TextInput placeholder="Password" name="loginpassword" type="password" validations={[ Validate.isRequired(), Validate.minLength(6) ]} />
         </Form>
     )

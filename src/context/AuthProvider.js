@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect, useRef } from "react";
 import useProvideAuth from "../hooks/useProvideAuth";
-import jwt_decode from 'jwt-decode';
 
 export const AuthContext = createContext(null);
 
