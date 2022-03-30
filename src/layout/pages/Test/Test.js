@@ -3,9 +3,7 @@ import Validate from "../../components/Form/validationRules";
 import React, {useEffect} from 'react';
 import {Tabs, Tab, TabList, TabPanel} from "../../components/Tabs/Tabs";
 import RegisterForm from "../../components/Form/RegisterForm";
-import EmbeddedMap from "../../components/EmbeddedMap/EmbeddedMap";
-
-
+import Map from "../../components/Map/Map";
 
 
 export default function Test() {
@@ -13,6 +11,6 @@ export default function Test() {
     console.log('test page rendered');
   })
     return (
-      <EmbeddedMap />
+      <Map />
     );
   }
