@@ -10,26 +10,6 @@ import RequireAuth from './routes/RequireAuth';
 import Profile from './layout/pages/Profile/Profile';
 
 export default function App() {
-  const getGeoInfo = () => {
-    let coord = new Promise((res, rej) => {
-      navigator.geolocation.getCurrentPosition(
-        pos => {
-          let encoded = encodeURIComponent(`${pos.coords.latitude},${pos.coords.longitude}`);
-          console.log(encoded);
-          return res({
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude
-          })
-        },
-        error => rej(error)
-      )
-    })
-
-    return Promise.resolve(coord);
-  }
-
-  let coordinates = getGeoInfo();
-  
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

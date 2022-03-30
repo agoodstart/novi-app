@@ -1,4 +1,6 @@
-import React from "react"
+import React from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationPin } from '@fortawesome/free-solid-svg-icons';
 
 export default function Marker({lat, lng, key}) {
   const customStyles = {
@@ -7,13 +9,17 @@ export default function Marker({lat, lng, key}) {
   }
 
   const positioning = {
-    position: 'absolute',
-    transform: 'translate(-50%, -100%)',
+    width: '100px',
+    height: '100px',
+    // position: 'absolute',
+    // transform: 'translate(-50%, -100%)',
   }
 
   return (
-    <div lat={lat} lng={lng} key={key} style={customStyles}>
-      <img height="100" style={positioning} src="https://img.favpng.com/8/5/0/google-map-maker-google-maps-computer-icons-png-favpng-62XACGKanLR8PR3P52YHQ7vUB.jpg" />
+    <div lat={lat} lng={lng} key={key} className="marker-class" style={customStyles}>
+      <div style={positioning}>
+        <FontAwesomeIcon icon={faLocationPin} size="6x" />
+      </div>
     </div>
   )
 }
