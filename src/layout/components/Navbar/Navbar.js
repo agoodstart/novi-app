@@ -18,7 +18,7 @@ const Navbar = () => {
   return (
     <nav className={styles.navigation}>
       <div className={styles.navigation__logo}>
-        NOVI App
+        <NavLink to='/'>Company Logo</NavLink>
       </div>
       <ul className={styles.navigation__list}>
         <li className={styles.navigation__item}>

@@ -8,6 +8,8 @@ import ModalContent from "./components/Modal/ModalContent";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import styles from './Layout.module.scss';
+
 
 export default function Layout() {
     const { modalRef } = useAuth();
@@ -16,7 +18,7 @@ export default function Layout() {
     <>
         <Navbar />
             <ToastContainer />
-            <main className="App">
+            <main className={styles['App']}>
                 <Outlet />
             </main>
         <Footer />
