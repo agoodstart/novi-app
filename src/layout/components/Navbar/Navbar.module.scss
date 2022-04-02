@@ -12,6 +12,7 @@
         font-weight: 600;
         font-size: 25px;
         color: tomato;
+        text-decoration: none;
     }
 
     &__list {
@@ -26,17 +27,20 @@
     }
 
     &__link {
-        text-decoration: none;
-        color: #fff;
-        font-weight: 300;
+        // text-decoration: none;
+        color: transparent;
         padding: 5px 10px;
+        -webkit-background-clip: text;
+        background-clip: text;
+        font-weight: 400;
+        letter-spacing: 1px;
+        background-image: linear-gradient(to right, #ef6461, #ea5b73, #e05685, #d05596, #bc58a4);
         
 
         &--active,
         &:hover {
-            background-color: #fff;
-            border-radius: 2px;
-            color: #000;
+            text-decoration: underline;
+            background-image: linear-gradient(to right, #87f6ff, #72e6ff, #67d5ff, #68c4fa, #72b1f2);
             transition: all 0.5s ease-in-out;
         }
     }

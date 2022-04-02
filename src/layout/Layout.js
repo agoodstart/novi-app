@@ -15,7 +15,7 @@ export default function Layout() {
     const { modalRef } = useAuth();
 
     return (
-    <>
+    <div className={styles['layout']}>
         <Navbar />
             <ToastContainer />
             <main className={styles['App']}>
@@ -25,6 +25,6 @@ export default function Layout() {
         <Modal ref={modalRef} >
             <ModalContent />
         </Modal>
-    </> 
+    </div> 
     )
 }

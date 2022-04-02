@@ -17,9 +17,6 @@ const Navbar = () => {
 
   return (
     <nav className={styles.navigation}>
-      <div className={styles.navigation__logo}>
-        <NavLink to='/'>Company Logo</NavLink>
-      </div>
       <ul className={styles.navigation__list}>
         <li className={styles.navigation__item}>
           <NavLink 
@@ -30,6 +27,16 @@ const Navbar = () => {
           <NavLink 
             to='/dashboard'
             className={checkIfActive}>Dashboard</NavLink>
+        </li>
+        <li className={styles.navigation__item}>
+          <NavLink 
+            to='/about'
+            className={checkIfActive}>About</NavLink>
+        </li>
+        <li className={styles.navigation__item}>
+          <NavLink 
+            to='/contact'
+            className={checkIfActive}>Contact</NavLink>
         </li>
         <li>
           <button onClick={handleClick}>Inloggen</button>
