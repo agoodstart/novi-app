@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '../../components/Header/Header';
 import Navbar from '../../components/Navbar/Navbar';
-import Typography from '../../components/Typography/Typography';
+import Typography from '@components/Typography/Typography';
 import styles from './Home.module.scss';
 
 export default function Home() {
