@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '../../components/Header/Header';
 import Navbar from '../../components/Navbar/Navbar';
-import Typography from '@components/Typography/Typography';
+import Typography from '../../components/Typography/Typography';
 import styles from './Home.module.scss';
 
 export default function Home() {
@@ -13,8 +13,8 @@ export default function Home() {
         </Header>
         <div className={styles['bg-video']}>
           <video className={styles['bg-video__content']} autoPlay muted loop>
-            {/* <source src="/assets/coastline.mp4" type="video/mp4" /> */}
-            <source src="/assets/citynight.mp4" type="video/mp4" />
+            <source src="/assets/coastline.mp4" type="video/mp4" />
+            {/* <source src="/assets/citynight.mp4" type="video/mp4" /> */}
             Your browser is not supported!
           </video>
         </div>

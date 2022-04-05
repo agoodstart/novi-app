@@ -38,11 +38,14 @@ const Navbar = () => {
             to='/contact'
             className={checkIfActive}>Contact</NavLink>
         </li>
-        <li>
-          <button onClick={handleClick}>Inloggen</button>
+        <li className={styles.navigation__item}>
+          <div className={styles['divider']}></div>
         </li>
-        <li>
-          <button onClick={handleClick}>Registreren</button>
+        <li className={styles.navigation__item}>
+          <button className={styles['btn']} onClick={handleClick}>Inloggen</button>
+        </li>
+        <li className={styles.navigation__item}>
+          <button className={styles['btn--blue']} onClick={handleClick}>Registreren</button>
         </li>
       </ul>
     </nav>
