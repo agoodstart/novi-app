@@ -13,15 +13,16 @@ export default function Home() {
         </Header>
         <div className={styles['bg-video']}>
           <video className={styles['bg-video__content']} autoPlay muted loop>
-            <source src="/assets/coastline.mp4" type="video/mp4" />
-            {/* <source src="/assets/citynight.mp4" type="video/mp4" /> */}
+            {/* <source src="/assets/coastline.mp4" type="video/mp4" /> */}
+            <source src="/assets/citynight.mp4" type="video/mp4" />
             Your browser is not supported!
           </video>
         </div>
 
         <div className={styles['center__div']}>
           <Typography variant="h1">
-            There is a world outside waiting for you
+            There is a world outside <br></br> 
+            waiting for you
           </Typography>
 
           <a href="" className={styles['btn']}>Login to discover</a>
