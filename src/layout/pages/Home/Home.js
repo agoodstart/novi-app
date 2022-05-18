@@ -1,10 +1,14 @@
 import React from 'react';
-import Header from '../../components/Header/Header';
-import Navbar from '../../components/Navbar/Navbar';
-import Typography from '../../components/Typography/Typography';
+import Header from '../../../components/Header/Header';
+import Navbar from '../../../components/Navbar/Navbar';
+import Typography from '../../../components/Typography/Typography';
+import useTheme from '../../../hooks/useTheme';
 import styles from './Home.module.scss';
 
 export default function Home() {
+  const {colors} = useTheme();
+
+  console.log(colors.black);
   console.log('home route rendered');
     return (
       <React.Fragment>

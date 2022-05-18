@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styles from './Navbar.module.scss'
-import useAuth from "../../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 
 const Navbar = () => {
   const {modalRef} = useAuth();

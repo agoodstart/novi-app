@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useRef, useImperativeHandle } from 'react';
 import styles from './Tabs.module.scss'
 
-export function Tabs({children, customStyles}) {
+export function Tabs({children, color, backgroundColor}) {
     const panelRefs = useRef([]);
     let realIndex = 0;
 
+    const colors = {
+        backgroundColor,
+        color,
+    }
+
     return (
-        <div className={styles['tabs']} style={customStyles}>
+        <div className={styles['tabs']} style={colors}>
             {React.Children.map(children, (child, index) => {
                 if (child.type === TabPanel) {
                     panelRefs.current.push(React.createRef());

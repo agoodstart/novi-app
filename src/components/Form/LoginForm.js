@@ -1,6 +1,6 @@
 import Form, {TextInput} from "./Form";
 import Validate from "./validationRules";
-import useAuth from "../../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {

@@ -1,5 +1,5 @@
 import React, {useReducer, useEffect, useState, useMemo, useRef} from 'react';
-import { validationReducer } from '../../../utils/reducers';
+import { validationReducer } from '../../utils/reducers';
 import styles from './Form.module.scss';
 
 const Form = ({children, onSubmit}) => {

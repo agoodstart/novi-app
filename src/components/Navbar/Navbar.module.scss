@@ -65,7 +65,7 @@
 }
 
 .btn {
-    font-size: inherit;
+    font-size: 2.2rem;
     font-family: inherit;
     color: #f7f7f7;
     padding: 1rem 2.5rem;
@@ -78,7 +78,7 @@
 }
 
 .btn--blue {
-font-size: inherit;
+font-size: 2.2rem;
 font-family: inherit;
 color: #f7f7f7;
 padding: 1rem 2.5rem;
@@ -93,4 +93,5 @@ box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
     width: 3px;
     height: 25px;
     background-color: #bc58a4;
+    border-radius: 10px;
 }
