@@ -2,9 +2,10 @@ const ColorTheme = {
   black: '#0a0f0d',
   white: '#fcfcfc',
 
+  // Emerald
   primary: {
     light: '#0cce6b',
-    main: '#00bc71',
+    medium: '#00bc71',
     dark: '#00aa74',
 
     gradient: {
@@ -13,9 +14,10 @@ const ColorTheme = {
     }
   },
 
+  // FireOpal
   secondary: {
     light: '#ef6461',
-    main: '#e05685',
+    medium: '#e05685',
     dark: '#bc58a4',
 
     gradient: {
@@ -24,9 +26,10 @@ const ColorTheme = {
     }
   },
 
+  // ElectricBlue
   tertiary: {
     light: '#87f6ff',
-    main: '#67d5ff',
+    medium: '#67d5ff',
     dark: '#72b1f2',
 
     gradient: {

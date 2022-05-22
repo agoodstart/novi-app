@@ -9,11 +9,11 @@
     &__item {
         display: flex;
         flex-grow: 1;
-        background-color: var(--cadetgray-medium);
+        // background-color: var(--cadetgray-medium);
 
-        &-active {
-            background-color: var(--cadetgray-light);
-        }
+        // &-active {
+        //     background-color: var(--cadetgray-light);
+        // }
     }
 
     &__link {

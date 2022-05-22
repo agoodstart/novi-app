@@ -16,12 +16,10 @@ export default function Layout() {
 
     return (
     <div className={styles['layout']}>
-        <Navbar />
-            <ToastContainer />
-            <main className={styles['App']}>
-                <Outlet />
-            </main>
-        <Footer />
+        <Navbar authModal={modalRef} />
+        <ToastContainer />
+        <Outlet />
+        {/* <Footer /> */}
         <Modal ref={modalRef} >
             <ModalContent />
         </Modal>

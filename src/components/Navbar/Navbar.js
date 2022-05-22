@@ -3,14 +3,12 @@ import { NavLink } from "react-router-dom";
 import styles from './Navbar.module.scss'
 import useAuth from "../../hooks/useAuth";
 
-const Navbar = () => {
-  const {modalRef} = useAuth();
+const Navbar = (props) => {
   console.log('navbar component rendered');
-
-  const [clicked, setClicked] = useState(false);
+  console.log(props.authModal)
 
   const handleClick = () => {
-    modalRef.current.openModal()
+    props.authModal.current.openModal()
   };
 
   const checkIfActive = ({ isActive }) => ( `${styles.navigation__link} ` + ( isActive ? `${styles['navigation__link--active']}` : "" ) );

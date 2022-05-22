@@ -7,22 +7,22 @@ import useTheme from "../../hooks/useTheme";
 export default function ModalContent() {
     const {colors } = useTheme();
 
-    console.log(colors.black);
-
-    const tabStyles = {
-        width: '65rem',
-    }
-
     return (
         <Tabs color={colors.white}>
             <TabList>
-                <Tab>Inloggen</Tab>
-                <Tab>Registeren</Tab>
+                <Tab
+                    activeBackgroundColor={colors.tertiary.medium}
+                    inactiveBackgroundColor={colors.tertiary.dark}
+                >Inloggen</Tab>
+                <Tab
+                    activeBackgroundColor={colors.tertiary.medium}
+                    inactiveBackgroundColor={colors.tertiary.dark}
+                >Registeren</Tab>
             </TabList>
-            <TabPanel>
+            <TabPanel backgroundColor={colors.tertiary.medium}>
                 <LoginForm />
             </TabPanel>
-            <TabPanel>
+            <TabPanel backgroundColor={colors.tertiary.medium}>
                 <RegisterForm />
             </TabPanel>
       </Tabs>

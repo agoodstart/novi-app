@@ -24,8 +24,12 @@ export function Tabs({children, color, backgroundColor}) {
     )
 }
 
-export const TabPanel = React.forwardRef((props, ref) => {
+export const TabPanel = React.forwardRef(({children, backgroundColor}, ref) => {
     const [active, setActive] = useState(false)
+
+    const customStyles = {
+        backgroundColor
+    }
 
     useImperativeHandle(ref, () => ({
         toggleActive: (isActive) => {
@@ -36,8 +40,8 @@ export const TabPanel = React.forwardRef((props, ref) => {
     return (
         <React.Fragment>
             {active ?
-                <div className={styles['tabs__panel']}>
-                    {props.children}
+                <div className={styles['tabs__panel']} style={customStyles}>
+                    {children}
                 </div>: 
             null}
         </React.Fragment>
@@ -80,8 +84,12 @@ export const Tab = (props) => {
         props.toggleState(props.index);
     }
 
+    const customStyles = {
+        backgroundColor: props.isActive ? props.activeBackgroundColor : props.inactiveBackgroundColor
+    }
+
     return (
-        <li className={`${styles['tabs__item']} ${props.isActive || props.default ? styles['tabs__item-active'] : ""}`}>
+        <li className={styles['tabs__item']} style={customStyles}>
             <a
             onClick={activate} 
             className={styles['tabs__link']}
