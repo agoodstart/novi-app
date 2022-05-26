@@ -6,7 +6,7 @@ import Contact from './pages/Contact/Contact';
 import DashboardHome from './pages/DashboardHome/DashboardHome';
 import Unauthorized from './pages/Unauthorized/Unauthorized';
 import NotFound from './pages/NotFound/NotFound';
-import Profile from './pages/Profile/Profile';
+import Account from './pages/Account/Account';
 import Test from './pages/Test/Test'
 
 import WebsiteLayout from './layout/WebsiteLayout/WebsiteLayout';
@@ -25,9 +25,9 @@ export default function App() {
       </Route>
 
       {/* User authentication beyond this point */}
-      <Route path="/dashboard" element={<DashboardLayout />} >
-        <Route path="/dashboard" element={<DashboardHome />} />
-        <Route path="profile" element={<Profile />} />
+      <Route path="/" element={<DashboardLayout />} >
+        <Route path="dashboard" element={<DashboardHome />} />
+        <Route path="account" element={<Account />} />
       </Route>
     </Routes>
   );
