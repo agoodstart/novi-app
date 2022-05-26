@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import styles from './Navbar.module.scss'
+import styles from './Navbar.module.scss';
+import Button from "../Button/Button";
+import useTheme from "../../hooks/useTheme";
 import useAuth from "../../hooks/useAuth";
 
-const Navbar = (props) => {
+const Navbar = () => {
+  const {modalRef} = useAuth();
+  const {colors} = useTheme();
   console.log('navbar component rendered');
 
-  const handleClick = () => {
-    props.authModal.current.openModal()
-  };
+  const handleOpenModal = () => {
+    modalRef.current.openModal();
+  }
 
   const checkIfActive = ({ isActive }) => ( `${styles.navigation__link} ` + ( isActive ? `${styles['navigation__link--active']}` : "" ) );
 
@@ -39,10 +43,22 @@ const Navbar = (props) => {
           <div className={styles['divider']}></div>
         </li>
         <li className={styles.navigation__item}>
-          <button className={styles['btn']} onClick={handleClick}>Inloggen</button>
+          <Button
+            color={colors.primary.gradient.half}
+            variant="pill"
+            size="medium"
+            boxShadow="light"
+            onClick={handleOpenModal}
+          >Inloggen</Button>
         </li>
         <li className={styles.navigation__item}>
-          <button className={styles['btn--blue']} onClick={handleClick}>Registreren</button>
+        <Button
+            color={colors.tertiary.gradient.half}
+            variant="pill"
+            size="medium"
+            boxShadow="light"
+            onClick={handleOpenModal}
+          >Registreren</Button>
         </li>
       </ul>
     </nav>

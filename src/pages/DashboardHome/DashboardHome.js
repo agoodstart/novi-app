@@ -1,19 +1,12 @@
-import useAuth from "../../hooks/useAuth";
+import React from 'react';
+import { useOutletContext } from "react-router-dom";
 
 export default function DashboardHome() {
-  console.log('dashboard route rendered');
-  const { modalRef } = useAuth();
-
-  const handleOpenModal = () => {
-    modalRef.current.openModal();
-  }
+  const user = useOutletContext();
 
   return (
-      <section className="section-dashboard">
-        <div className="row">
-            <button onClick={handleOpenModal}>Open Modal</button>
-        </div>
-      </section>
-    );
-  }
-
+    <React.Fragment>
+      <h2>welcome {user}!</h2>
+    </React.Fragment>
+  );
+}

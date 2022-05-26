@@ -9,7 +9,7 @@ const ColorTheme = {
     dark: '#00aa74',
 
     gradient: {
-      half: 'linear-gradient(to right, #00bc71, #00b373, #00aa74);',
+      half: 'linear-gradient(to right, #00bc71, #00b373, #00aa74)',
       full: 'linear-gradient(to right, #0cce6b, #00c56f, #00bc71, #00b373, #00aa74)',
     }
   },
@@ -33,8 +33,8 @@ const ColorTheme = {
     dark: '#72b1f2',
 
     gradient: {
-      half: 'linear-gradient(to right, #67d5ff, #68c4fa, #72b1f2);',
-      full: 'linear-gradient(to right, #87f6ff, #72e6ff, #67d5ff, #68c4fa, #72b1f2);',
+      half: 'linear-gradient(to right, #67d5ff, #68c4fa, #72b1f2)',
+      full: 'linear-gradient(to right, #87f6ff, #72e6ff, #67d5ff, #68c4fa, #72b1f2)',
     }
   },
 

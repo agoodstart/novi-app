@@ -9,8 +9,6 @@ import NotFound from './pages/NotFound/NotFound';
 import Profile from './pages/Profile/Profile';
 import Test from './pages/Test/Test'
 
-import RequireAuth from './routes/RequireAuth';
-
 import WebsiteLayout from './layout/WebsiteLayout/WebsiteLayout';
 import DashboardLayout from './layout/DashboardLayout/DashboardLayout';
 
@@ -26,11 +24,10 @@ export default function App() {
         <Route path="*" element={<NotFound />} />      
       </Route>
 
-      <Route element={<RequireAuth />}>
-        <Route path="/" element={<DashboardLayout />} >
-          <Route path="/" element={<DashboardHome />} />
-          <Route path="profile" element={<Profile />} />
-        </Route>
+      {/* User authentication beyond this point */}
+      <Route path="/dashboard" element={<DashboardLayout />} >
+        <Route path="/dashboard" element={<DashboardHome />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
     </Routes>
   );
