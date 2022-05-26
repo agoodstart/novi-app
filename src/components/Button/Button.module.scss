@@ -1,0 +1,58 @@
+.btn {
+  font-size: 2.2rem;
+  border: none;
+  font-family: inherit;
+  color: #f7f7f7;
+  // padding: 1rem 2.5rem;
+  padding: 1.5rem 3.5rem;
+  border-radius: 10rem;
+  text-decoration: none;
+  background-image: linear-gradient(to right, #0cce6b, #00c56f, #00bc71, #00b373, #00aa74);
+  // background-image: linear-gradient(to right, #e05685, #d05596, #bc58a4);
+  // box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+
+  &--shadow-light {
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  }
+
+  &--shadow-dark {
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  }
+
+  &--small {
+    font-size: 1.5rem;
+    padding: .5rem 2rem;
+  }
+
+  &--medium {
+    font-size: 2.2rem;
+    padding: 1rem 2.5rem;
+  }
+
+  &--large {
+    font-size: 2.5rem;
+    padding: 1.5rem 3.5rem;
+  }
+
+  &--contained {
+    border-radius: 7px;
+  }
+
+  &--pill {
+    border-radius: 80px;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:active {
+    outline: none;
+    border: none;
+  }
+
+  &:focus {
+    outline: 0;
+  }
+}

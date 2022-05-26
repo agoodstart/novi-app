@@ -5,7 +5,6 @@ import useAuth from "../../hooks/useAuth";
 
 const Navbar = (props) => {
   console.log('navbar component rendered');
-  console.log(props.authModal)
 
   const handleClick = () => {
     props.authModal.current.openModal()

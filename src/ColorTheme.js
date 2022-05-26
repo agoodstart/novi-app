@@ -10,7 +10,7 @@ const ColorTheme = {
 
     gradient: {
       half: 'linear-gradient(to right, #00bc71, #00b373, #00aa74);',
-      full: 'linear-gradient(to right, #0cce6b, #00c56f, #00bc71, #00b373, #00aa74);',
+      full: 'linear-gradient(to right, #0cce6b, #00c56f, #00bc71, #00b373, #00aa74)',
     }
   },
 

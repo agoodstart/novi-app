@@ -43,10 +43,12 @@ const Form = ({children, onSubmit}) => {
           (formComponents.includes(child.type) ? React.cloneElement(child, { updateComponentState }) : child)
         )}
 
-      <input 
+      <button 
         type="submit"
         disabled={!isFormInvalid}
-        />
+      >
+        Submit
+      </button>
       </form>
     </div>
   )

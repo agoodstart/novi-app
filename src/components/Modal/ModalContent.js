@@ -11,18 +11,18 @@ export default function ModalContent() {
         <Tabs color={colors.white}>
             <TabList>
                 <Tab
-                    activeBackgroundColor={colors.tertiary.medium}
-                    inactiveBackgroundColor={colors.tertiary.dark}
+                    activeBackgroundColor={colors.grey.light}
+                    inactiveBackgroundColor={colors.grey.medium}
                 >Inloggen</Tab>
                 <Tab
-                    activeBackgroundColor={colors.tertiary.medium}
-                    inactiveBackgroundColor={colors.tertiary.dark}
+                    activeBackgroundColor={colors.grey.light}
+                    inactiveBackgroundColor={colors.grey.medium}
                 >Registeren</Tab>
             </TabList>
-            <TabPanel backgroundColor={colors.tertiary.medium}>
+            <TabPanel backgroundColor={colors.grey.light}>
                 <LoginForm />
             </TabPanel>
-            <TabPanel backgroundColor={colors.tertiary.medium}>
+            <TabPanel backgroundColor={colors.grey.light}>
                 <RegisterForm />
             </TabPanel>
       </Tabs>

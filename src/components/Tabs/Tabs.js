@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef, useImperativeHandle } from 'react';
 import styles from './Tabs.module.scss'
 
+/*
+TODO:
+move activecolors to tablist
+*/
+
 export function Tabs({children, color, backgroundColor}) {
     const panelRefs = useRef([]);
     let realIndex = 0;
