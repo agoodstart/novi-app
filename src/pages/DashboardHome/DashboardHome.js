@@ -1,6 +1,6 @@
-import useAuth from "../../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 
-export default function Dashboard() {
+export default function DashboardHome() {
   console.log('dashboard route rendered');
   const { modalRef } = useAuth();
 

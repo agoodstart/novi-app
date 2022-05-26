@@ -1,8 +1,11 @@
 import React from 'react';
-import Typography from '../../../components/Typography/Typography';
-import Button from '../../../components/Button/Button';
-import useAuth from '../../../hooks/useAuth';
-import useTheme from '../../../hooks/useTheme';
+
+import useTheme from '../../hooks/useTheme';
+import useAuth from '../../hooks/useAuth';
+
+import Button from '../../components/Button/Button';
+import Typography from '../../components/Typography/Typography';
+
 import styles from './Home.module.scss';
 
 export default function Home() {
