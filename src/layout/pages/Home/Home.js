@@ -35,7 +35,8 @@ export default function Home() {
             variant="pill"
             size="large"
             boxShadow="dark"
-            onClick={handleOpenModal}>
+            onClick={handleOpenModal}
+            >
               Login to discover
             </Button>
         </div>

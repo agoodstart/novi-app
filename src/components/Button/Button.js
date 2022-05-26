@@ -1,6 +1,6 @@
 import styles from './Button.module.scss';
 
-export default function Button({color, variant, size, boxShadow, onClick, customStyles, children}) {
+export default function Button({color, variant, size, boxShadow, onClick, customStyles, isDisabled, children}) {
 
   const setCustomStyles = {
     background: color,
@@ -15,7 +15,7 @@ export default function Button({color, variant, size, boxShadow, onClick, custom
   );  
 
   return (
-    <button className={setClassNames()} style={setCustomStyles} onClick={onClick}>
+    <button className={setClassNames()} style={setCustomStyles} onClick={onClick} disabled={isDisabled}>
       {children}
     </button>
   )
