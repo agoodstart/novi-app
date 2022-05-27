@@ -4,3 +4,4 @@ import { ThemeContext } from '../context/ThemeProvider';
 export default function useTheme() {
     return useContext(ThemeContext);
 }
+ 

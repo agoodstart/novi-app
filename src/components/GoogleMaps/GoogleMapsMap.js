@@ -87,6 +87,7 @@ const EmbeddedMap = ({defaultCenter}) => {
         center={defaultCenter}
         defaultZoom={14}
         margin={[50, 50, 50, 50]}
+        yesIWantToUseGoogleMapApiInternals
         // options={''}
         // onChange={''}
 
@@ -94,18 +95,18 @@ const EmbeddedMap = ({defaultCenter}) => {
         onClick={onMapClick}
         >
           {markers.length && markers.map((marker, i) => (
-            <FontAwesomeIcon icon={faLocationPin} lat={marker.lat} lng={marker.lng} key={i} size="6x" />
+            <Marker lat={marker.lat} lng={marker.lng} key={i}  />
           ))}
       </GoogleMapReact>
     </div>
   )
 }
 
-const Map = () => {
+const GoogleMapsMap = () => {
   const { data, error, isPending } = useAsync({ promiseFn: getDeviceLocation });
   if (isPending) return 'loading...';
   if (error) return 'something went wrong';
   if (data) return <EmbeddedMap defaultCenter={data} />
 }
 
-export default Map;
+export default GoogleMapsMap;

@@ -8,6 +8,7 @@ import Unauthorized from './pages/Unauthorized/Unauthorized';
 import NotFound from './pages/NotFound/NotFound';
 import Account from './pages/Account/Account';
 import Test from './pages/Test/Test'
+import AddTravelPlan from './pages/AddTravelPlan/AddTravelPlan';
 
 import WebsiteLayout from './layout/WebsiteLayout/WebsiteLayout';
 import DashboardLayout from './layout/DashboardLayout/DashboardLayout';
@@ -27,6 +28,7 @@ export default function App() {
       {/* User authentication beyond this point */}
       <Route path="/" element={<DashboardLayout />} >
         <Route path="dashboard" element={<DashboardHome />} />
+        <Route path="/addtravelplan" element={<AddTravelPlan />} />
         <Route path="account" element={<Account />} />
       </Route>
     </Routes>

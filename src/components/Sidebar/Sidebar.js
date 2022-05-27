@@ -35,8 +35,8 @@ export default function Sidebar() {
 
           <li className={styles['sidebarnav__item']}>
           <NavLink 
-            to='/newtravels'
-            className={checkIfActive}>New Travels</NavLink>
+            to='/addtravelplan'
+            className={checkIfActive}>Add Travel Plan</NavLink>
           </li>
         </ul>
       </nav>

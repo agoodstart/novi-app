@@ -1,11 +1,11 @@
 import {useEffect} from 'react';
-import Map from "../../components/Map/Map";
+import GoogleMapsMap from '../../components/GoogleMaps/GoogleMapsMap';
 
 export default function Test() {
   useEffect(() => {
     console.log('test page rendered');
   })
     return (
-      <Map />
+      <GoogleMapsMap />
     );
   }
