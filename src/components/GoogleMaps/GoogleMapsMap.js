@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { useAsync } from 'react-async';
 import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationPin } from '@fortawesome/free-solid-svg-icons';
 import Marker from './Marker';
 import styles from './Map.module.scss';
 
@@ -76,7 +74,8 @@ const EmbeddedMap = ({defaultCenter}) => {
   }, [markers])
 
   const onChildClick = (index, coords) => {
-    return;
+    console.log(coords);
+    console.log(index);
   }
 
   return (
@@ -95,7 +94,7 @@ const EmbeddedMap = ({defaultCenter}) => {
         onClick={onMapClick}
         >
           {markers.length && markers.map((marker, i) => (
-            <Marker lat={marker.lat} lng={marker.lng} key={i}  />
+            <Marker lat={marker.lat} lng={marker.lng} key={i} text="Halloooooo"  />
           ))}
       </GoogleMapReact>
     </div>

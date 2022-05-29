@@ -1,23 +1,23 @@
 import React from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationPin } from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '@iconify/react';
+import locationIcon from '@iconify/icons-mdi/map-marker';
 
-export default function Marker({lat, lng, key}) {
-  const customStyles = {
-    // position: 'relative',
-    // transform: 'translate(50%, -50%)',
+export default function Marker(props) {
+  console.log(props);
+
+  const pinSize = {
+    fontSize: '6rem',
+    color: 'darkgoldenrod'
   }
 
   const positioning = {
-    // width: '100px',
-    // height: '100px',
     position: 'absolute',
-    transform: 'translate(-50%, -100%)',
+    transform: 'translate(-50%, -90%)',
   }
 
   return (
-    <div lat={lat} lng={lng} key={key} style={positioning}>
-        <FontAwesomeIcon icon={faLocationPin} size="4x" />
+    <div style={positioning}>
+        <Icon icon={locationIcon} style={pinSize} />
     </div>
   )
 }
