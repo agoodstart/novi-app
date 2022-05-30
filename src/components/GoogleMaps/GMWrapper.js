@@ -35,24 +35,37 @@ const getDeviceLocation = () => {
 
 
 export default function GMWrapper() {
-  const [initialCenter, setInitialCenter] = useState({ lat: 0, lng: 0 })
+  const [center, setCenter] = useState({ lat: 0, lng: 0 })
+  const [zoom, setZoom] = useState(13)
   const [markers, setMarkers] = useState([]);
 
   const onClick = (e) => {
     setMarkers([...markers, e.latLng]);
   }
 
+  const onIdle = (map) => {
+    console.log("onIdle");
+    setZoom(map.getZoom());
+    setCenter(map.getCenter().toJSON());
+  };
+
+  const onZoomChanged = (v) => {
+    console.log('zoom changed')
+  }
+
   useEffect(() => {
-    getDeviceLocation().then(data => setInitialCenter(data))
+    getDeviceLocation().then(data => setCenter(data))
   }, [])
 
   return (
     <Wrapper apiKey={REACT_APP_GOOGLE_MAPS_API_KEY} render={render} >
       <ActualMap
+        onZoomChanged={onZoomChanged}
+        onIdle={onIdle}
         onClick={onClick}
         disableDefaultUI={true}
-        zoom={13}
-        center={initialCenter}
+        zoom={zoom}
+        center={center}
       >
         {markers.length && markers.map((marker, i) => (
           <NewMarker key={i} position={marker} />
