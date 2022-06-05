@@ -1,23 +1,25 @@
-import React from "react";
-import { Icon } from '@iconify/react';
-import locationIcon from '@iconify/icons-mdi/map-marker';
+import { useState, useEffect } from "react";
 
-export default function Marker(props) {
-  console.log(props);
+export default function Marker(options) {
+  const [marker, setMarker] = useState();
 
-  const pinSize = {
-    fontSize: '6rem',
-    color: 'darkgoldenrod'
-  }
+  useEffect(() => {
+    if(!marker) {
+      setMarker(new window.google.maps.Marker());
+    }
 
-  const positioning = {
-    position: 'absolute',
-    transform: 'translate(-50%, -90%)',
-  }
+    return () => {
+      if(marker) {
+        marker.setMap(null);
+      }
+    }
+  }, [marker]);
 
-  return (
-    <div style={positioning}>
-        <Icon icon={locationIcon} style={pinSize} />
-    </div>
-  )
+  useEffect(() => {
+    if(marker) {
+      marker.setOptions(options)
+    }
+  }, [marker, options])
+
+  return null;
 }

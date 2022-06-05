@@ -20,12 +20,11 @@ const useDeepCompareEffectForMaps = (callback, dependencies) => {
   useEffect(callback, dependencies.map(useDeepCompareMemoize))
 }
 
-export default function ActualMap({onClick, onIdle, onZoomChanged, children, ...options}) {
+export default function Map({onClick, onIdle, onZoomChange, onMouseMove, children, ...options}) {
   const ref = useRef(null);
   const [map, setMap] = useState();
 
   useEffect(() => {
-    console.log('test');
     if (ref.current && !map) {
       setMap(new window.google.maps.Map(ref.current, {}));
     }
@@ -33,16 +32,16 @@ export default function ActualMap({onClick, onIdle, onZoomChanged, children, ...
 
   useDeepCompareEffectForMaps(() => {
     if(map) {
-      console.log('bruh');
       map.setOptions(options);
     }
   }, [map, options])
 
   useEffect(() => {
     if (map) {
-      ["click", "idle", "zoom_changed"].forEach((eventName) =>
+      ["click", "idle", "mousemove"].forEach((eventName) =>
         window.google.maps.event.clearListeners(map, eventName)
       );
+
       if (onClick) {
         map.addListener("click", onClick);
       }
@@ -50,22 +49,29 @@ export default function ActualMap({onClick, onIdle, onZoomChanged, children, ...
       if (onIdle) {
         map.addListener("idle", () => onIdle(map));
       }
+
+      if (onMouseMove) {
+        map.addListener("mousemove", onMouseMove)
+      }
     }
-  }, [map, onClick, onIdle]);
+  }, [map, onClick, onIdle, onMouseMove]);
 
   useEffect(() => {
     if(map) {
       window.google.maps.event.clearListeners(map, "zoom_changed");
 
-      if(onZoomChanged) {
-        map.addListener("zoom_changed", onZoomChanged)
+      if(onZoomChange) {
+        map.addListener("zoom_changed", () => {
+          onZoomChange(map)
+        })
       }
     }
-  }, [map, onZoomChanged])
+  }, [map, onZoomChange])
 
   const mapSize = {
     height: '85vh',
-    width: '85%'
+    width: '85%',
+    borderRadius: '20px'
   }
 
   return (
