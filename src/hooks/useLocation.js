@@ -19,17 +19,29 @@ export default function useLocation() {
     return d;
   }
 
-  const getGeocodedAddress = (lat, lng, depth) => {
-    GoogleService.getGeocodeJSON(lat, lng)
+  const getGeocodedAddress = (lat, lng, depth, components) => {
+    GoogleService.getGeocodeJSON(lat, lng, depth)
       .then(results => {
-        console.log(results[results.length - 1].formatted_address)
+        let resultComponents = 
+        Array.from(
+          results.address_components.filter(
+            component => !component.types.every(
+              type => !components.includes(type)
+            )
+          ), 
+          x => x.long_name
+        );
+        console.log(resultComponents);
       })
   }
   
   const getDeviceLocation = () => {
-    console.log('test device locaiton')
-
-    return wrappedLocation.unwrap();
+    try {
+      return wrappedLocation.unwrap();
+    }
+    catch(e) {
+      return null;
+    }
   }
 
   return {

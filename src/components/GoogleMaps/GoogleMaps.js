@@ -17,21 +17,32 @@ const render = (status) => {
     }
 }
 
-export default function GoogleMaps() {
+export default function GoogleMaps({defaultCenter}) {
   const location = useLocation();
+  const netherlands = { lat: 52.132633, lng: 5.2912659}
 
-  const deviceLocation = useMemo(() => {
-    return location.getDeviceLocation();
+  const currentCenter = useMemo(() => {
+    if(defaultCenter) {
+      return defaultCenter;
+    }
+
+    let deviceLocation = location.getDeviceLocation();
+
+    if(deviceLocation) {
+      return deviceLocation
+    } else {
+      return netherlands
+    }
   }, [])
   
-  const [center, setCenter] = useState(deviceLocation)
+  const [center, setCenter] = useState(currentCenter)
   const [zoom, setZoom] = useState(11)
   const [markers, setMarkers] = useState([]);
 
   const onClick = (e) => {
     setMarkers([...markers, e.latLng]);
     
-    location.getGeocodedAddress(e.latLng.lat(), e.latLng.lng(), "locality");
+    location.getGeocodedAddress(e.latLng.lat(), e.latLng.lng(), 0, ["locality", "country"]);
   }
 
   const onIdle = (map) => {
@@ -50,7 +61,7 @@ export default function GoogleMaps() {
   }
 
   useEffect(() => {
-    location.getGeocodedAddress(deviceLocation.lat, deviceLocation.lng, "locality");
+    location.getGeocodedAddress(currentCenter.lat, currentCenter.lng, 0, ["locality", "country"]);
   }, [])
 
   return (

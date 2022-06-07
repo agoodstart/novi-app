@@ -69,9 +69,10 @@ export default function Map({onClick, onIdle, onZoomChange, onMouseMove, childre
   }, [map, onZoomChange])
 
   const mapSize = {
-    height: '85vh',
-    width: '85%',
-    borderRadius: '20px'
+    height: '50vh',
+    width: '60%',
+    borderRadius: '20px',
+    boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
   }
 
   return (

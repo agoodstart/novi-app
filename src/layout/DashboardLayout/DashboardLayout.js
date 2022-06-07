@@ -8,12 +8,11 @@ export default function DashboardLayout() {
     const auth = useRequireAuth();
 
     return (
-    <div className={styles['layout']}>
-        <Sidebar />
-        <main>
-            <Outlet context={auth?.user?.username} />
-        </main>
-
-    </div> 
+        <div className={styles['layout']}>
+            <Sidebar />
+            <main>
+                <Outlet context={auth?.user?.username} />
+            </main>
+        </div> 
     )
 }

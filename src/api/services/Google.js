@@ -1,5 +1,5 @@
 import axios from "axios";
-const { REACT_APP_GOOGLE_MAPS_API_KEY, REACT_APP_GOOGLE_GEOLOCATION_API } = process.env;
+const { REACT_APP_GOOGLE_MAPS_API_KEY } = process.env;
 
 class GoogleService {
   #GeocodeAPI;
@@ -9,12 +9,6 @@ class GoogleService {
   };
 
   #createAPI = () => {
-    const params = new URLSearchParams({
-      key: REACT_APP_GOOGLE_MAPS_API_KEY
-    });
-
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?${params}`;
-
     const geocodeAPI = axios.create({
       baseURL: "https://maps.googleapis.com/maps/api/geocode",
     })
@@ -22,14 +16,14 @@ class GoogleService {
     return geocodeAPI;
   }
 
-  getGeocodeJSON = (lat, lng) => {
+  getGeocodeJSON = (lat, lng, depth) => {
     const params = new URLSearchParams({
       latlng: `${lat},${lng}`,
       key: REACT_APP_GOOGLE_MAPS_API_KEY
     });
 
     return this.#GeocodeAPI.get(`json?${params}`).then(response => {
-      return response.data.results
+      return response.data.results[depth]
     })
   }
 
@@ -54,6 +48,7 @@ class GoogleService {
       },
       (err) => {
         status = 'error';
+        console.log('error');
         response = err;
       })
   
