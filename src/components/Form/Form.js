@@ -1,8 +1,10 @@
-import React, {useReducer, useEffect, useState, useMemo, useRef} from 'react';
+import React, {useReducer, useEffect, useState, useMemo, useRef, Children} from 'react';
 import { validationReducer } from '../../utils/reducers';
 import styles from './Form.module.scss';
 
 const Form = ({children, onSubmit}) => {
+  const childCount = Children.count(Children.map(children, (child) => child.type === FormControl ? child : null));
+  console.log(childCount);
   /* 
   the validationstate of the form depends on its children so we need to reference their states
   but useRef does not cause a rerender, so I use a simple usestate hook to force a rerender.
@@ -40,7 +42,7 @@ const Form = ({children, onSubmit}) => {
     <div className={styles['form__wrapper']}>
       <form className="" onSubmit={formSubmission}>
         {React.Children.map(children, (child) => 
-          (formComponents.includes(child.type) ? React.cloneElement(child, { updateComponentState }) : child)
+          React.cloneElement(child, { updateComponentState })
         )}
 
       <button 
@@ -112,6 +114,11 @@ function HOC(FormComponent) {
   }
 
   return Wrapper;
+}
+
+export const FormControl = ({children, validations, ...rest}) => {
+
+  return children;
 }
 
 export const TextInput = HOC(React.memo(({placeholder, name, checkValidations, type}) => {

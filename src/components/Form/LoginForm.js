@@ -1,4 +1,4 @@
-import Form, {TextInput} from "./Form";
+import Form, {TextInput, FormControl} from "./Form";
 import Validate from "./validationRules";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -25,8 +25,15 @@ export default function LoginForm() {
 
     return (
         <Form onSubmit={loginUser}>
-            <TextInput placeholder="Username" name="loginusername" type="text" validations={[ Validate.isRequired(), Validate.minLength(5) ]} />
-            <TextInput placeholder="Password" name="loginpassword" type="password" validations={[ Validate.isRequired(), Validate.minLength(6) ]} />
+            <FormControl>
+                <TextInput placeholder="Username" name="loginusername" type="text" validations={[ Validate.isRequired(), Validate.minLength(5) ]} />
+            </FormControl>
+
+            <FormControl>
+                <TextInput placeholder="Password" name="loginpassword" type="password" validations={[ Validate.isRequired(), Validate.minLength(6) ]} />
+            </FormControl>
+
+            <button>test</button>
         </Form>
     )
 }
