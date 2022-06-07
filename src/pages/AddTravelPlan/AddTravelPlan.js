@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { Suspense, useState } from 'react';
 import { useOutletContext } from "react-router-dom";
-import GoogleMapsMap from '../../components/GoogleMaps/GoogleMapsMap';
+import GoogleMaps from '../../components/GoogleMaps/GoogleMaps';
 
 export default function AddTravelPlan() {
   const user = useOutletContext();
 
   return (
-    <GoogleMapsMap />
+    <Suspense fallback={<p>Loading Google Maps....</p>}>
+      <GoogleMaps />
+    </Suspense>
   );
 }

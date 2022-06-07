@@ -1,6 +1,6 @@
 import "@fontsource/ubuntu";
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import './index.scss'
 import App from './App';
@@ -11,8 +11,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 
 const rootElement = document.getElementById("root");
-
-ReactDOM.render(
+const root = createRoot(rootElement);
+root.render(
   <React.StrictMode>
     <BrowserRouter>
       <ThemeProvider>
@@ -23,8 +23,7 @@ ReactDOM.render(
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>
-  </React.StrictMode>,
-  rootElement
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

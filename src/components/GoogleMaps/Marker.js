@@ -1,23 +1,25 @@
-import React from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationPin } from '@fortawesome/free-solid-svg-icons';
+import { useState, useEffect } from "react";
 
-export default function Marker({lat, lng, key}) {
-  const customStyles = {
-    // position: 'relative',
-    // transform: 'translate(50%, -50%)',
-  }
+export default function Marker(options) {
+  const [marker, setMarker] = useState();
 
-  const positioning = {
-    // width: '100px',
-    // height: '100px',
-    position: 'absolute',
-    transform: 'translate(-50%, -100%)',
-  }
+  useEffect(() => {
+    if(!marker) {
+      setMarker(new window.google.maps.Marker());
+    }
 
-  return (
-    <div lat={lat} lng={lng} key={key} style={positioning}>
-        <FontAwesomeIcon icon={faLocationPin} size="4x" />
-    </div>
-  )
+    return () => {
+      if(marker) {
+        marker.setMap(null);
+      }
+    }
+  }, [marker]);
+
+  useEffect(() => {
+    if(marker) {
+      marker.setOptions(options)
+    }
+  }, [marker, options])
+
+  return null;
 }
