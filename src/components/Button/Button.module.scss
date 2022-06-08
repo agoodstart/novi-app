@@ -1,4 +1,5 @@
 .btn {
+  cursor: pointer;
   font-size: 2.2rem;
   border: none;
   font-family: inherit;
@@ -7,7 +8,7 @@
   padding: 1.5rem 3.5rem;
   border-radius: 10rem;
   text-decoration: none;
-  background-image: linear-gradient(to right, #0cce6b, #00c56f, #00bc71, #00b373, #00aa74);
+  background: linear-gradient(to right, #0cce6b, #00c56f, #00bc71, #00b373, #00aa74);
   // background-image: linear-gradient(to right, #e05685, #d05596, #bc58a4);
   // box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
@@ -43,9 +44,16 @@
     border-radius: 80px;
   }
 
-  &:hover {
-    cursor: pointer;
+  &:disabled {
+    cursor: default;
+    background-color: -internal-light-dark(rgba(239, 239, 239, 0.3), rgba(19, 1, 1, 0.3)) !important;
+    color: -internal-light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3)) !important;
+    border-color: -internal-light-dark(rgba(118, 118, 118, 0.3), rgba(195, 195, 195, 0.3)) !important;
   }
+
+  // &:hover {
+    
+  // }
 
   &:active {
     outline: none;

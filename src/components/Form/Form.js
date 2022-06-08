@@ -1,6 +1,61 @@
 import React, {useReducer, useEffect, useState, Children} from 'react';
 import styles from './Form.module.scss';
 
+export const TextInput = ({placeholder, name, onChange}) => {
+  return (
+      <input
+        className={styles['form__input']}
+        placeholder={placeholder} 
+        type="text"
+        id={name}
+        name={name}
+        onChange={onChange} />
+  )
+};
+
+export const EmailInput = ({placeholder, name, onChange}) => {
+  return (
+      <input
+        className={styles['form__input']}
+        placeholder={placeholder} 
+        type="email"
+        id={name}
+        name={name}
+        onChange={onChange} />
+  )
+};
+
+export const PasswordInput = ({placeholder, name, onChange}) => {
+  return (
+      <input
+        className={styles['form__input']}
+        placeholder={placeholder} 
+        type="password"
+        id={name}
+        name={name}
+        onChange={onChange} />
+  )
+};
+
+export const NumberInput = ({placeholder, name, onChange}) => {
+  return (
+      <input
+        className={styles['form__input']}
+        placeholder={placeholder} 
+        type="number"
+        id={name}
+        name={name}
+        onChange={onChange} />
+  )
+};
+
+const formComponents = [
+  TextInput,
+  EmailInput,
+  NumberInput,
+  PasswordInput,
+]
+
 const validationReducer = (_state, action) => {
   switch(action.rule) {
     case 'required':
@@ -50,10 +105,6 @@ const Form = ({children, onSubmit, onValidate}) => {
   useEffect(() => {
     onValidate(formElementsValid.every(el => el))
   }, [formElementsValid])
-
-  const formComponents = [
-    TextInput
-  ]
 
   const formSubmission = (e) => {
     e.preventDefault();
@@ -127,7 +178,7 @@ export const FormControl = ({children, validations, ...rest}) => {
   return (
     <div className={styles['form__group']}>
       {Children.map(children, (child) => 
-        child.type === TextInput ? React.cloneElement(child, { onChange: checkValidations }) : null
+        formComponents.includes(child.type) ? React.cloneElement(child, { onChange: checkValidations }) : null
       )}
       {state.errorMessage && !state.isValid && (
         <span className="error">{state.errorMessage}</span>
@@ -135,17 +186,5 @@ export const FormControl = ({children, validations, ...rest}) => {
     </div>
   )
 }
-
-export const TextInput = ({placeholder, name, onChange, type}) => {
-  return (
-      <input
-        className={styles['form__input']}
-        placeholder={placeholder} 
-        type={type}
-        id={name}
-        name={name}
-        onChange={onChange} />
-  )
-};
 
 export default Form;

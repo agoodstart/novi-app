@@ -1,8 +1,9 @@
 .sidebar {
-  width: 400px;
-  height: 100%;
+  // width: 400px;
+  // height: 100%;
+  grid-area: sidebar;
   background: linear-gradient(to left, #67d5ff, #68c4fa, #72b1f2);
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   display: flex;
   flex-flow: wrap row;
   align-items: center;

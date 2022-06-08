@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { createCustomEqual } from "fast-equals";
+import styles from './GoogleMaps.module.scss';
 
 // deepCompare compares nested objects, like the map instance
 const deepCompareEqualsForMaps = createCustomEqual((deepEqual) => (a, b) => {
@@ -69,15 +70,14 @@ export default function Map({onClick, onIdle, onZoomChange, onMouseMove, childre
   }, [map, onZoomChange])
 
   const mapSize = {
-    height: '50vh',
-    width: '60%',
     borderRadius: '20px',
+    // boxShadow: 'rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px',
     boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
   }
 
   return (
     <>
-      <div ref={ref} style={mapSize} />
+      <div ref={ref} style={mapSize} className={styles['maps']}  />
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           // set the map prop on the child component
