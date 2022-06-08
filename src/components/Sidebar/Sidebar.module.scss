@@ -1,7 +1,9 @@
 .sidebar {
-  width: 400px;
-  height: 100%;
-  background-color: #67d5ff;
+  // width: 400px;
+  // height: 100%;
+  grid-area: sidebar;
+  background: linear-gradient(to left, #67d5ff, #68c4fa, #72b1f2);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   display: flex;
   flex-flow: wrap row;
   align-items: center;
@@ -31,7 +33,7 @@
     letter-spacing: 2px;
 
     &--active {
-      background: #87f6ff;
+      background: linear-gradient(to right, #72e6ff, transparent);
     }
   }
 }

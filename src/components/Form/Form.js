@@ -1,32 +1,110 @@
-import React, {useReducer, useEffect, useState, useMemo, useRef} from 'react';
-import { validationReducer } from '../../utils/reducers';
+import React, {useReducer, useEffect, useState, Children} from 'react';
 import styles from './Form.module.scss';
 
-const Form = ({children, onSubmit}) => {
-  /* 
-  the validationstate of the form depends on its children so we need to reference their states
-  but useRef does not cause a rerender, so I use a simple usestate hook to force a rerender.
-  */
-  let formRef = useRef({});
-  const [update, toggleForceUpdate] = useState(true)
+export const TextInput = ({placeholder, name, onChange}) => {
+  return (
+      <input
+        className={styles['form__input']}
+        placeholder={placeholder} 
+        type="text"
+        id={name}
+        name={name}
+        onChange={onChange} />
+  )
+};
 
-  const updateComponentState = (name, isValid) => {
-    formRef.current = {...formRef.current, [name]: isValid}
-    toggleForceUpdate(!update);
+export const EmailInput = ({placeholder, name, onChange}) => {
+  return (
+      <input
+        className={styles['form__input']}
+        placeholder={placeholder} 
+        type="email"
+        id={name}
+        name={name}
+        onChange={onChange} />
+  )
+};
+
+export const PasswordInput = ({placeholder, name, onChange}) => {
+  return (
+      <input
+        className={styles['form__input']}
+        placeholder={placeholder} 
+        type="password"
+        id={name}
+        name={name}
+        onChange={onChange} />
+  )
+};
+
+export const NumberInput = ({placeholder, name, onChange}) => {
+  return (
+      <input
+        className={styles['form__input']}
+        placeholder={placeholder} 
+        type="number"
+        id={name}
+        name={name}
+        onChange={onChange} />
+  )
+};
+
+const formComponents = [
+  TextInput,
+  EmailInput,
+  NumberInput,
+  PasswordInput,
+]
+
+const validationReducer = (_state, action) => {
+  switch(action.rule) {
+    case 'required':
+      return {
+        errorMessage: `${action.payload.name} required`,
+        isValid: false,
+      }
+    case 'minLength':
+      return {
+        errorMessage: `${action.payload.name} should at least contain ${action.payload.length} characters`,
+        isValid: false,
+      }
+    case 'isEmail':
+      return {
+        errorMessage: `${action.payload.name} is not a valid email`,
+        isValid: false,
+      }
+    case 'passwordMatch':
+      return {
+        errorMessage: `Passwords do not match`,
+        isValid: false,
+      }
+    case 'noError':
+      return {
+        errorMessage: '',
+        isValid: true
+      }
+    default:
+      throw new Error('This action does not exist');
+  }
+}
+
+const Form = ({children, onSubmit, onValidate}) => {
+  let realIndex = 0;
+  const [formElementsValid, setFormElementsValid] = useState(Array.from(children, (child, i) => child.type === FormControl ? false : null).filter(el => el !== null));
+
+  const changeFormElementStatus = (isValid, index) => {
+    setFormElementsValid(formElementsValid.map((el, i) => {
+      if(i === index) {
+        el = isValid
+      }
+
+      return el;
+    }));
   }
 
-  // useMemo will cache the variable. useMemo will only run when the dependency changes
-  const isFormInvalid = useMemo(() => {
-    for (const property in formRef.current) {
-      if (!formRef.current[property]) return false
-    }
-
-    return true;
-  }, [update])
-
-  const formComponents = [
-    TextInput
-  ]
+  useEffect(() => {
+    onValidate(formElementsValid.every(el => el))
+  }, [formElementsValid])
 
   const formSubmission = (e) => {
     e.preventDefault();
@@ -39,91 +117,74 @@ const Form = ({children, onSubmit}) => {
   return (
     <div className={styles['form__wrapper']}>
       <form className="" onSubmit={formSubmission}>
-        {React.Children.map(children, (child) => 
-          (formComponents.includes(child.type) ? React.cloneElement(child, { updateComponentState }) : child)
-        )}
+        {Children.map(children, (child) => {
+          if(child.type === FormControl) {
+            return React.cloneElement(child, { index: realIndex++, changeFormElementStatus })
+          }
 
-      <button 
-        type="submit"
-        disabled={!isFormInvalid}
-      >
-        Submit
-      </button>
+          return child;
+        })}
       </form>
     </div>
   )
 }
 
-function HOC(FormComponent) {
-  function Wrapper({placeholder, name, validations, type, ...rest}) {
-    const initialState = {
-      errorMessage: '',
-      isValid: false
-    }
-
-    const [state, dispatch] = useReducer(validationReducer, initialState);
-  
-    useEffect(() => {
-      rest.updateComponentState(name, state.isValid)
-    }, [state.isValid])
-  
-    const isInputFieldValid = (obj) => {
-      if (!obj.validations) return true;
-
-      for (const validation of obj.validations) {
-        if(!validation.validate(obj.field)) {
-          dispatch({
-            rule: validation.name,
-            payload: obj.field
-          });
-          return false;
-        }
-      }
-
-      return true;
-    }
-  
-    const checkValidations = (e) => {
-      const validObj = {
-        field: {
-          name: e.target.name,
-          value: e.target.value
-        },
-        validations
-      }
-
-      const isValidInput = isInputFieldValid(validObj)
-
-      if(isValidInput) {
-        dispatch({
-          rule: 'noError'
-        })
-      }
-    }
-
-    return (
-      <div className={styles['form__group']}>
-        <FormComponent placeholder={placeholder} name={name} type={type} checkValidations={checkValidations} />
-        {state.errorMessage && !state.isValid && (
-          <span className="error">{state.errorMessage}</span>
-        )}
-      </div>
-    )
+export const FormControl = ({children, validations, ...rest}) => {
+  const initialState = {
+    errorMessage: '',
+    isValid: false
   }
 
-  return Wrapper;
-}
+  const [state, dispatch] = useReducer(validationReducer, initialState);
 
-export const TextInput = HOC(React.memo(({placeholder, name, checkValidations, type}) => {
+  useEffect(() => {
+    rest.changeFormElementStatus(state.isValid, rest.index)
+  }, [state.isValid])
+
+  const isInputFieldValid = (obj) => {
+    if (!obj.validations) return true;
+
+    for (const validation of obj.validations) {
+      if(!validation.validate(obj.field)) {
+        dispatch({
+          rule: validation.name,
+          payload: obj.field
+        });
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  const checkValidations = (e) => {
+    const validObj = {
+      field: {
+        name: e.target.name,
+        value: e.target.value
+      },
+      validations
+    }
+
+    const isValidInput = isInputFieldValid(validObj)
+
+    if(isValidInput) {
+      dispatch({
+        rule: 'noError'
+      })
+    }
+  }
+
   return (
-      <input
-        className={styles['form__input']}
-        placeholder={placeholder} 
-        type={type}
-        id={name}
-        name={name}
-        onChange={checkValidations} />
+    <div className={styles['form__group']}>
+      {Children.map(children, (child) => 
+        formComponents.includes(child.type) ? React.cloneElement(child, { onChange: checkValidations }) : null
+      )}
+      {state.errorMessage && !state.isValid && (
+        <span className="error">{state.errorMessage}</span>
+      )}
+    </div>
   )
-}));
+}
 
 export default Form;

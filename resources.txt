@@ -5,3 +5,6 @@ https://cloud.google.com/blog/products/maps-platform/how-calculate-distances-map
 
 Framer Motion
 React DnD
+
+Spotify Website
+Lava Drops Website

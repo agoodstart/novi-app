@@ -1,32 +1,60 @@
-import Form, {TextInput} from "./Form";
-import Validate from "./validationRules";
-import useAuth from "../../hooks/useAuth";
+import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
+import useAuth from "../../hooks/useAuth";
+import useTheme from '../../hooks/useTheme';
+
+import Validate from "./validationRules";
+
+import Form, { FormControl, TextInput, PasswordInput } from "./Form";
+import Button from "../Button/Button";
+
 export default function LoginForm() {
-    const {auth, modalRef} = useAuth();
-    const navigate = useNavigate();
+  const { colors } = useTheme();
+  const {auth, modalRef} = useAuth();
+  const navigate = useNavigate();
+  const [formValid, setFormValid] = useState(false);
 
-    const loginUser = (data) => {
-        const credentials = {
-            username: data.loginusername,
-            password: data.loginpassword,
-        }
+  const changeFormValidation = (isValid) => {
+    setFormValid(isValid)
+  }
 
-        auth.signin(credentials)
-            .then(() => {
-                modalRef.current.closeModal();
-                navigate('/dashboard')
-            },
-            err => {
-                console.log(err);
-            });
+  const loginUser = (data) => {
+    const credentials = {
+      username: data.loginusername,
+      password: data.loginpassword,
     }
 
-    return (
-        <Form onSubmit={loginUser}>
-            <TextInput placeholder="Username" name="loginusername" type="text" validations={[ Validate.isRequired(), Validate.minLength(5) ]} />
-            <TextInput placeholder="Password" name="loginpassword" type="password" validations={[ Validate.isRequired(), Validate.minLength(6) ]} />
-        </Form>
-    )
+    auth.signin(credentials)
+      .then(() => {
+          modalRef.current.closeModal();
+          navigate('/dashboard')
+      },
+      err => {
+          console.log(err);
+    });
+  }
+
+  return (
+    <Form onSubmit={loginUser} onValidate={changeFormValidation}>
+
+      <FormControl validations={[ Validate.isRequired(), Validate.minLength(5) ]}>
+        <TextInput placeholder="Username" name="loginusername" />
+      </FormControl>
+
+      <FormControl validations={[ Validate.isRequired(), Validate.minLength(6) ]}>
+        <PasswordInput placeholder="Password" name="loginpassword" />
+      </FormControl>
+
+      <Button color={colors.primary.gradient.full}
+      isDisabled={!formValid}
+      variant="contained"
+      size="medium"
+      boxShadow="light"
+      customStyles={{
+        width: '100%'
+      }}>Login</Button>
+      
+    </Form>
+  )
 }

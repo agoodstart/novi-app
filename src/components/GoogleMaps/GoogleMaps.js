@@ -3,6 +3,7 @@ import useLocation from "../../hooks/useLocation";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import Map from "./Map";
 import Marker from "./Marker";
+import styles from './GoogleMaps.module.scss';
 
 const { REACT_APP_GOOGLE_MAPS_API_KEY } = process.env;
 
