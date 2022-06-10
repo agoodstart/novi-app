@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState, useMemo } from "react";
 import { createCustomEqual } from "fast-equals";
+import useGoogleApi from "../../hooks/useGoogleApi";
 import styles from './GoogleMaps.module.scss';
-import useLocation from "../../hooks/useLocation";
-
+import DeviceLocationSuspender from "../../api/services/Google";
 // deepCompare compares nested objects, like the map instance
 const deepCompareEqualsForMaps = createCustomEqual((deepEqual) => (a, b) => {
   return deepEqual(a, b)
@@ -22,22 +22,12 @@ const useDeepCompareEffectForMaps = (callback, dependencies) => {
   useEffect(callback, dependencies.map(useDeepCompareMemoize))
 }
 
-export default function GoogleMaps({
-  onBoundsChange, 
-  onCenterChange, 
+const currentlocation = DeviceLocationSuspender()
+
+export default function GoogleMaps({ 
   onClick, 
-  onContextMenu,
-  onDoubleClick,
-  onDrag,
-  onDragStart,
-  onDragEnd,
-  onHeadingChange,
   onIdle, 
   onMouseMove, 
-  onMouseOut,
-  onMouseOver,
-  onTilesLoad,
-  onTiltChange,
   onZoomChange,
 
   defaultCenter, 
@@ -45,10 +35,9 @@ export default function GoogleMaps({
   children, 
   ...options
 }) {
+  const { map, createMap } = useGoogleApi();
   const ref = useRef(null);
-  const [map, setMap] = useState();
-
-  const location = useLocation();
+  // const [map, setMap] = useState();
   const netherlands = { lat: 52.132633, lng: 5.2912659}
 
   const currentCenter = useMemo(() => {
@@ -56,7 +45,13 @@ export default function GoogleMaps({
       return defaultCenter;
     }
 
-    let deviceLocation = location.getDeviceLocation();
+    let deviceLocation; 
+    try {
+      deviceLocation = currentlocation.unwrap()
+    }
+    catch(e) {
+      deviceLocation = null;
+    }
 
     if(deviceLocation) {
       return deviceLocation
@@ -67,10 +62,10 @@ export default function GoogleMaps({
 
   useEffect(() => {
     if (ref.current && !map) {
-      setMap(new google.maps.Map(ref.current, {
+      createMap(ref.current, {
         center: currentCenter,
         zoom: defaultZoom || 14,
-      }));
+      })
     }
   }, [ref, map])
 
@@ -83,61 +78,16 @@ export default function GoogleMaps({
   useEffect(() => {
     if (map) {
       [
-        "bounds_changed", 
-        "center_changed", 
         "click",
-        "contextmenu", 
-        "dblclick", 
-        "drag", 
-        "dragstart", 
-        "dragend", 
-        "heading_changed",
         "idle",
         "mousemove",
-        "mouseout",
-        "mouseover",
-        "tilesloaded",
-        "tilt_changed",
         "zoom_changed"
       ].forEach((eventName) =>
         google.maps.event.clearListeners(map, eventName)
       );
 
-      if(onBoundsChange) {
-        console.log('je moeder')
-        map.addListener("bounds_changed", () => onBoundsChange(map))
-      }
-
-      if(onCenterChange) {
-        map.addListener("center_changed", () => onCenterChange(map))
-      }
-
       if (onClick) {
-        map.addListener("click", (e) => onClick(e, map));
-      }
-
-      if (onContextMenu) {
-        map.addListener("contextmenu", (e) => onContextMenu(e, map))
-      }
-
-      if (onDoubleClick) {
-        map.addListener("dblclick", (e) => onDoubleClick(e, map))
-      }
-
-      if (onDrag) {
-        map.addListener("drag", () => onDrag(map))
-      }
-
-      if (onDragStart) {
-        map.addListener("dragstart", () => onDragStart(map))
-      }
-
-      if (onDragEnd) {
-        map.addListener("dragend", () => onDragEnd(map))
-      }
-
-      if (onHeadingChange) {
-        map.addListener("heading_changed", () => onHeadingChange(map))
+        map.addListener("click", onClick);
       }
 
       if (onIdle) {
@@ -148,43 +98,15 @@ export default function GoogleMaps({
         map.addListener("mousemove", () => onMouseMove(map))
       }
 
-      if (onMouseOut) {
-        map.addListener("mouseout", () => onMouseOut(map))
-      }
-
-      if (onMouseOver) {
-        map.addListener("mouseover", () => onMouseOver(map))
-      }
-
-      if (onTilesLoad) {
-        map.addListener("tilesloaded", () => onTilesLoad(map))
-      }
-
-      if (onTiltChange) {
-        map.addListener("tilt_changed", () => onTiltChange(map))
-      }
-
       if (onZoomChange) {
         map.addListener("zoom_changed", () => onZoomChange(map))
       }
     }
   }, [
     map, 
-    onBoundsChange,
-    onCenterChange,
     onClick, 
-    onContextMenu,
-    onDoubleClick,
-    onDrag,
-    onDragStart,
-    onDragEnd,
-    onHeadingChange,
     onIdle,
     onMouseMove,
-    onMouseOut,
-    onMouseOver,
-    onTilesLoad,
-    onTiltChange,
     onZoomChange
   ]);
 

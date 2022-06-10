@@ -6,6 +6,7 @@ import './index.scss'
 import App from './App';
 import { AuthProvider } from "./context/AuthProvider";
 import { ThemeProvider } from "./context/ThemeProvider";
+import { GoogleApiProvider } from "./context/GoogleApiProvider";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import reportWebVitals from './reportWebVitals';
@@ -16,11 +17,13 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <ThemeProvider>
-        <AuthProvider>
-          <Routes>
-            <Route path="/*" element={<App />} />
-          </Routes>
-        </AuthProvider>
+        <GoogleApiProvider>
+          <AuthProvider>
+            <Routes>
+              <Route path="/*" element={<App />} />
+            </Routes>
+          </AuthProvider>
+        </GoogleApiProvider>
       </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>

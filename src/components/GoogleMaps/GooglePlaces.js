@@ -1,17 +1,25 @@
 import {useState, useRef, useEffect} from 'react'
 import styles from './GoogleMaps.module.scss';
+import useGoogleApi from "../../hooks/useGoogleApi";
 
 export default function GooglePlaces({setDefaultValue, onPlaceChange}) {
-  const [autocomplete, setAutocomplete] = useState();
+  const {autocomplete, createAutocomplete} = useGoogleApi();
   const autocompleteRef = useRef(null);
 
   useEffect(() => {
     if(autocompleteRef.current && !autocomplete && autocompleteRef.current instanceof HTMLInputElement) {
-      setAutocomplete(new google.maps.places.Autocomplete(autocompleteRef.current, {
+      // console.log(autocompleteRef.current)
+      createAutocomplete(autocompleteRef.current, {
         types: ['(cities)']
-      }))
+      })
     }
   }, [autocomplete, autocompleteRef])
+
+  useEffect(() => {
+    if(autocompleteRef.current && autocomplete && autocompleteRef.current instanceof HTMLInputElement) {
+      autocompleteRef.current.value = setDefaultValue
+    }
+  }, [setDefaultValue, autocomplete, autocompleteRef])
 
   useEffect(() => {
     if(autocomplete) {
@@ -22,14 +30,9 @@ export default function GooglePlaces({setDefaultValue, onPlaceChange}) {
     }
   }, [autocomplete, onPlaceChange])
 
-  // useEffect(() => {
-  //   console.log('input element:', autocompleteRef.current);
-  //   console.log(autocompleteRef.current instanceof HTMLInputElement);
-  // })
-
 
 
   return (
-    <input type="text" className={styles['places']} value={setDefaultValue} id="autocomplete" ref={autocompleteRef} />
+    <input type="text" className={styles['places']} id="autocomplete" ref={autocompleteRef} />
   )
 }

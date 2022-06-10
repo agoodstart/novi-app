@@ -1,33 +1,5 @@
-import axios from "axios";
-const { REACT_APP_GOOGLE_MAPS_API_KEY } = process.env;
 
-class GoogleService {
-  #GeocodeAPI;
-
-  constructor() {
-    this.#GeocodeAPI = this.#createAPI();
-  };
-
-  #createAPI = () => {
-    const geocodeAPI = axios.create({
-      baseURL: "https://maps.googleapis.com/maps/api/geocode",
-    })
-
-    return geocodeAPI;
-  }
-
-  getGeocodeJSON = (lat, lng, depth) => {
-    const params = new URLSearchParams({
-      latlng: `${lat},${lng}`,
-      key: REACT_APP_GOOGLE_MAPS_API_KEY
-    });
-
-    return this.#GeocodeAPI.get(`json?${params}`).then(response => {
-      return response.data.results[depth]
-    })
-  }
-
-  deviceLocationSuspender = () => {
+const DeviceLocationSuspender = () => {
     let status = 'pending';
     let response;
 
@@ -65,6 +37,5 @@ class GoogleService {
 
     return { unwrap }
   }
-}
 
-export default new GoogleService();
+export default DeviceLocationSuspender;
