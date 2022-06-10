@@ -5,7 +5,7 @@ export default function Marker(options) {
 
   useEffect(() => {
     if(!marker) {
-      setMarker(new window.google.maps.Marker());
+      setMarker(new google.maps.Marker());
     }
 
     return () => {
