@@ -45,7 +45,7 @@ export const GoogleApiProvider = ({ children }) => {
   }, [autocomplete])
   
   useEffect(() => {
-    if(!map) {
+    if(map) {
       console.log('map is set!');
     }
   }, [map])
@@ -55,9 +55,9 @@ export const GoogleApiProvider = ({ children }) => {
   const getAutoComplete = () => autocomplete;
 
   const api = {
-    getMap,
-    getGeocoder,
-    getAutoComplete,
+    map,
+    geocoder,
+    autocomplete,
   }
 
   const checkStatus = (status, loader) => {

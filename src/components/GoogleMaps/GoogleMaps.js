@@ -3,6 +3,7 @@ import { createCustomEqual } from "fast-equals";
 import useGoogleApi from "../../hooks/useGoogleApi";
 import styles from './GoogleMaps.module.scss';
 import DeviceLocationSuspender from "../../api/services/Google";
+
 // deepCompare compares nested objects, like the map instance
 const deepCompareEqualsForMaps = createCustomEqual((deepEqual) => (a, b) => {
   return deepEqual(a, b)
@@ -30,15 +31,16 @@ export default function GoogleMaps({
   onMouseMove, 
   onZoomChange,
 
+  onMapsLoaded,
+
   defaultCenter, 
-  defaultZoom,
   children, 
   ...options
 }) {
   const { map, createMap } = useGoogleApi();
   const ref = useRef(null);
   // const [map, setMap] = useState();
-  const netherlands = { lat: 52.132633, lng: 5.2912659}
+  const netherlands = { lat: 52.132633, lng: 5.2912659 };
 
   const currentCenter = useMemo(() => {
     if(defaultCenter) {
@@ -62,18 +64,23 @@ export default function GoogleMaps({
 
   useEffect(() => {
     if (ref.current && !map) {
-      createMap(ref.current, {
-        center: currentCenter,
-        zoom: defaultZoom || 14,
-      })
+      createMap(ref.current)
     }
   }, [ref, map])
 
   useDeepCompareEffectForMaps(() => {
     if(map) {
-      map.setOptions(options);
+      map.setOptions(
+        {center: currentCenter , ...options}
+      );
     }
   }, [map, options])
+
+  useEffect(() => {
+    if(ref.current && map) {
+      onMapsLoaded();
+    }
+  }, [ref, map])
 
   useEffect(() => {
     if (map) {
@@ -99,7 +106,9 @@ export default function GoogleMaps({
       }
 
       if (onZoomChange) {
-        map.addListener("zoom_changed", () => onZoomChange(map))
+        map.addListener("zoom_changed", () => {
+          onZoomChange(map)
+        })
       }
     }
   }, [

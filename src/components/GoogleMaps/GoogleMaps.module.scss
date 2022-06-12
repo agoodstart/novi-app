@@ -5,5 +5,10 @@
 .places {
   grid-area: 1 / 2 / 1 / 4;
   align-self: center;
-  height: 50px;
+  display: flex;
+  flex-flow: column wrap;
+
+  &__input {
+    height: 50px;
+  }
 }

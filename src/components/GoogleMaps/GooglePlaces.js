@@ -33,6 +33,11 @@ export default function GooglePlaces({setDefaultValue, onPlaceChange}) {
 
 
   return (
-    <input type="text" className={styles['places']} id="autocomplete" ref={autocompleteRef} />
+    <>
+    <div className={styles['places']}>
+      <label className={styles['places__label']}>Your current location: </label>
+      <input type="text" className={styles['places__input']} id="autocomplete" ref={autocompleteRef} />
+    </div>
+    </>
   )
 }

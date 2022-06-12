@@ -1,0 +1,24 @@
+.list {
+  list-style-type: none;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  background: linear-gradient(to right, #0cce6b, #00c56f, #00bc71, #00b373, #00aa74);
+  border-radius: 30px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 1rem;
+  margin: 0 3rem;
+
+  &__item {
+    // background-color: whitesmoke;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    padding: 1.5rem 0 1.5rem 1rem;
+    width: 80%;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    
+    &:not(:last-child) {
+      margin-bottom: 1.5rem;
+    }
+  }
+}
