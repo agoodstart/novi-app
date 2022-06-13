@@ -5,7 +5,9 @@ import GoogleMaps from '../../components/GoogleMaps/GoogleMaps';
 import Marker from '../../components/GoogleMaps/Marker';
 import GooglePlaces from '../../components/GoogleMaps/GooglePlaces';
 import { List, ListItem } from '../../components/List/List';
+import Location from '../../components/Location/Location';
 
+import styles from './AddTravelPlan.module.scss';
 import useGoogleApi from '../../hooks/useGoogleApi';
 
 export default function AddTravelPlan() {
@@ -16,36 +18,41 @@ export default function AddTravelPlan() {
   const user = useOutletContext();
 
   const getGeocodedAddress = (latlng) => {
-    return api.geocoder
-      .geocode({ location: latlng }, (results, status) => {
-        if (status == 'OK') {
-          const [formattedAddr] = results.filter(component => component.types.includes('locality'));
-          console.log(formattedAddr);
-          return formattedAddr.formatted_address;
+    return new Promise((resolve, reject) => {
+      api.geocoder
+        .geocode({ location: latlng }, (results, status) => {
+          if (status == 'OK') {
+            resolve(results);
+          } else {
+            reject(status)
+          }
+        })
+    }).then(results => {
+        const [formattedAddr] = results.filter(component => component.types.includes('locality'));
+
+        if(!formattedAddr) {
+          return Promise.reject('cannot resolve address')
         } else {
-          alert('Geocode was not successfull: ', status)
+          return Promise.resolve(formattedAddr)
         }
-      }).then(result => {
-        console.log(result);
+      },
+      err => {
+        console.log('error')
       })
   }
 
   const onMapsLoaded = () => {
     const latlng = api.map.getCenter().toJSON();
 
-    api.geocoder
-      .geocode({ location: latlng }, (results, status) => {
-        if (status == 'OK') {
-          const [formattedAddr] = results.filter(component => component.types.includes('locality'));
-          setLocations([{
-            latlng,
-            addr: formattedAddr.formatted_address,
-          }])
-          setCurrentAddress(formattedAddr.formatted_address)
-
-        } else {
-          alert('Geocode was not successfull: ', status)
-        }
+    getGeocodedAddress(latlng)
+      .then(result => {
+        setLocations([{
+          latlng,
+          addr: result.formatted_address,
+        }])
+        setCurrentAddress(result.formatted_address)
+      }, err => {
+        console.log(err)
       })
   }
   
@@ -55,19 +62,15 @@ export default function AddTravelPlan() {
       lng: e.latLng.lng(),
     };
 
-    api.geocoder
-      .geocode({ location: latlng }, (results, status) => {
-        if (status == 'OK') {
-          const [formattedAddr] = results.filter(component => component.types.includes('locality'));
-          setLocations([...locations, {
-            latlng,
-            addr: formattedAddr.formatted_address,
-          }])
-
-        } else {
-          alert('Geocode was not successfull: ', status)
-        }
-      })
+    getGeocodedAddress(latlng)
+    .then(result => {
+      setLocations([...locations, {
+        latlng,
+        addr: result.formatted_address,
+      }])
+    }, err => {
+      console.log(err)
+    })
   }
 
   const onZoomChange = () => {
@@ -102,15 +105,15 @@ export default function AddTravelPlan() {
         </GoogleMaps>
       </Suspense>
 
-      <List customStyles={{
-        gridArea: '2 / 5 / 5 / 7',
-      }}>
-        {locations.length && locations.map((location, i) => (
-          <ListItem key={i}>
-            {location.addr}
-          </ListItem>
-        ))}
-      </List>
+      <div className={styles['locations']}>
+        <List>
+          {locations.length && locations.map((location, i) => (
+            <ListItem key={i}>
+              <Location location={location} index={i} />
+            </ListItem>
+          ))}
+        </List>
+      </div>
     </React.Fragment>
   );
 }
