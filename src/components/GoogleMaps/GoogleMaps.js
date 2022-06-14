@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState, useMemo } from "react";
 import { createCustomEqual } from "fast-equals";
 import useGoogleApi from "../../hooks/useGoogleApi";
-import styles from './GoogleMaps.module.scss';
 import DeviceLocationSuspender from "../../api/services/Google";
 
 // deepCompare compares nested objects, like the map instance
@@ -35,6 +34,9 @@ export default function GoogleMaps({
 
   defaultCenter, 
   children, 
+
+  customClassname,
+
   ...options
 }) {
   const { map, createMap } = useGoogleApi();
@@ -127,7 +129,7 @@ export default function GoogleMaps({
 
   return (
     <>
-      <div ref={ref} style={mapSize} className={styles['maps']}  />
+      <div ref={ref} style={mapSize} className={customClassname}  />
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           // set the map prop on the child component

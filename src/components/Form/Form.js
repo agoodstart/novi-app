@@ -1,7 +1,7 @@
 import React, {useReducer, useEffect, useState, Children} from 'react';
 import styles from './Form.module.scss';
 
-export const TextInput = ({placeholder, name, onChange}) => {
+export const TextInput = ({placeholder, name, onChange, fref}) => {
   return (
       <input
         className={styles['form__input']}
@@ -9,7 +9,8 @@ export const TextInput = ({placeholder, name, onChange}) => {
         type="text"
         id={name}
         name={name}
-        onChange={onChange} />
+        onChange={onChange}
+        ref={fref} />
   )
 };
 

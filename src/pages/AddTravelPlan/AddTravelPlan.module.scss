@@ -1,9 +1,8 @@
 .locations {
   grid-area: 2 / 5 / 5 / 7;
-  background: linear-gradient(to right, #0cce6b, #00c56f, #00bc71, #00b373, #00aa74);
+  background: linear-gradient(to right, #0cce6b80, #00c56f80, #00bc7180, #00b37380, #00aa7480);
   border-radius: 30px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  margin: 0 3rem;
 
   &__list {
     list-style-type: none;
@@ -24,4 +23,37 @@
       margin-bottom: 1.5rem;
     }
   }
+}
+
+.travelplan__control {
+  grid-area: 1 / 1 / 1 / 5;
+  background: linear-gradient(to right, #0cce6b80, #00c56f80, #00bc7180, #00b37380, #00aa7480);
+  // background: linear-gradient(to right, #ef6461, #ea5b73, #e05685, #d05596, #bc58a4);
+  border-radius: 30px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-around;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.travelplan__label {
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding-left: 5px;
+}
+
+.travelplan__maps {
+  grid-area: 2 / 1 / 6 / 5;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.travelplan__places {
+  // grid-area: 1 / 2 / 1 / 4;
+  align-self: center;
+  display: flex;
+  flex-flow: column wrap;
+  width: 30%;
+  transform: translateY(-5px);
 }

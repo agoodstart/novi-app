@@ -17,15 +17,20 @@ const render = (status) => {
 
 export const GoogleApiProvider = ({ children }) => {
   const [map, setMap] = useState();
-  const [autocomplete, setAutocomplete] = useState();
+  const [autocompleteCenter, setAutocompleteCenter] = useState();
+  const [autocompleteGeo, setAutocompleteGeo] = useState();
   const [geocoder, setGeocoder] = useState();
 
   const createMap = (refEl, options = {}) => {
     setMap(new google.maps.Map(refEl, options))
   } 
   
-  const createAutocomplete = (refEl, options = {}) => {
-    setAutocomplete(new google.maps.places.Autocomplete(refEl, options))
+  const createAutocompleteCenter = (refEl, options = {}) => {
+    setAutocompleteCenter(new google.maps.places.Autocomplete(refEl, options))
+  }
+
+  const createAutocompleteGeo = (refEl, options = {}) => {
+    setAutocompleteGeo(new google.maps.places.Autocomplete(refEl, options))
   }
   
   const createGeocoder = () => {
@@ -39,25 +44,33 @@ export const GoogleApiProvider = ({ children }) => {
   }, [geocoder])
   
   useEffect(() => {
-    if(autocomplete) {
-      console.log('autocomplete is set!')
-    }
-  }, [autocomplete])
-  
-  useEffect(() => {
     if(map) {
       console.log('map is set!');
     }
   }, [map])
 
-  const getMap = () => map;
-  const getGeocoder = () => geocoder;
-  const getAutoComplete = () => autocomplete;
-
   const api = {
     map,
+    createMap,
+
     geocoder,
-    autocomplete,
+
+    autocompleteGeo,
+    autocompleteCenter,
+    createAutocompleteGeo,
+    createAutocompleteCenter,
+
+    autocomplete: {
+      geo: {
+        autocomplete: autocompleteGeo,
+        createAutocomplete: createAutocompleteGeo
+      },
+
+      center: {
+        autocomplete: autocompleteCenter,
+        createAutocomplete: createAutocompleteCenter
+      }
+    },
   }
 
   const checkStatus = (status, loader) => {
@@ -67,7 +80,7 @@ export const GoogleApiProvider = ({ children }) => {
   }
 
   return (
-      <GoogleApiContext.Provider value={{ map, createMap, autocomplete, createAutocomplete, geocoder, api }}>
+      <GoogleApiContext.Provider value={{ map, createMap, geocoder, api }}>
         <Wrapper apiKey={REACT_APP_GOOGLE_MAPS_API_KEY} render={render} libraries={["places"]} callback={checkStatus}  >
           {children}
         </Wrapper>
