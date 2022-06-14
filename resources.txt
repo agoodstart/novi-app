@@ -9,6 +9,15 @@ https://www.robinwieruch.de/react-higher-order-components/
 https://www.w3docs.com/learn-javascript/places-autocomplete.html
 https://css-tricks.com/snippets/css/complete-guide-grid/#aa-fluid-columns-snippet
 https://kml4earth.appspot.com/icons.html
+https://www.google.com/search?q=dashboard+design&sxsrf=ALiCzsYy2m-Z5RgaFVv_E9zLCQM9Ao0IsA:1653561520128&source=lnms&tbm=isch&sa=X&ved=2ahUKEwih15XY_Pz3AhWxQkEAHdG8BI0Q_AUoAXoECAEQAw&biw=1846&bih=1104&dpr=2#imgrc=v5LFrVHJJpYMYM
+https://uxplanet.org/beautiful-dashboard-inspiration-ideas-for-2020-42f10c6b70ec
+https://www.youtube.com/watch?v=BkGtNBrOhKU
+https://www.youtube.com/watch?v=DfBkPtxobrU
+https://www.youtube.com/watch?v=iP3DnhCUIsE
+https://www.youtube.com/watch?v=UKdQjQX1Pko&t=512s
+https://www.youtube.com/watch?v=xZZ6cCQxcmE
+https://getcssscan.com/css-box-shadow-examples
+https://kml4earth.appspot.com/icons.html
 
 Framer Motion
 React DnD

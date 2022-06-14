@@ -13,11 +13,27 @@ import useGoogleApi from '../../hooks/useGoogleApi';
 export default function AddTravelPlan() {
   const { api } = useGoogleApi();
 
-  const [center, setCenter] = useState("")
-  const [origin, setOrigin] = useState("")
-  const [markers, setMarkers] = useState([])
+  const [placeCenter, setPlaceCenter] = useState("");
+  const [placeOrigin, setPlaceOrigin] = useState("");
+
+  const [markers, setMarkers] = useState([]);
   const [mapZoom, setMapZoom] = useState(11);
-  const [mapCenter, setMapCenter] = useState()
+  const [mapCenter, setMapCenter] = useState();
+
+  const calculateMarkerDistance = (mk1, mk2) => {
+    // I didn't calc this myself lol
+    // https://cloud.google.com/blog/products/maps-platform/how-calculate-distances-map-maps-javascript-api
+    const R = 6371.0710 // Radius of earth in km
+    // var R = 3958.8; // Radius of the Earth in miles
+    var rlat1 = mk1.lat * (Math.PI/180); // Convert degrees to radians
+    var rlat2 = mk2.lat * (Math.PI/180); // Convert degrees to radians
+    var difflat = rlat2-rlat1; // Radian difference (latitudes)
+    var difflon = (mk2.lng-mk1.lng) * (Math.PI/180); // Radian difference (longitudes)
+  
+    // idk wtf this calculation is but whatever
+    var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat/2)*Math.sin(difflat/2)+Math.cos(rlat1)*Math.cos(rlat2)*Math.sin(difflon/2)*Math.sin(difflon/2)));
+    return d;
+  }
 
   const getGeocodedAddress = (latlng) => {
     return new Promise((resolve, reject) => {
@@ -54,7 +70,7 @@ export default function AddTravelPlan() {
           type: 'origin',
           index: markers.length
         }])
-        setOrigin(result.formatted_address)
+        setPlaceOrigin(result.formatted_address)
       }, err => {
         console.log(err)
       })
@@ -88,7 +104,7 @@ export default function AddTravelPlan() {
 
     getGeocodedAddress(api.map.getCenter().toJSON())
     .then(result => {
-      setCenter(result.formatted_address);
+      setPlaceCenter(result.formatted_address);
     }, err => {
       console.log(err)
     })
@@ -98,6 +114,28 @@ export default function AddTravelPlan() {
     const place = autocomplete.getPlace();
 
     api.map.panTo({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()})
+  }
+
+  const onOriginPlaceChange = (autocomplete) => {
+    const place = autocomplete.getPlace();
+    const latlng = {
+      lat: place.geometry.location.lat(),
+      lng: place.geometry.location.lng()
+    }
+
+    api.map.panTo(latlng)
+    getGeocodedAddress(latlng)
+    .then(result => {
+      setMarkers(markers.map((marker, i) => {
+        if(marker.type === 'origin') {
+          marker.latlng = latlng;
+        }
+
+        return marker;
+      }));
+    }, err => {
+      console.log(err)
+    })
   }
 
   const onOriginMarkerDragend = (e, index) => {
@@ -113,7 +151,7 @@ export default function AddTravelPlan() {
         return marker;
       }));
 
-      setOrigin(result.formatted_address)
+      setPlaceOrigin(result.formatted_address)
     }, err => {
       console.log(err)
     })
@@ -135,8 +173,8 @@ export default function AddTravelPlan() {
           <label className={styles['travelplan__label']}>Your current location: </label>
           <TextInputWithGooglePlaces 
             autocompleteInstance={api.autocomplete.geo} 
-            onPlaceChange={onPlaceChange}
-            defaultLocation={origin}
+            onPlaceChange={onOriginPlaceChange}
+            defaultLocation={placeOrigin}
             types={['(cities)']}
             customStyles={{
               borderRadius: '10px'
@@ -149,7 +187,7 @@ export default function AddTravelPlan() {
           <TextInputWithGooglePlaces 
             autocompleteInstance={api.autocomplete.center} 
             onPlaceChange={onPlaceChange}
-            defaultLocation={center}
+            defaultLocation={placeCenter}
             types={['(cities)']}
             customStyles={{
               borderRadius: '10px'
@@ -191,10 +229,11 @@ export default function AddTravelPlan() {
 
       <div className={styles['locations']}>
         <List>
-          {markers.length && markers.map((location, i) => (
+          {markers.length && markers.map((marker, i) => (
+            marker.type === 'destination' ?
             <ListItem key={i}>
-              <Location location={location} index={i} />
-            </ListItem>
+              <Location location={marker} index={i} />
+            </ListItem> : console.log('no other element')
           ))}
         </List>
       </div>
