@@ -12,8 +12,10 @@ import useGoogleApi from '../../hooks/useGoogleApi';
 
 export default function AddTravelPlan() {
   const { api } = useGoogleApi();
-  const [currentAddress, setCurrentAddress] = useState("")
-  const [locations, setLocations] = useState([])
+
+  const [center, setCenter] = useState("")
+  const [origin, setOrigin] = useState("")
+  const [markers, setMarkers] = useState([])
   const [mapZoom, setMapZoom] = useState(11);
   const [mapCenter, setMapCenter] = useState()
 
@@ -46,11 +48,13 @@ export default function AddTravelPlan() {
 
     getGeocodedAddress(latlng)
       .then(result => {
-        setLocations([{
+        setMarkers([{
           latlng,
           addr: result.formatted_address,
+          type: 'origin',
+          index: markers.length
         }])
-        setCurrentAddress(result.formatted_address)
+        setOrigin(result.formatted_address)
       }, err => {
         console.log(err)
       })
@@ -64,9 +68,11 @@ export default function AddTravelPlan() {
 
     getGeocodedAddress(latlng)
     .then(result => {
-      setLocations([...locations, {
+      setMarkers([...markers, {
         latlng,
         addr: result.formatted_address,
+        type: 'destination',
+        index: markers.length
       }])
     }, err => {
       console.log(err)
@@ -76,7 +82,17 @@ export default function AddTravelPlan() {
   const onZoomChange = () => {
     setMapZoom(api.map.getZoom());
   }
-  console.log('test');
+
+  const onIdle = () => {
+    setMapCenter(api.map.getCenter().toJSON());
+
+    getGeocodedAddress(api.map.getCenter().toJSON())
+    .then(result => {
+      setCenter(result.formatted_address);
+    }, err => {
+      console.log(err)
+    })
+  }
 
   const onPlaceChange = (autocomplete) => {
     const place = autocomplete.getPlace();
@@ -84,10 +100,33 @@ export default function AddTravelPlan() {
     api.map.panTo({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()})
   }
 
+  const onOriginMarkerDragend = (e, index) => {
+    const latlng = { lat: e.latLng.lat(), lng: e.latLng.lng() }
+
+    getGeocodedAddress(latlng)
+    .then(result => {
+      setMarkers(markers.map((marker, i) => {
+        if(marker.index === index) {
+          marker.latlng = latlng;
+        }
+
+        return marker;
+      }));
+
+      setOrigin(result.formatted_address)
+    }, err => {
+      console.log(err)
+    })
+  }
+
+  const changeCenter = (autocomplete) => {
+
+  }
+
 
   useEffect(() => {
-    console.log(locations);
-  }, [locations])
+    console.log(markers);
+  }, [markers])
 
   return (
     <React.Fragment>
@@ -97,7 +136,7 @@ export default function AddTravelPlan() {
           <TextInputWithGooglePlaces 
             autocompleteInstance={api.autocomplete.geo} 
             onPlaceChange={onPlaceChange}
-            defaultLocation={currentAddress}
+            defaultLocation={origin}
             types={['(cities)']}
             customStyles={{
               borderRadius: '10px'
@@ -110,7 +149,7 @@ export default function AddTravelPlan() {
           <TextInputWithGooglePlaces 
             autocompleteInstance={api.autocomplete.center} 
             onPlaceChange={onPlaceChange}
-            defaultLocation={currentAddress}
+            defaultLocation={center}
             types={['(cities)']}
             customStyles={{
               borderRadius: '10px'
@@ -124,22 +163,35 @@ export default function AddTravelPlan() {
           onClick={onClick}
           onZoomChange={onZoomChange}
           onMapsLoaded={onMapsLoaded}
-          // onIdle={onIdle}
+          onIdle={onIdle}
           zoom={mapZoom}
           disableDefaultUI={true}
           zoomControl={true}
-          center={mapCenter}
+          defaultCenter={mapCenter}
           customClassname={styles['travelplan__maps']}
         >
-          {locations.length && locations.map((location, i) => (
-            <Marker key={i} position={location.latlng} />
+          {markers.length && markers.map((marker, i) => (
+            marker.type === 'origin' 
+              ? <Marker 
+                  key={i} 
+                  index={marker.index}
+                  onDragend={onOriginMarkerDragend} 
+                  position={marker.latlng} 
+                  icon={'http://maps.google.com/mapfiles/kml/paddle/red-stars.png'}  
+                /> 
+              : <Marker 
+                  key={i} 
+                  index={marker.index}
+                  position={marker.latlng} 
+                  icon={'http://maps.google.com/mapfiles/kml/paddle/red-circle.png'}  
+                /> 
           ))}
         </GoogleMaps>
       </Suspense>
 
       <div className={styles['locations']}>
         <List>
-          {locations.length && locations.map((location, i) => (
+          {markers.length && markers.map((location, i) => (
             <ListItem key={i}>
               <Location location={location} index={i} />
             </ListItem>

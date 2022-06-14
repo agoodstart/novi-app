@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function Marker(options) {
+export default function Marker({onDragend, index, ...options}) {
   const [marker, setMarker] = useState();
 
   useEffect(() => {
@@ -20,6 +20,12 @@ export default function Marker(options) {
       marker.setOptions(options)
     }
   }, [marker, options])
+
+  useEffect(() => {
+    if(marker) {
+      marker.addListener("dragend", (e) => onDragend(e, index))
+    }
+  }, [marker])
 
   return null;
 }

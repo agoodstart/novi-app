@@ -41,10 +41,10 @@ export default function GoogleMaps({
 }) {
   const { map, createMap } = useGoogleApi();
   const ref = useRef(null);
-  // const [map, setMap] = useState();
   const netherlands = { lat: 52.132633, lng: 5.2912659 };
 
   const currentCenter = useMemo(() => {
+    console.log('currentcenter')
     if(defaultCenter) {
       return defaultCenter;
     }
@@ -62,7 +62,7 @@ export default function GoogleMaps({
     } else {
       return netherlands
     }
-  }, [])
+  }, [defaultCenter])
 
   useEffect(() => {
     if (ref.current && !map) {
@@ -133,7 +133,7 @@ export default function GoogleMaps({
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           // set the map prop on the child component
-          return React.cloneElement(child, { map });
+          return React.cloneElement(child, { map, draggable: true });
         }
       })}
     </>

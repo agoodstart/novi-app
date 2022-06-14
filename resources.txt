@@ -2,6 +2,13 @@ https://github.com/adrianhajdin/project_travel_advisor
 https://github.com/shukerullah/react-geocode/blob/master/src/index.js
 https://docs.react-async.com/getting-started/usage
 https://cloud.google.com/blog/products/maps-platform/how-calculate-distances-map-maps-javascript-api
+https://bobbyhadz.com/blog/react-set-input-value-ref
+https://bobbyhadz.com/blog/react-set-ref-style
+https://developers.google.com/maps/documentation/javascript/markers#draggable
+https://www.robinwieruch.de/react-higher-order-components/
+https://www.w3docs.com/learn-javascript/places-autocomplete.html
+https://css-tricks.com/snippets/css/complete-guide-grid/#aa-fluid-columns-snippet
+https://kml4earth.appspot.com/icons.html
 
 Framer Motion
 React DnD
