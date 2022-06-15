@@ -1,8 +1,12 @@
 .locations {
   grid-area: 1 / 6 / 7 / 9;
-  background: linear-gradient(to right, #0cce6b80, #00c56f80, #00bc7180, #00b37380, #00aa7480);
+  padding: 15px;
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  row-gap: 20px;
+  background: #EBEBEB;
   border-radius: 30px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 
   &__list {
     list-style-type: none;

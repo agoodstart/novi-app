@@ -1,15 +1,26 @@
 .location {
+  padding: 20px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  // background: #6ec5b495;
+  border-radius: 30px;
+  border: 1px solid rgba(0, 0, 0, .10); 
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  transition: all .2s;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+
+  &-active {
+    // background: linear-gradient(to right, #e4b363, #cdaf54, #b4aa49, #99a541, #7da03d);
+  }
 }
 
 .location__info {
   display: flex;
   flex-flow: column wrap;
-  justify-content: center;
-}
-
-.location__buttons {
-  display: flex;
   justify-content: center;
 }

@@ -6,6 +6,7 @@ import Marker from '../../components/GoogleMaps/Marker';
 import { List, ListItem } from '../../components/List/List';
 import Location from '../../components/Location/Location';
 import TextInputWithGooglePlaces from '../../components/GoogleMaps/TextInputWithGooglePlaces';
+import Divider from '../../components/Divider/Divider';
 
 import styles from './AddTravelPlan.module.scss';
 import useGoogleApi from '../../hooks/useGoogleApi';
@@ -102,7 +103,6 @@ export default function AddTravelPlan() {
   }
 
   const onIdle = () => {
-    console.log('idle')
     setMapCenter(api.map.getCenter().toJSON());
 
     getGeocodedAddress(api.map.getCenter().toJSON())
@@ -113,8 +113,12 @@ export default function AddTravelPlan() {
     })
   }
 
-  function onLocationMapCenter (marker) {
-    api.map.panTo(marker.latlng);
+  const onLocationCenter = (locationMarker) => {
+    api.map.panTo(locationMarker.latlng);
+  }
+
+  const onLocationRemove = (locationMarker) => {
+    setMarkers(markers.filter(marker => marker.index !== locationMarker.index))
   }
 
   const onPlaceChange = (autocomplete) => {
@@ -132,7 +136,7 @@ export default function AddTravelPlan() {
 
     api.map.panTo(latlng);
 
-    setMarkers(markers.map((marker, i) => {
+    setMarkers(markers.map((marker) => {
       if(marker.type === 'origin') {
         marker.latlng = latlng;
       }
@@ -231,18 +235,43 @@ export default function AddTravelPlan() {
       </Suspense>
 
       <div className={styles['locations']}>
-        <List>
-          {markers.length && markers.map((marker, i) => (
-            marker.type === 'destination' ?
-            <ListItem key={i}>
-              <Location 
-                marker={marker} 
-                calculateMarkerDistance={calculateMarkerDistance}
-                onCenter={onLocationMapCenter} />
-            </ListItem> : null
-          ))}
-        </List>
+        {markers.length && markers.filter(marker => marker.type === 'destination').map((marker, i, currentArr) => (
+          <Location 
+              marker={marker} 
+              calculateMarkerDistance={calculateMarkerDistance}
+              onCenter={onLocationCenter}
+              onRemove={onLocationRemove}
+              gridPosition={++i}
+          />
+      ))}
       </div>
     </React.Fragment>
   );
 }
+
+
+{/* <div className={styles['locations']}>
+<List>
+  {markers.length && markers
+    .filter(marker => marker.type === 'destination')
+    .map((marker, i) => (
+      i === 0
+      ? <ListItem key={i}>
+          <Location 
+            marker={marker} 
+            calculateMarkerDistance={calculateMarkerDistance}
+            onCenter={onLocationMapCenter} />
+        </ListItem>
+      : <React.Fragment>
+          <Divider />
+          <ListItem key={i}>
+            <Location 
+              marker={marker} 
+              calculateMarkerDistance={calculateMarkerDistance}
+              onCenter={onLocationMapCenter} />
+          </ListItem> 
+        </React.Fragment>
+    ))
+  }
+</List>
+</div> */}

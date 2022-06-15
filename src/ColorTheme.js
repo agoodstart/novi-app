@@ -38,6 +38,17 @@ const ColorTheme = {
     }
   },
 
+  quaternary: {
+    light: '#e4b363',
+    medium: '#b4aa49',
+    dark: '#7da03d',
+
+    gradient: {
+      half: 'linear-gradient(to right, #b4aa49, #99a541, #7da03d)',
+      full: 'linear-gradient(to right, #e4b363, #cdaf54, #b4aa49, #99a541, #7da03d)'
+    }
+  },
+
   grey: {
     light: '#6ec5b4',
     medium: '#75acaf',
