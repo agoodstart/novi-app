@@ -14,19 +14,17 @@ import reportWebVitals from './reportWebVitals';
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <ThemeProvider>
-        <GoogleApiProvider>
-          <AuthProvider>
-            <Routes>
-              <Route path="/*" element={<App />} />
-            </Routes>
-          </AuthProvider>
-        </GoogleApiProvider>
-      </ThemeProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+  <BrowserRouter>
+    <ThemeProvider>
+      <GoogleApiProvider>
+        <AuthProvider>
+          <Routes>
+            <Route path="/*" element={<App />} />
+          </Routes>
+        </AuthProvider>
+      </GoogleApiProvider>
+    </ThemeProvider>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -21,8 +21,8 @@ const ColorTheme = {
     dark: '#bc58a4',
 
     gradient: {
-      half: 'linear-gradient(to right, #e05685, #d05596, #bc58a4);',
-      full: 'linear-gradient(to right, #ef6461, #ea5b73, #e05685, #d05596, #bc58a4);',
+      half: 'linear-gradient(to right, #e05685, #d05596, #bc58a4)',
+      full: 'linear-gradient(to right, #ef6461, #ea5b73, #e05685, #d05596, #bc58a4)',
     }
   },
 

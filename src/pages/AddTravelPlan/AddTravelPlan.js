@@ -123,19 +123,15 @@ export default function AddTravelPlan() {
       lng: place.geometry.location.lng()
     }
 
-    api.map.panTo(latlng)
-    getGeocodedAddress(latlng)
-    .then(result => {
-      setMarkers(markers.map((marker, i) => {
-        if(marker.type === 'origin') {
-          marker.latlng = latlng;
-        }
+    api.map.panTo(latlng);
 
-        return marker;
-      }));
-    }, err => {
-      console.log(err)
-    })
+    setMarkers(markers.map((marker, i) => {
+      if(marker.type === 'origin') {
+        marker.latlng = latlng;
+      }
+
+      return marker;
+    }));
   }
 
   const onOriginMarkerDragend = (e, index) => {

@@ -1,0 +1,11 @@
+.location {
+  display: flex;
+  justify-content: space-between;
+}
+
+.location__buttons,
+.location__info {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+}
