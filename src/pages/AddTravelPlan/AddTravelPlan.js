@@ -17,22 +17,24 @@ export default function AddTravelPlan() {
   const [placeOrigin, setPlaceOrigin] = useState("");
 
   const [markers, setMarkers] = useState([]);
-  const [mapZoom, setMapZoom] = useState(11);
+  const [mapZoom, setMapZoom] = useState(8);
   const [mapCenter, setMapCenter] = useState();
 
-  const calculateMarkerDistance = (mk1, mk2) => {
+  const calculateMarkerDistance = (destinationMarker) => {
+    const originMarker = markers.find(marker => marker.type === 'origin');
+
     // I didn't calc this myself lol
     // https://cloud.google.com/blog/products/maps-platform/how-calculate-distances-map-maps-javascript-api
     const R = 6371.0710 // Radius of earth in km
     // var R = 3958.8; // Radius of the Earth in miles
-    var rlat1 = mk1.lat * (Math.PI/180); // Convert degrees to radians
-    var rlat2 = mk2.lat * (Math.PI/180); // Convert degrees to radians
+    var rlat1 = originMarker.latlng.lat * (Math.PI/180); // Convert degrees to radians
+    var rlat2 = destinationMarker.latlng.lat * (Math.PI/180); // Convert degrees to radians
     var difflat = rlat2-rlat1; // Radian difference (latitudes)
-    var difflon = (mk2.lng-mk1.lng) * (Math.PI/180); // Radian difference (longitudes)
+    var difflon = (destinationMarker.latlng.lng-originMarker.latlng.lng) * (Math.PI/180); // Radian difference (longitudes)
   
     // idk wtf this calculation is but whatever
     var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat/2)*Math.sin(difflat/2)+Math.cos(rlat1)*Math.cos(rlat2)*Math.sin(difflon/2)*Math.sin(difflon/2)));
-    return d;
+    return d.toFixed(2);
   }
 
   const getGeocodedAddress = (latlng) => {
@@ -100,6 +102,7 @@ export default function AddTravelPlan() {
   }
 
   const onIdle = () => {
+    console.log('idle')
     setMapCenter(api.map.getCenter().toJSON());
 
     getGeocodedAddress(api.map.getCenter().toJSON())
@@ -108,6 +111,10 @@ export default function AddTravelPlan() {
     }, err => {
       console.log(err)
     })
+  }
+
+  function onLocationMapCenter (marker) {
+    api.map.panTo(marker.latlng);
   }
 
   const onPlaceChange = (autocomplete) => {
@@ -228,8 +235,11 @@ export default function AddTravelPlan() {
           {markers.length && markers.map((marker, i) => (
             marker.type === 'destination' ?
             <ListItem key={i}>
-              <Location location={marker} index={i} />
-            </ListItem> : console.log('no other element')
+              <Location 
+                marker={marker} 
+                calculateMarkerDistance={calculateMarkerDistance}
+                onCenter={onLocationMapCenter} />
+            </ListItem> : null
           ))}
         </List>
       </div>

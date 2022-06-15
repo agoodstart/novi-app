@@ -9,7 +9,7 @@
   grid-template-columns: 280px auto;
   grid-template-rows: 60px auto;
   grid-template-areas: 
-    "sidebar top"
+    "sidebar main"
     "sidebar main";
   background: #fcfcfc;
   // background-image: linear-gradient(to left top, #041f1e, #042926, #05332e, #083d35, #0d483c);
@@ -17,10 +17,11 @@
   &__main {
     grid-area: main;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     gap: 30px 30px;
     padding: 30px;
+    overflow: hidden;
   }
 
   &__sidebar {

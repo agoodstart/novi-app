@@ -3,9 +3,13 @@
   justify-content: space-between;
 }
 
-.location__buttons,
 .location__info {
   display: flex;
   flex-flow: column wrap;
+  justify-content: center;
+}
+
+.location__buttons {
+  display: flex;
   justify-content: center;
 }

@@ -1,5 +1,5 @@
 .locations {
-  grid-area: 2 / 5 / 6 / 8;
+  grid-area: 1 / 6 / 7 / 9;
   background: linear-gradient(to right, #0cce6b80, #00c56f80, #00bc7180, #00b37380, #00aa7480);
   border-radius: 30px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -26,7 +26,7 @@
 }
 
 .travelplan__control {
-  grid-area: 1 / 1 / 1 / 5;
+  grid-area: 1 / 1 / 1 / 6;
   background: linear-gradient(to right, #0cce6b80, #00c56f80, #00bc7180, #00b37380, #00aa7480);
   // background: linear-gradient(to right, #ef6461, #ea5b73, #e05685, #d05596, #bc58a4);
   border-radius: 30px;
@@ -44,7 +44,7 @@
 }
 
 .travelplan__maps {
-  grid-area: 2 / 1 / 6 / 5;
+  grid-area: 2 / 1 / 7 / 6;
   border-radius: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
