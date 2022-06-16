@@ -1,43 +1,70 @@
-import Openweather from "../../api/services/OpenWeather";
-import React, { useRef, useEffect, useState } from "react";
-import Button from "../Button/Button";
-import useTheme from "../../hooks/useTheme";
-import styles from './Location.module.scss';
+import React, { useRef, useCallback, useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Typography from "../Typography/Typography";
 import { faXmark, faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
+
+import Openweather from "../../api/services/OpenWeather";
+import styles from './Location.module.scss';
+
+import Button from "../Button/Button";
+import Typography from "../Typography/Typography";
+
+import useTheme from "../../hooks/useTheme";
 const { REACT_APP_OPENWEATHER_API_KEY } = process.env;
 
-const Location = ({marker, calculateMarkerDistance, onCenter, onRemove, gridPosition}) => {
+const Location = ({marker, calculateMarkerDistance, maxTravelDistance, onCenter, onRemove, gridPosition}) => {
   const locationRef = useRef();
   const { colors } = useTheme();
   const [currentWeather, setCurrentWeather] = useState('');
   const [markerDistance, setMarkerDistance] = useState(0);
-  const [isActive, setIsActive] = useState(false)
+  const [active, setActive] = useState(false)
+  const [update, forceUpdate] = useState(false);
+
+  const setData = useCallback(() => {
+    console.log('bruh')
+    setMarkerDistance(calculateMarkerDistance(marker))
+
+    setTimeout(() => {
+      axios.get('https://api.openweathermap.org/data/3.0/onecall', {
+        params: {
+          lat: marker.latlng.lat,
+          lon: marker.latlng.lng,
+          units: 'metric',
+          appid: REACT_APP_OPENWEATHER_API_KEY,
+        }
+      }).then(result => {
+        console.log('test');
+        setCurrentWeather(result.data.current);
+        setMarkerDistance(calculateMarkerDistance(marker))
+      }).catch(e => {
+        console.log('error')
+      })
+    }, 3000);
+  }, [setMarkerDistance])
 
   useEffect(() => {
-    console.log('test')
-    axios.get('https://api.openweathermap.org/data/3.0/onecall', {
-      params: {
-        lat: marker.latlng.lat,
-        lon: marker.latlng.lng,
-        units: 'metric',
-        appid: REACT_APP_OPENWEATHER_API_KEY,
-      }
-    }).then(result => {
-      setCurrentWeather(result.data.current);
-      setMarkerDistance(calculateMarkerDistance(marker))
-    })
-  }, []);
+    setData()
+  }, [setData]);
+
+  useEffect(() => {
+    console.log(markerDistance)
+    if(markerDistance >= parseInt(maxTravelDistance) || !maxTravelDistance) {
+      locationRef.current.style.background = `${colors.secondary.light}95`;
+    } else {
+      locationRef.current.style.background = `${colors.grey.light}95`;
+    }
+
+    forceUpdate(!update);
+  }, [maxTravelDistance, markerDistance])
+
 
   const changeColor = () => {
-    setIsActive(isActive => !isActive)
+    console.log(locationRef.current.style.background);
+    locationRef.current.style.background = `${colors.quaternary.light}95`;
   }
 
   return (
-    <div className={styles['location']} style={{
-      background: !isActive ? '#6ec5b495' : 'linear-gradient(to right, #e4b36380, #cdaf5480, #b4aa4980, #99a54180, #7da03d80)',
+    <div className={styles['location']} ref={locationRef} style={{
       gridArea: gridPosition
     }} onClick={changeColor}>
       <div className={styles['location__info']}>
@@ -67,6 +94,9 @@ const Location = ({marker, calculateMarkerDistance, onCenter, onRemove, gridPosi
           size="small"
           boxShadow="light"
           onClick={onRemove.bind(this, marker)}
+          customStyles={{
+            zIndex: '9999'
+          }}
           >
             <FontAwesomeIcon icon={faXmark} />
         </Button>

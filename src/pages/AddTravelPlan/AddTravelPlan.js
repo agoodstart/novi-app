@@ -7,6 +7,7 @@ import { List, ListItem } from '../../components/List/List';
 import Location from '../../components/Location/Location';
 import TextInputWithGooglePlaces from '../../components/GoogleMaps/TextInputWithGooglePlaces';
 import Divider from '../../components/Divider/Divider';
+import { NumberInput } from '../../components/Form/Form';
 
 import styles from './AddTravelPlan.module.scss';
 import useGoogleApi from '../../hooks/useGoogleApi';
@@ -16,6 +17,8 @@ export default function AddTravelPlan() {
 
   const [placeCenter, setPlaceCenter] = useState("");
   const [placeOrigin, setPlaceOrigin] = useState("");
+
+  const [maxTravelDistance, setMaxTravelDistance] = useState(1000);
 
   const [markers, setMarkers] = useState([]);
   const [mapZoom, setMapZoom] = useState(8);
@@ -49,7 +52,14 @@ export default function AddTravelPlan() {
           }
         })
     }).then(results => {
-        const [formattedAddr] = results.filter(component => component.types.includes('locality'));
+      console.log(results);
+        const formattedAddr = results.reduce((res, location) => {
+          if(location.types.includes('locality') || location.types.includes('postal_town') ||location.types.includes('administrative_area_level_3')) {
+            res = location;
+          };
+
+          return res;
+        }, null)
 
         if(!formattedAddr) {
           return Promise.reject('cannot resolve address')
@@ -168,6 +178,10 @@ export default function AddTravelPlan() {
 
   }
 
+  const onDistanceChange = (e) => {
+    setMaxTravelDistance(e.target.value);
+  }
+
 
   useEffect(() => {
     console.log(markers);
@@ -201,6 +215,18 @@ export default function AddTravelPlan() {
             }}
           />
         </div>
+
+        <div className={styles['travelplan__places']}>
+          <label className={styles['travelplan__label']}>Max travel distance: </label>
+          <NumberInput 
+            value={maxTravelDistance}
+            onChange={onDistanceChange}
+            customStyles={{
+              borderRadius: '10px'
+            }}
+          />
+        </div>
+        
       </div>
 
       <Suspense fallback={<p>Loading Google Maps....</p>}>
@@ -237,7 +263,9 @@ export default function AddTravelPlan() {
       <div className={styles['locations']}>
         {markers.length && markers.filter(marker => marker.type === 'destination').map((marker, i, currentArr) => (
           <Location 
+              key={i}
               marker={marker} 
+              maxTravelDistance={maxTravelDistance}
               calculateMarkerDistance={calculateMarkerDistance}
               onCenter={onLocationCenter}
               onRemove={onLocationRemove}

@@ -38,15 +38,18 @@ export const PasswordInput = ({placeholder, name, onChange}) => {
   )
 };
 
-export const NumberInput = ({placeholder, name, onChange}) => {
+export const NumberInput = ({placeholder, name, onChange, value, customStyles}) => {
   return (
       <input
+        style={customStyles}
+        inputMode="numeric"
         className={styles['form__input']}
         placeholder={placeholder} 
-        type="number"
+        type="text"
         id={name}
         name={name}
-        onChange={onChange} />
+        onChange={onChange}
+        value={value} />
   )
 };
 

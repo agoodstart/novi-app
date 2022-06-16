@@ -44,7 +44,6 @@ export default function GoogleMaps({
   const netherlands = { lat: 52.132633, lng: 5.2912659 };
 
   const currentCenter = useMemo(() => {
-    console.log('currentcenter')
     if(defaultCenter) {
       return defaultCenter;
     }
