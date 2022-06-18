@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import useTheme from '../../hooks/useTheme';
 import useAuth from '../../hooks/useAuth';
@@ -9,12 +9,16 @@ import Typography from '../../components/Typography/Typography';
 import styles from './Home.module.scss';
 
 export default function Home() {
-  const { modalRef } = useAuth();
+  const { modalRef, auth } = useAuth();
   const {colors } = useTheme();
 
   const handleOpenModal = () => {
     modalRef.current.openModal();
   }
+
+  useEffect(() => {
+    auth.testConnection();
+  }, [])
 
   console.log('home route rendered');
     return (

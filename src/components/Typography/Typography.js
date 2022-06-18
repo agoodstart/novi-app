@@ -20,6 +20,12 @@ export default function Typography({children, variant}) {
           {children}
         </h3>
       )
+      case 'h4':
+        return (
+          <h4 className={styles['typography__heading-quaternary']}>
+            {children}
+          </h4>
+        )
     case 'paragraph':
       return (
         <p className={styles['typography__paragraph']}>

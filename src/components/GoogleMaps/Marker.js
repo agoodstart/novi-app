@@ -22,10 +22,15 @@ export default function Marker({onDragend, index, ...options}) {
   }, [marker, options])
 
   useEffect(() => {
+    // console.log('index: ', index)
     if(marker) {
       marker.addListener("dragend", (e) => onDragend(e, index))
     }
   }, [marker])
+
+  useEffect(() => {
+    console.log('index: ', index)
+  }, [])
 
   return null;
 }

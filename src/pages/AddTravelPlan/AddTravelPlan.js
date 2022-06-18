@@ -1,16 +1,17 @@
-import React, { Suspense, useEffect, useState } from 'react';
-import { useOutletContext } from "react-router-dom";
+import React, { Suspense, useEffect, useState, useCallback } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import GoogleMaps from '../../components/GoogleMaps/GoogleMaps';
 import Marker from '../../components/GoogleMaps/Marker';
-import { List, ListItem } from '../../components/List/List';
 import Location from '../../components/Location/Location';
 import TextInputWithGooglePlaces from '../../components/GoogleMaps/TextInputWithGooglePlaces';
-import Divider from '../../components/Divider/Divider';
 import { NumberInput } from '../../components/Form/Form';
 
 import styles from './AddTravelPlan.module.scss';
 import useGoogleApi from '../../hooks/useGoogleApi';
+import Typography from '../../components/Typography/Typography';
+import Button from '../../components/Button/Button';
 
 export default function AddTravelPlan() {
   const { api } = useGoogleApi();
@@ -21,6 +22,8 @@ export default function AddTravelPlan() {
   const [maxTravelDistance, setMaxTravelDistance] = useState(1000);
 
   const [markers, setMarkers] = useState([]);
+  const [markerMoved, setMarkerMoved] = useState(null);
+
   const [mapZoom, setMapZoom] = useState(8);
   const [mapCenter, setMapCenter] = useState();
 
@@ -52,7 +55,7 @@ export default function AddTravelPlan() {
           }
         })
     }).then(results => {
-      console.log(results);
+      // console.log(results);
         const formattedAddr = results.reduce((res, location) => {
           if(location.types.includes('locality') || location.types.includes('postal_town') ||location.types.includes('administrative_area_level_3')) {
             res = location;
@@ -155,14 +158,21 @@ export default function AddTravelPlan() {
     }));
   }
 
-  const onOriginMarkerDragend = (e, index) => {
-    const latlng = { lat: e.latLng.lat(), lng: e.latLng.lng() }
+  function onMarkerDragend(e, index) {
+    const latlng = { lat: e.latLng.lat(), lng: e.latLng.lng() };
 
-    getGeocodedAddress(latlng)
+    setMarkerMoved({
+      index,
+      latlng
+    });
+  }
+
+  const placeMarker = (m) => {
+    getGeocodedAddress(m.latlng)
     .then(result => {
       setMarkers(markers.map((marker, i) => {
-        if(marker.index === index) {
-          marker.latlng = latlng;
+        if(marker.index === m.index) {
+          marker.latlng = m.latlng;
         }
 
         return marker;
@@ -174,18 +184,19 @@ export default function AddTravelPlan() {
     })
   }
 
-  const changeCenter = (autocomplete) => {
-
-  }
-
   const onDistanceChange = (e) => {
     setMaxTravelDistance(e.target.value);
   }
 
+  const showWarning = (address) => {
+    toast.warn(`${address} is not within the specified travel distance range`);
+  }
 
   useEffect(() => {
-    console.log(markers);
-  }, [markers])
+    if(markerMoved) {
+      placeMarker(markerMoved)
+    }
+  }, [markerMoved])
 
   return (
     <React.Fragment>
@@ -246,7 +257,7 @@ export default function AddTravelPlan() {
               ? <Marker 
                   key={i} 
                   index={marker.index}
-                  onDragend={onOriginMarkerDragend} 
+                  onDragend={onMarkerDragend} 
                   position={marker.latlng} 
                   icon={'http://maps.google.com/mapfiles/kml/paddle/red-stars.png'}  
                 /> 
@@ -260,12 +271,17 @@ export default function AddTravelPlan() {
         </GoogleMaps>
       </Suspense>
 
+      <div className="travelplan__zoom">
+        
+      </div>
+
       <div className={styles['locations']}>
-        {markers.length && markers.filter(marker => marker.type === 'destination').map((marker, i, currentArr) => (
+        {markers.length && markers.filter(marker => marker.type === 'destination').map((marker, i) => (
           <Location 
               key={i}
               marker={marker} 
               maxTravelDistance={maxTravelDistance}
+              showWarning={showWarning}
               calculateMarkerDistance={calculateMarkerDistance}
               onCenter={onLocationCenter}
               onRemove={onLocationRemove}
@@ -273,33 +289,39 @@ export default function AddTravelPlan() {
           />
       ))}
       </div>
+
+      <div className={styles['travelplan__choices']}>
+        <div className={styles['travelplan__choices-suggested']}>
+          <Typography variant="h4">
+            Our choice:
+          </Typography>
+          <Typography variant="paragraph">
+            Amsterdam, Netherlands
+          </Typography>
+        </div>
+
+        <div className={styles['travelplan__choices-chosen']}>
+          <Typography variant="h4">
+            Your choice:
+          </Typography>
+        </div>
+      </div>
+
+      <div className={styles['travelplan__save']}>
+      <Button 
+          // color={colors.secondary.medium}
+          variant="contained"
+          size="large"
+          boxShadow="light"
+          onClick={() => {}}
+          customStyles={{
+            width: '100%',
+            height: '100%'
+          }}
+          >
+            Save chosen destination
+        </Button>
+      </div>
     </React.Fragment>
   );
 }
-
-
-{/* <div className={styles['locations']}>
-<List>
-  {markers.length && markers
-    .filter(marker => marker.type === 'destination')
-    .map((marker, i) => (
-      i === 0
-      ? <ListItem key={i}>
-          <Location 
-            marker={marker} 
-            calculateMarkerDistance={calculateMarkerDistance}
-            onCenter={onLocationMapCenter} />
-        </ListItem>
-      : <React.Fragment>
-          <Divider />
-          <ListItem key={i}>
-            <Location 
-              marker={marker} 
-              calculateMarkerDistance={calculateMarkerDistance}
-              onCenter={onLocationMapCenter} />
-          </ListItem> 
-        </React.Fragment>
-    ))
-  }
-</List>
-</div> */}

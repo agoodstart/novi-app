@@ -1,6 +1,8 @@
 import "@fontsource/ubuntu";
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import './index.scss'
 import App from './App';
@@ -15,6 +17,7 @@ const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 root.render(
   <BrowserRouter>
+    <ToastContainer />
     <ThemeProvider>
       <GoogleApiProvider>
         <AuthProvider>

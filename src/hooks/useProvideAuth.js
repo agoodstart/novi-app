@@ -10,6 +10,16 @@ export default function useProvideAuth() {
     //   console.log('user is logged in: ', user)
     }, [user])
 
+    const testConnection = () => {
+        console.log('testing api connection...')
+        return Novi.get('test/all')
+            .then(() => {
+                console.log('API connection successfull')
+            }, () => {
+                console.log('cannot connect to api')
+            })
+    }
+
     const signin = (credentials) => {
         return Novi.post('/auth/signin', credentials)
             .then(data => {
@@ -37,6 +47,7 @@ export default function useProvideAuth() {
 
     return {
         user,
+        testConnection,
         signin,
         signup,
     }

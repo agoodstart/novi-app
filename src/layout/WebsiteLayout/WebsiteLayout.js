@@ -4,9 +4,6 @@ import Navbar from "../../components/Navbar/Navbar";
 import Modal from "../../components/Modal/Modal";
 import ModalContent from "../../components/Modal/ModalContent";
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
 import styles from './WebsiteLayout.module.scss';
 
 export default function WebsiteLayout() {
@@ -15,7 +12,6 @@ export default function WebsiteLayout() {
     return (
     <div className={styles['layout']}>
         <Navbar authModal={modalRef} />
-        <ToastContainer />
         <Outlet />
         {/* <Footer /> */}
         <Modal ref={modalRef} >

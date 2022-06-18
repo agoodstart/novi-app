@@ -48,7 +48,7 @@
 }
 
 .travelplan__maps {
-  grid-area: 2 / 1 / 7 / 6;
+  grid-area: 2 / 1 / 8 / 6;
   border-radius: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
@@ -60,4 +60,37 @@
   flex-flow: column wrap;
   width: 30%;
   transform: translateY(-5px);
+}
+
+.travelplan__choices {
+  grid-area: 7 / 6 / 9 / 9;
+  display: flex;
+  justify-content: space-between;
+
+  &-suggested,
+  &-chosen {
+    border: 2px solid rgba(0, 0, 0, .10); 
+    width: 45%;
+    border-radius: 30px;
+    // padding: 20px;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-suggested {
+    background: linear-gradient(to right, #87f6ff80, #72e6ff80, #67d5ff80, #68c4fa80, #72b1f280);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  }
+
+  &-chosen {
+    background: linear-gradient(to right, #e4b36380, #cdaf5480, #b4aa4980, #99a54180, #7da03d80);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  }
+}
+
+.travelplan__save {
+  // background: black;
+  grid-area: 8 / 1 / 8 / 6;
 }

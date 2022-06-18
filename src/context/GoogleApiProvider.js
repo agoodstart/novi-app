@@ -39,13 +39,13 @@ export const GoogleApiProvider = ({ children }) => {
   
   useEffect(() => {
     if(geocoder) {
-      console.log('geocoder is set!')
+      // console.log('geocoder is set!')
     }
   }, [geocoder])
   
   useEffect(() => {
     if(map) {
-      console.log('map is set!');
+      // console.log('map is set!');
     }
   }, [map])
 

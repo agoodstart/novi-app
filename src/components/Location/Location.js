@@ -12,18 +12,14 @@ import Typography from "../Typography/Typography";
 import useTheme from "../../hooks/useTheme";
 const { REACT_APP_OPENWEATHER_API_KEY } = process.env;
 
-const Location = ({marker, calculateMarkerDistance, maxTravelDistance, onCenter, onRemove, gridPosition}) => {
+const Location = ({marker, calculateMarkerDistance, maxTravelDistance, onCenter, onRemove, gridPosition, showWarning}) => {
   const locationRef = useRef();
   const { colors } = useTheme();
   const [currentWeather, setCurrentWeather] = useState('');
   const [markerDistance, setMarkerDistance] = useState(0);
-  const [active, setActive] = useState(false)
-  const [update, forceUpdate] = useState(false);
+  const [favorite, setFavorite] = useState(false);
 
   const setData = useCallback(() => {
-    console.log('bruh')
-    setMarkerDistance(calculateMarkerDistance(marker))
-
     setTimeout(() => {
       axios.get('https://api.openweathermap.org/data/3.0/onecall', {
         params: {
@@ -39,28 +35,27 @@ const Location = ({marker, calculateMarkerDistance, maxTravelDistance, onCenter,
       }).catch(e => {
         console.log('error')
       })
-    }, 3000);
-  }, [setMarkerDistance])
+    }, 1000);
+  }, [setMarkerDistance, setCurrentWeather, marker])
 
   useEffect(() => {
     setData()
   }, [setData]);
 
   useEffect(() => {
-    console.log(markerDistance)
-    if(markerDistance >= parseInt(maxTravelDistance) || !maxTravelDistance) {
+    console.log('favorite')
+    if(favorite) {
+      locationRef.current.style.background = `${colors.quaternary.light}95`;
+    } else if(markerDistance >= parseInt(maxTravelDistance) || !maxTravelDistance) {
+      showWarning(marker.addr)
       locationRef.current.style.background = `${colors.secondary.light}95`;
     } else {
       locationRef.current.style.background = `${colors.grey.light}95`;
     }
-
-    forceUpdate(!update);
-  }, [maxTravelDistance, markerDistance])
-
+  }, [maxTravelDistance, markerDistance, favorite]);
 
   const changeColor = () => {
-    console.log(locationRef.current.style.background);
-    locationRef.current.style.background = `${colors.quaternary.light}95`;
+    setFavorite(!favorite);
   }
 
   return (
@@ -82,7 +77,8 @@ const Location = ({marker, calculateMarkerDistance, maxTravelDistance, onCenter,
           boxShadow="light"
           onClick={onCenter.bind(this, marker)}
           customStyles={{
-            marginRight: '10px'
+            marginRight: '10px',
+            zIndex: '9999'
           }}
           >
             <FontAwesomeIcon icon={faLocationCrosshairs} />
