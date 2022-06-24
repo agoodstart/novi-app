@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import useGoogleApi from "../../hooks/useGoogleApi";
 
 export default function Marker({onDragend, index, ...options}) {
   const [marker, setMarker] = useState();
@@ -22,15 +23,27 @@ export default function Marker({onDragend, index, ...options}) {
   }, [marker, options])
 
   useEffect(() => {
-    // console.log('index: ', index)
-    if(marker) {
-      marker.addListener("dragend", (e) => onDragend(e, index))
+    if(onDragend && marker) {
+      google.maps.event.clearInstanceListeners(marker);
     }
-  }, [marker])
 
-  useEffect(() => {
-    console.log('index: ', index)
-  }, [])
+    if(marker) {
+      marker.addListener("dragend", (e) => onDragend(e))
+    }
+  }, [marker, onDragend])
 
   return null;
 }
+
+const withConfig = (customIcon) => ({onDragend, marker}) => {
+  const { api } = useGoogleApi();
+
+  const triggerDragend = (e) => {
+    onDragend(e, marker.id);
+  }
+
+  return <Marker map={api.map} icon={customIcon} onDragend={triggerDragend} position={marker.latlng} draggable={true} />
+}
+
+export const OriginMarker = withConfig('http://maps.google.com/mapfiles/kml/paddle/red-stars.png');
+export const DestinationMarker = withConfig('http://maps.google.com/mapfiles/kml/paddle/red-circle.png');

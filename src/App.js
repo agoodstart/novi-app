@@ -7,8 +7,11 @@ import DashboardHome from './pages/DashboardHome/DashboardHome';
 import Unauthorized from './pages/Unauthorized/Unauthorized';
 import NotFound from './pages/NotFound/NotFound';
 import Account from './pages/Account/Account';
+import Social from './pages/Social/Social';
 import Test from './pages/Test/Test'
 import AddTravelPlan from './pages/AddTravelPlan/AddTravelPlan';
+import Destinations from './pages/Destinations/Destinations';
+import Destination from './pages/Destinations/Destination/Destination';
 
 import WebsiteLayout from './layout/WebsiteLayout/WebsiteLayout';
 import DashboardLayout from './layout/DashboardLayout/DashboardLayout';
@@ -28,8 +31,11 @@ export default function App() {
       {/* User authentication beyond this point */}
       <Route path="/" element={<DashboardLayout />} >
         <Route path="dashboard" element={<DashboardHome />} />
-        <Route path="/addtravelplan" element={<AddTravelPlan />} />
+        <Route path="destinations" element={<Destinations/>} />
+        <Route path="destinations/:id" element={<Destination />} />
+        <Route path="addtravelplan" element={<AddTravelPlan />} />
         <Route path="account" element={<Account />} />
+        <Route path="social" element={<Social />} />
       </Route>
     </Routes>
   );

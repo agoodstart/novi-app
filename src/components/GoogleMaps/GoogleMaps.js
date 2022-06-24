@@ -129,12 +129,7 @@ export default function GoogleMaps({
   return (
     <>
       <div ref={ref} style={mapSize} className={customClassname}  />
-      {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          // set the map prop on the child component
-          return React.cloneElement(child, { map, draggable: true });
-        }
-      })}
+      {children}
     </>
   )
 }

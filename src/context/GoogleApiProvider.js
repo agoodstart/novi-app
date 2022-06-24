@@ -36,6 +36,38 @@ export const GoogleApiProvider = ({ children }) => {
   const createGeocoder = () => {
     setGeocoder(new google.maps.Geocoder());
   }
+
+  const getGeocodedAddress = (latlng) => {
+    return new Promise((resolve, reject) => {
+      geocoder
+        .geocode({ location: latlng }, (results, status) => {
+          if (status == 'OK') {
+            resolve(results);
+          } else {
+            reject(status)
+          }
+        })
+    }).then(results => {
+      console.log(results);
+      // console.log(results);
+        const formattedAddr = results.reduce((res, location) => {
+          if(location.types.includes('locality') || location.types.includes('postal_town') ||location.types.includes('administrative_area_level_3')) {
+            res = location;
+          };
+
+          return res;
+        }, null)
+
+        if(!formattedAddr) {
+          return Promise.reject('cannot resolve address')
+        } else {
+          return Promise.resolve(formattedAddr)
+        }
+      },
+      err => {
+        console.log('error')
+      })
+  }
   
   useEffect(() => {
     if(geocoder) {
@@ -54,11 +86,7 @@ export const GoogleApiProvider = ({ children }) => {
     createMap,
 
     geocoder,
-
-    autocompleteGeo,
-    autocompleteCenter,
-    createAutocompleteGeo,
-    createAutocompleteCenter,
+    getGeocodedAddress,
 
     autocomplete: {
       geo: {
@@ -80,7 +108,7 @@ export const GoogleApiProvider = ({ children }) => {
   }
 
   return (
-      <GoogleApiContext.Provider value={{ map, createMap, geocoder, api }}>
+      <GoogleApiContext.Provider value={{ map, createMap, api }}>
         <Wrapper apiKey={REACT_APP_GOOGLE_MAPS_API_KEY} render={render} libraries={["places"]} callback={checkStatus}  >
           {children}
         </Wrapper>

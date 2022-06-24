@@ -18,6 +18,7 @@ https://www.youtube.com/watch?v=UKdQjQX1Pko&t=512s
 https://www.youtube.com/watch?v=xZZ6cCQxcmE
 https://getcssscan.com/css-box-shadow-examples
 https://kml4earth.appspot.com/icons.html
+https://cloud.google.com/blog/products/maps-platform/how-calculate-distances-map-maps-javascript-api
 
 Framer Motion
 React DnD

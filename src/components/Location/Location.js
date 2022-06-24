@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
 
-import Openweather from "../../api/services/OpenWeather";
 import styles from './Location.module.scss';
 
 import Button from "../Button/Button";
@@ -12,50 +11,68 @@ import Typography from "../Typography/Typography";
 import useTheme from "../../hooks/useTheme";
 const { REACT_APP_OPENWEATHER_API_KEY } = process.env;
 
-const Location = ({marker, calculateMarkerDistance, maxTravelDistance, onCenter, onRemove, gridPosition, showWarning}) => {
+const Location = ({
+  destination, 
+  origin, 
+  chosen,
+  maxTravelDistance, 
+  updateMarkerInfo, 
+  updateChosen,
+  onCenter, 
+  onRemove, 
+  gridPosition, 
+  showWarning
+}) => {
   const locationRef = useRef();
   const { colors } = useTheme();
-  const [currentWeather, setCurrentWeather] = useState('');
-  const [markerDistance, setMarkerDistance] = useState(0);
-  const [favorite, setFavorite] = useState(false);
+
+  const calculateMarkerDistance = () => {
+    const R = 6371.0710 // Radius of earth in km
+    // var R = 3958.8; // Radius of the Earth in miles
+    var rlat1 = origin.latlng.lat * (Math.PI/180); // Convert degrees to radians
+    var rlat2 = destination.latlng.lat * (Math.PI/180); // Convert degrees to radians
+    var difflat = rlat2-rlat1; // Radian difference (latitudes)
+    var difflon = (destination.latlng.lng-origin.latlng.lng) * (Math.PI/180); // Radian difference (longitudes)
+  
+    var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat/2)*Math.sin(difflat/2)+Math.cos(rlat1)*Math.cos(rlat2)*Math.sin(difflon/2)*Math.sin(difflon/2)));
+    return d.toFixed(2);
+  }
 
   const setData = useCallback(() => {
+    console.log('testrun')
     setTimeout(() => {
       axios.get('https://api.openweathermap.org/data/3.0/onecall', {
         params: {
-          lat: marker.latlng.lat,
-          lon: marker.latlng.lng,
+          lat: destination.latlng.lat,
+          lon: destination.latlng.lng,
           units: 'metric',
           appid: REACT_APP_OPENWEATHER_API_KEY,
         }
       }).then(result => {
-        console.log('test');
-        setCurrentWeather(result.data.current);
-        setMarkerDistance(calculateMarkerDistance(marker))
+        updateMarkerInfo(result.data.current.temp, calculateMarkerDistance(), destination);
       }).catch(e => {
         console.log('error')
       })
     }, 1000);
-  }, [setMarkerDistance, setCurrentWeather, marker])
+  }, [destination])
 
   useEffect(() => {
     setData()
   }, [setData]);
 
   useEffect(() => {
-    console.log('favorite')
-    if(favorite) {
+    if(chosen.id === destination.id) {
       locationRef.current.style.background = `${colors.quaternary.light}95`;
-    } else if(markerDistance >= parseInt(maxTravelDistance) || !maxTravelDistance) {
-      showWarning(marker.addr)
+    } else if(destination.distance >= parseInt(maxTravelDistance) || !maxTravelDistance) {
+      showWarning(destination.addr)
       locationRef.current.style.background = `${colors.secondary.light}95`;
     } else {
       locationRef.current.style.background = `${colors.grey.light}95`;
     }
-  }, [maxTravelDistance, markerDistance, favorite]);
+  }, [maxTravelDistance, destination, chosen]);
 
   const changeColor = () => {
-    setFavorite(!favorite);
+    updateChosen(destination);
   }
 
   return (
@@ -64,10 +81,10 @@ const Location = ({marker, calculateMarkerDistance, maxTravelDistance, onCenter,
     }} onClick={changeColor}>
       <div className={styles['location__info']}>
         <Typography variant="paragraph">
-          {marker.addr}
+          {destination.addr || ""}
         </Typography>
-        <p>Temperature: {currentWeather.temp} &#8451;</p>
-        <p>Distance: {markerDistance} km</p>
+        <p>Temperature: {destination.temperature} &#8451;</p>
+        <p>Distance: {destination.distance} km</p>
       </div>
       <div className={styles['location__buttons']}>
       <Button 
@@ -75,7 +92,7 @@ const Location = ({marker, calculateMarkerDistance, maxTravelDistance, onCenter,
           variant="contained"
           size="small"
           boxShadow="light"
-          onClick={onCenter.bind(this, marker)}
+          onClick={onCenter.bind(this, destination)}
           customStyles={{
             marginRight: '10px',
             zIndex: '9999'
@@ -89,7 +106,7 @@ const Location = ({marker, calculateMarkerDistance, maxTravelDistance, onCenter,
           variant="contained"
           size="small"
           boxShadow="light"
-          onClick={onRemove.bind(this, marker)}
+          onClick={onRemove.bind(this, destination)}
           customStyles={{
             zIndex: '9999'
           }}

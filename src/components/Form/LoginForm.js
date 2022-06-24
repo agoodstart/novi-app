@@ -27,11 +27,11 @@ export default function LoginForm() {
 
     auth.signin(credentials)
       .then(() => {
-          modalRef.current.closeModal();
-          navigate('/dashboard')
+        modalRef.current.closeModal();
+        navigate('/dashboard')
       },
       err => {
-          console.log(err);
+        console.log(err);
     });
   }
 

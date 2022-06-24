@@ -19,13 +19,18 @@ export default function DashboardSidebar({styles}) {
           </li>
           <li className={styles['sidebarnav__item']}>
           <NavLink 
+            to='/Destinations'
+            className={checkIfActive}>Destinations</NavLink>
+          </li>
+          <li className={styles['sidebarnav__item']}>
+          <NavLink 
             to='/account'
             className={checkIfActive}>Account</NavLink>
           </li>
           <li className={styles['sidebarnav__item']}>
           <NavLink 
-            to='/checkendpoints'
-            className={checkIfActive}>Check Endpoints</NavLink>
+            to='/social'
+            className={checkIfActive}>Social</NavLink>
           </li>
 
           <li>

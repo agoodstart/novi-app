@@ -1,91 +1,58 @@
-import React, { Suspense, useEffect, useState, useCallback } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
+import { nanoid } from 'nanoid';
 import 'react-toastify/dist/ReactToastify.css';
 
 import GoogleMaps from '../../components/GoogleMaps/GoogleMaps';
-import Marker from '../../components/GoogleMaps/Marker';
+import { OriginMarker, DestinationMarker } from '../../components/GoogleMaps/Marker';
 import Location from '../../components/Location/Location';
 import TextInputWithGooglePlaces from '../../components/GoogleMaps/TextInputWithGooglePlaces';
 import { NumberInput } from '../../components/Form/Form';
-
-import styles from './AddTravelPlan.module.scss';
-import useGoogleApi from '../../hooks/useGoogleApi';
 import Typography from '../../components/Typography/Typography';
 import Button from '../../components/Button/Button';
+import Modal from '../../components/Modal/Modal';
+
+import styles from './AddTravelPlan.module.scss';
+
+import useGoogleApi from '../../hooks/useGoogleApi';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import useTheme from '../../hooks/useTheme';
+import useAuth from '../../hooks/useAuth';
 
 export default function AddTravelPlan() {
+  const navigate = useNavigate();
+  const { modalRef } = useAuth();
+  const { colors } = useTheme()
   const { api } = useGoogleApi();
+
+  const [savedDestinations, setSavedDestinations] = useLocalStorage("destinations", []);
 
   const [placeCenter, setPlaceCenter] = useState("");
   const [placeOrigin, setPlaceOrigin] = useState("");
 
   const [maxTravelDistance, setMaxTravelDistance] = useState(1000);
 
-  const [markers, setMarkers] = useState([]);
-  const [markerMoved, setMarkerMoved] = useState(null);
+  const [origin, setOrigin] = useState({});
+  const [destinations, setDestinations] = useState([]);
+  const [destinationDragged, setDestinationDragged] = useState(null)
+
+  const [recommended, setRecommended] = useState({});
+  const [chosen, setChosen] = useState({})
 
   const [mapZoom, setMapZoom] = useState(8);
   const [mapCenter, setMapCenter] = useState();
 
-  const calculateMarkerDistance = (destinationMarker) => {
-    const originMarker = markers.find(marker => marker.type === 'origin');
-
-    // I didn't calc this myself lol
-    // https://cloud.google.com/blog/products/maps-platform/how-calculate-distances-map-maps-javascript-api
-    const R = 6371.0710 // Radius of earth in km
-    // var R = 3958.8; // Radius of the Earth in miles
-    var rlat1 = originMarker.latlng.lat * (Math.PI/180); // Convert degrees to radians
-    var rlat2 = destinationMarker.latlng.lat * (Math.PI/180); // Convert degrees to radians
-    var difflat = rlat2-rlat1; // Radian difference (latitudes)
-    var difflon = (destinationMarker.latlng.lng-originMarker.latlng.lng) * (Math.PI/180); // Radian difference (longitudes)
-  
-    // idk wtf this calculation is but whatever
-    var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat/2)*Math.sin(difflat/2)+Math.cos(rlat1)*Math.cos(rlat2)*Math.sin(difflon/2)*Math.sin(difflon/2)));
-    return d.toFixed(2);
-  }
-
-  const getGeocodedAddress = (latlng) => {
-    return new Promise((resolve, reject) => {
-      api.geocoder
-        .geocode({ location: latlng }, (results, status) => {
-          if (status == 'OK') {
-            resolve(results);
-          } else {
-            reject(status)
-          }
-        })
-    }).then(results => {
-      // console.log(results);
-        const formattedAddr = results.reduce((res, location) => {
-          if(location.types.includes('locality') || location.types.includes('postal_town') ||location.types.includes('administrative_area_level_3')) {
-            res = location;
-          };
-
-          return res;
-        }, null)
-
-        if(!formattedAddr) {
-          return Promise.reject('cannot resolve address')
-        } else {
-          return Promise.resolve(formattedAddr)
-        }
-      },
-      err => {
-        console.log('error')
-      })
-  }
-
   const onMapsLoaded = () => {
     const latlng = api.map.getCenter().toJSON();
 
-    getGeocodedAddress(latlng)
+    api.getGeocodedAddress(latlng)
       .then(result => {
-        setMarkers([{
+        setOrigin({
           latlng,
-          addr: result.formatted_address,
-          type: 'origin',
-          index: markers.length
-        }])
+          addr: result.formatted_address
+        });
+
         setPlaceOrigin(result.formatted_address)
       }, err => {
         console.log(err)
@@ -98,14 +65,16 @@ export default function AddTravelPlan() {
       lng: e.latLng.lng(),
     };
 
-    getGeocodedAddress(latlng)
+    api.getGeocodedAddress(latlng)
     .then(result => {
-      setMarkers([...markers, {
+      setDestinations([...destinations, {
         latlng,
         addr: result.formatted_address,
-        type: 'destination',
-        index: markers.length
+        id: nanoid(),
+        distance: 0,
+        temperature: '',
       }])
+
     }, err => {
       console.log(err)
     })
@@ -118,7 +87,7 @@ export default function AddTravelPlan() {
   const onIdle = () => {
     setMapCenter(api.map.getCenter().toJSON());
 
-    getGeocodedAddress(api.map.getCenter().toJSON())
+    api.getGeocodedAddress(api.map.getCenter().toJSON())
     .then(result => {
       setPlaceCenter(result.formatted_address);
     }, err => {
@@ -126,12 +95,13 @@ export default function AddTravelPlan() {
     })
   }
 
-  const onLocationCenter = (locationMarker) => {
-    api.map.panTo(locationMarker.latlng);
+  const onLocationCenter = (destinationMarker) => {
+    api.map.panTo(destinationMarker.latlng);
   }
 
-  const onLocationRemove = (locationMarker) => {
-    setMarkers(markers.filter(marker => marker.index !== locationMarker.index))
+  const onLocationRemove = (destinationMarker) => {
+    console.log(destinations);
+    setDestinations(destinations.filter(destination => destination.id !== destinationMarker.id))
   }
 
   const onPlaceChange = (autocomplete) => {
@@ -149,39 +119,61 @@ export default function AddTravelPlan() {
 
     api.map.panTo(latlng);
 
-    setMarkers(markers.map((marker) => {
-      if(marker.type === 'origin') {
-        marker.latlng = latlng;
-      }
-
-      return marker;
-    }));
+    setOrigin({
+      latlng,
+      addr: place.formatted_address
+    })
   }
 
-  function onMarkerDragend(e, index) {
+  function onOriginDragend(e) {
     const latlng = { lat: e.latLng.lat(), lng: e.latLng.lng() };
 
-    setMarkerMoved({
-      index,
-      latlng
-    });
-  }
-
-  const placeMarker = (m) => {
-    getGeocodedAddress(m.latlng)
+    api.getGeocodedAddress(latlng)
     .then(result => {
-      setMarkers(markers.map((marker, i) => {
-        if(marker.index === m.index) {
-          marker.latlng = m.latlng;
-        }
-
-        return marker;
-      }));
+      setOrigin({
+        latlng,
+        addr: result.formatted_address
+      });
 
       setPlaceOrigin(result.formatted_address)
     }, err => {
       console.log(err)
     })
+  }
+
+  function onDestinationDragend(e, id) {
+    console.log(id);
+    const latlng = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+
+    api.getGeocodedAddress(latlng)
+    .then(result => {
+      setDestinationDragged({
+        id,
+        latlng,
+        addr: result.formatted_address
+      })
+    }, err => {
+      console.log(err)
+    })
+  }
+
+  const updateMarkerInfo = (temp, distance, marker) => {
+    setDestinations(destinations.map(destination => {
+      if(destination.id === marker.id) {
+        destination.distance = parseFloat(distance);
+        destination.temperature = temp;
+      }
+
+      return destination;
+    }))
+  }
+
+  const updateChosen = (d) => {
+    if(d.id === chosen.id) {
+      setChosen({})
+    } else {
+      setChosen(d);
+    }
   }
 
   const onDistanceChange = (e) => {
@@ -193,10 +185,94 @@ export default function AddTravelPlan() {
   }
 
   useEffect(() => {
-    if(markerMoved) {
-      placeMarker(markerMoved)
+    console.log(destinationDragged);
+    if(destinationDragged) {
+      setDestinations(destinations.map(destination => {
+        if(destination.id === destinationDragged.id) {
+          destination.latlng = destinationDragged.latlng;
+          destination.addr = destinationDragged.addr;
+
+          console.log(destination)
+        }
+
+        return destination;
+      }))
     }
-  }, [markerMoved])
+
+    return () => {
+      setDestinationDragged(null);
+    }
+  }, [destinationDragged])
+
+  useEffect(() => {
+    if(destinations.length >= 2) {
+      setRecommended(destinations.reduce((prev, curr) => {
+        let [
+          prevScore, 
+          currScore
+        ] = [
+          calculateDistanceScore(prev.distance) + calculateWeatherScore(prev.temperature), 
+          calculateDistanceScore(curr.distance) + calculateWeatherScore(curr.temperature)
+        ];
+
+        if(prevScore > currScore) {
+          return prev;
+        } else {
+          return curr;
+        }
+      }))
+    }
+  }, [destinations]);
+
+  const calculateDistanceScore = (distance) => {
+    let score = 0;
+    let [q1, q2, q3, q4] = [maxTravelDistance / 4, maxTravelDistance / 3, maxTravelDistance / 2, maxTravelDistance];
+
+    if(distance > 0 && distance < q1) {
+      score = 4;
+    } else if(distance > q1 && distance < q2) {
+      score = 3;
+    } else if(distance > q2 && distance < q3) {
+      score = 2;
+    } else if(distance > q3 && distance < q4) {
+      score = 1;
+    } else if(distance > q4) {
+      score = -1;
+    }
+
+    return score;
+  }
+
+  const calculateWeatherScore = (temperature) => {
+    let score = 0;
+    let [q1, q2, q3, q4] = [30, 25, 20, 15];
+
+    if(temperature > q2 && temperature < q1) {
+      score = 4;
+    } else if(temperature > q3 && temperature < q2) {
+      score = 3;
+    } else if(temperature > q4 && temperature < q3) {
+      score = 1; 
+    } else if(temperature > q1) {
+      score = 2
+    }
+
+    return score;
+  }
+
+  const handleOpenModal = () => {
+    modalRef.current.openModal();
+  }
+
+  const handleCloseModal = () => {
+    modalRef.current.closeModal();
+  }
+
+  const saveDestination = () => {
+    setSavedDestinations(savedDestinations.concat([chosen]));
+    navigate('/destinations');
+  }
+
 
   return (
     <React.Fragment>
@@ -252,37 +328,28 @@ export default function AddTravelPlan() {
           defaultCenter={mapCenter}
           customClassname={styles['travelplan__maps']}
         >
-          {markers.length && markers.map((marker, i) => (
-            marker.type === 'origin' 
-              ? <Marker 
-                  key={i} 
-                  index={marker.index}
-                  onDragend={onMarkerDragend} 
-                  position={marker.latlng} 
-                  icon={'http://maps.google.com/mapfiles/kml/paddle/red-stars.png'}  
-                /> 
-              : <Marker 
-                  key={i} 
-                  index={marker.index}
-                  position={marker.latlng} 
-                  icon={'http://maps.google.com/mapfiles/kml/paddle/red-circle.png'}  
-                /> 
+          <OriginMarker onDragend={onOriginDragend} marker={origin} />
+          {destinations.map((destination, i) => (
+            <DestinationMarker onDragend={onDestinationDragend} marker={destination} key={i} />
           ))}
         </GoogleMaps>
       </Suspense>
 
-      <div className="travelplan__zoom">
+      {/* <div className="travelplan__zoom">
         
-      </div>
+      </div> */}
 
       <div className={styles['locations']}>
-        {markers.length && markers.filter(marker => marker.type === 'destination').map((marker, i) => (
+        {destinations.map((destination, i) => (
           <Location 
               key={i}
-              marker={marker} 
+              destination={destination} 
+              origin={origin}
+              chosen={chosen}
               maxTravelDistance={maxTravelDistance}
               showWarning={showWarning}
-              calculateMarkerDistance={calculateMarkerDistance}
+              updateChosen={updateChosen}
+              updateMarkerInfo={updateMarkerInfo}
               onCenter={onLocationCenter}
               onRemove={onLocationRemove}
               gridPosition={++i}
@@ -296,7 +363,7 @@ export default function AddTravelPlan() {
             Our choice:
           </Typography>
           <Typography variant="paragraph">
-            Amsterdam, Netherlands
+            {recommended.addr}
           </Typography>
         </div>
 
@@ -304,16 +371,20 @@ export default function AddTravelPlan() {
           <Typography variant="h4">
             Your choice:
           </Typography>
+          <Typography variant="paragraph">
+            {chosen.addr}
+          </Typography>
         </div>
       </div>
 
       <div className={styles['travelplan__save']}>
       <Button 
-          // color={colors.secondary.medium}
+          color={colors.primary.gradient.full} 
+          isDisabled={Object.keys(chosen).length === 0}
           variant="contained"
           size="large"
           boxShadow="light"
-          onClick={() => {}}
+          onClick={handleOpenModal}
           customStyles={{
             width: '100%',
             height: '100%'
@@ -322,6 +393,43 @@ export default function AddTravelPlan() {
             Save chosen destination
         </Button>
       </div>
+
+      <Modal ref={modalRef} >
+        <div style={{
+          background: colors.white,
+          // width: '70vh',
+          // height: '70vh',
+          padding: '5rem',
+          borderRadius: '10px'
+        }}>
+          <Typography variant="h4" fontWeight="400" >Are you sure you want to save <strong>{chosen.addr}</strong> as your next destination?</Typography>
+
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-around',
+            marginTop: '20px'
+          }}>
+          <Button
+            onClick={saveDestination}
+            color={colors.primary.gradient.half}
+            variant="contained"
+            size="medium"
+            boxShadow="light"
+          >
+            Yes
+          </Button>
+          <Button
+            onClick={handleCloseModal}
+            color={colors.secondary.gradient.half}
+            variant="contained"
+            size="medium"
+            boxShadow="light"
+          >
+            No
+          </Button>
+          </div>
+        </div>
+      </Modal>
     </React.Fragment>
   );
 }
