@@ -15,7 +15,7 @@ function ReactPortal({ children, modalRootId = "modal-container"}) {
 
     // Because the program mutates the DOM directly, it's best to use useLayoutEffect
     useLayoutEffect(() => {
-        console.log('testing uselayouteffect')
+        // console.log('testing uselayouteffect')
         // Nullish coalescing operator.
         // element === modalWrapperElement
         let element = document.getElementById(modalRootId) ?? (() => {

@@ -47,13 +47,14 @@ export default function AddTravelPlan() {
     const latlng = api.map.getCenter().toJSON();
 
     api.getGeocodedAddress(latlng)
-      .then(result => {
+      .then(locationInfo => {
+        // console.log(result);
         setOrigin({
           latlng,
-          addr: result.formatted_address
+          ...locationInfo,
         });
 
-        setPlaceOrigin(result.formatted_address)
+        setPlaceOrigin(locationInfo.formattedAddress)
       }, err => {
         console.log(err)
       })
@@ -66,15 +67,17 @@ export default function AddTravelPlan() {
     };
 
     api.getGeocodedAddress(latlng)
-    .then(result => {
-      setDestinations([...destinations, {
-        latlng,
-        addr: result.formatted_address,
-        id: nanoid(),
-        distance: 0,
-        temperature: '',
-      }])
-
+    .then(locationInfo => {
+      if (destinations.some(destination => destination.placeId === locationInfo.placeId)) {
+        showWarning(`${locationInfo.formattedAddress} is already present in the list`)
+      } else {
+        setDestinations([...destinations, {
+          latlng,
+          ...locationInfo,
+          distance: 0,
+          temperature: '',
+        }])
+      }
     }, err => {
       console.log(err)
     })
@@ -88,8 +91,8 @@ export default function AddTravelPlan() {
     setMapCenter(api.map.getCenter().toJSON());
 
     api.getGeocodedAddress(api.map.getCenter().toJSON())
-    .then(result => {
-      setPlaceCenter(result.formatted_address);
+    .then(locationInfo => {
+      setPlaceCenter(locationInfo.formattedAddress);
     }, err => {
       console.log(err)
     })
@@ -100,8 +103,7 @@ export default function AddTravelPlan() {
   }
 
   const onLocationRemove = (destinationMarker) => {
-    console.log(destinations);
-    setDestinations(destinations.filter(destination => destination.id !== destinationMarker.id))
+    setDestinations(destinations.filter(destination => destination.placeId !== destinationMarker.placeId))
   }
 
   const onPlaceChange = (autocomplete) => {
@@ -115,13 +117,18 @@ export default function AddTravelPlan() {
     const latlng = {
       lat: place.geometry.location.lat(),
       lng: place.geometry.location.lng()
-    }
+    };
+
+    console.log(place.photos[0].getUrl());
 
     api.map.panTo(latlng);
 
     setOrigin({
       latlng,
-      addr: place.formatted_address
+      country: place.address_components.find(location => location.types.includes('country')),
+      city: place.address_components.find(location => location.types.includes('locality') || location.types.includes('postal_town') || location.types.includes('administrative_area_level_3')),
+      formattedAddress: place.formatted_address,
+      placeId: place.placeId
     })
   }
 
@@ -129,13 +136,13 @@ export default function AddTravelPlan() {
     const latlng = { lat: e.latLng.lat(), lng: e.latLng.lng() };
 
     api.getGeocodedAddress(latlng)
-    .then(result => {
+    .then(locationInfo => {
       setOrigin({
         latlng,
-        addr: result.formatted_address
+        ...locationInfo
       });
 
-      setPlaceOrigin(result.formatted_address)
+      setPlaceOrigin(locationInfo.formattedAddress)
     }, err => {
       console.log(err)
     })
@@ -146,11 +153,10 @@ export default function AddTravelPlan() {
     const latlng = { lat: e.latLng.lat(), lng: e.latLng.lng() };
 
     api.getGeocodedAddress(latlng)
-    .then(result => {
+    .then(locationInfo => {
       setDestinationDragged({
-        id,
         latlng,
-        addr: result.formatted_address
+        ...locationInfo
       })
     }, err => {
       console.log(err)
@@ -159,7 +165,7 @@ export default function AddTravelPlan() {
 
   const updateMarkerInfo = (temp, distance, marker) => {
     setDestinations(destinations.map(destination => {
-      if(destination.id === marker.id) {
+      if(destination.placeId === marker.placeId) {
         destination.distance = parseFloat(distance);
         destination.temperature = temp;
       }
@@ -169,7 +175,7 @@ export default function AddTravelPlan() {
   }
 
   const updateChosen = (d) => {
-    if(d.id === chosen.id) {
+    if(d.placeId === chosen.placeId) {
       setChosen({})
     } else {
       setChosen(d);
@@ -180,19 +186,18 @@ export default function AddTravelPlan() {
     setMaxTravelDistance(e.target.value);
   }
 
-  const showWarning = (address) => {
-    toast.warn(`${address} is not within the specified travel distance range`);
+  const showWarning = (text) => {
+    toast.warn(text);
   }
 
   useEffect(() => {
     console.log(destinationDragged);
     if(destinationDragged) {
       setDestinations(destinations.map(destination => {
-        if(destination.id === destinationDragged.id) {
+        console.log(destination);
+        if(destination.placeId === destinationDragged.placeId) {
           destination.latlng = destinationDragged.latlng;
           destination.addr = destinationDragged.addr;
-
-          console.log(destination)
         }
 
         return destination;
@@ -273,6 +278,9 @@ export default function AddTravelPlan() {
     navigate('/destinations');
   }
 
+  useEffect(() => {
+    console.log(recommended)
+  }, [recommended]);
 
   return (
     <React.Fragment>
@@ -363,7 +371,7 @@ export default function AddTravelPlan() {
             Our choice:
           </Typography>
           <Typography variant="paragraph">
-            {recommended.addr}
+            {recommended.formattedAddress}
           </Typography>
         </div>
 
@@ -372,7 +380,7 @@ export default function AddTravelPlan() {
             Your choice:
           </Typography>
           <Typography variant="paragraph">
-            {chosen.addr}
+            {chosen.formattedAddress}
           </Typography>
         </div>
       </div>
@@ -402,7 +410,7 @@ export default function AddTravelPlan() {
           padding: '5rem',
           borderRadius: '10px'
         }}>
-          <Typography variant="h4" fontWeight="400" >Are you sure you want to save <strong>{chosen.addr}</strong> as your next destination?</Typography>
+          <Typography variant="h4" fontWeight="400" >Are you sure you want to save <strong>{chosen.formattedAddress}</strong> as your next destination?</Typography>
 
           <div style={{
             display: 'flex',

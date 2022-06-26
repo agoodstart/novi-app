@@ -4,7 +4,7 @@ import ReactPortal from "../Portal/ReactPortal";
 import styles from './Modal.module.scss';
 
 const Modal = (props, ref) => {
-	console.log('modal component rendered');
+	// console.log('modal component rendered');
 
 	const nodeRef = useRef(null);
 	const [isOpen, setIsOpen] = useState(false);

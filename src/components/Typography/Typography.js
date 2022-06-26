@@ -11,6 +11,10 @@ export default function Typography({children, variant, uppercase, textColor, fon
     }
   }
 
+  const setClassNames = (heading) => {
+    
+  }
+
   switch(variant) {
     case 'h1':
       return (

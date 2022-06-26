@@ -39,7 +39,7 @@ const withConfig = (customIcon) => ({onDragend, marker}) => {
   const { api } = useGoogleApi();
 
   const triggerDragend = (e) => {
-    onDragend(e, marker.id);
+    onDragend(e, marker.placeId);
   }
 
   return <Marker map={api.map} icon={customIcon} onDragend={triggerDragend} position={marker.latlng} draggable={true} />

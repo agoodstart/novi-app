@@ -4,6 +4,7 @@ import useTheme from '../../hooks/useTheme';
 import useAuth from '../../hooks/useAuth';
 
 import Button from '../../components/Button/Button';
+import Center from '../../components/Center/Center';
 import Typography from '../../components/Typography/Typography';
 
 import styles from './Home.module.scss';
@@ -31,7 +32,7 @@ export default function Home() {
           </video>
         </div>
 
-        <div className={styles['center__div']}>
+        <Center>
           <Typography variant="h1">
             There is a world outside <br></br> 
             waiting for you
@@ -46,7 +47,7 @@ export default function Home() {
             >
               Login to discover
             </Button>
-        </div>
+        </Center>
       </React.Fragment>
     );
   }

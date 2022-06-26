@@ -39,7 +39,6 @@ const Location = ({
   }
 
   const setData = useCallback(() => {
-    console.log('testrun')
     setTimeout(() => {
       axios.get('https://api.openweathermap.org/data/3.0/onecall', {
         params: {
@@ -61,10 +60,10 @@ const Location = ({
   }, [setData]);
 
   useEffect(() => {
-    if(chosen.id === destination.id) {
+    if(chosen.placeId === destination.placeId) {
       locationRef.current.style.background = `${colors.quaternary.light}95`;
     } else if(destination.distance >= parseInt(maxTravelDistance) || !maxTravelDistance) {
-      showWarning(destination.addr)
+      showWarning(`${destination.formattedAddress} is not within the specified travel distance range`)
       locationRef.current.style.background = `${colors.secondary.light}95`;
     } else {
       locationRef.current.style.background = `${colors.grey.light}95`;
@@ -81,7 +80,7 @@ const Location = ({
     }} onClick={changeColor}>
       <div className={styles['location__info']}>
         <Typography variant="paragraph">
-          {destination.addr || ""}
+          {destination.formattedAddress}
         </Typography>
         <p>Temperature: {destination.temperature} &#8451;</p>
         <p>Distance: {destination.distance} km</p>

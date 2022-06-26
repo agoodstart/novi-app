@@ -48,20 +48,25 @@ export const GoogleApiProvider = ({ children }) => {
           }
         })
     }).then(results => {
-      console.log(results);
-      // console.log(results);
-        const formattedAddr = results.reduce((res, location) => {
-          if(location.types.includes('locality') || location.types.includes('postal_town') ||location.types.includes('administrative_area_level_3')) {
-            res = location;
-          };
+      const locationMatch = results.reduce((res, location) => {
+        if(location.types.includes('locality') || 
+        location.types.includes('postal_town') || 
+        location.types.includes('administrative_area_level_3')) {
+          res = location;
+        };
+        
+        return res;
+      }, null);
 
-          return res;
-        }, null)
-
-        if(!formattedAddr) {
-          return Promise.reject('cannot resolve address')
+        if(!locationMatch) {
+          return Promise.reject('cannot resolve address');
         } else {
-          return Promise.resolve(formattedAddr)
+          return Promise.resolve({
+            country: locationMatch.address_components.find(location => location.types.includes('country')),
+            city: locationMatch.address_components.find(location => location.types.includes('locality') || location.types.includes('postal_town') || location.types.includes('administrative_area_level_3')),
+            formattedAddress: locationMatch.formatted_address,
+            placeId: locationMatch.place_id,
+          })
         }
       },
       err => {

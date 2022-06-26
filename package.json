@@ -12,9 +12,12 @@
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^14.2.0",
     "axios": "^0.27.2",
+    "concurrently": "^7.2.2",
     "dayjs": "^1.11.3",
     "dotenv": "^16.0.1",
     "fast-equals": "^4.0.1",
+    "iso-lang-codes": "^2.1.1",
+    "json-server": "^0.17.0",
     "jwt-decode": "^3.1.2",
     "nanoid": "^4.0.0",
     "prop-types": "^15.8.1",
@@ -27,7 +30,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently \"npm:react\" \"npm:miniserver\"",
+    "react": "react-scripts start",
+    "miniserver": "node ./miniserver/index.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

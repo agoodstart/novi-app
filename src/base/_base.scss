@@ -1,3 +1,7 @@
+@use "~@fontsource/ubuntu/scss/mixins" as Ubuntu;
+@import "~@fontsource/ubuntu/index.css";
+// @import "~@fontsource/ubuntu/index.css";
+
 *,
 *::after,
 *::before {
@@ -12,15 +16,21 @@ html {
 
 .Toastify__toast-container {
     width: 450px;
-    font-family: "Ubuntu";
+    font-family: "Ubuntu", sans-serif;
     font-size: 1.8rem;
 }
 
 body {
+    @include Ubuntu.fontFace(
+        $weight: 400,
+        $display: fallback,
+        $fontDir: "~@fontsource/ubuntu/files"
+    );
+
     box-sizing: border-box;
     margin: 0;
     font-family: "Ubuntu";
-    font-weight: 400;
+    // font-weight: 400;
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

@@ -19,6 +19,8 @@ export default function Destinations() {
     navigate(`/destinations/${id}`)
   }
 
+  console.log(styles['destinations__headline']);
+
   return (
     <React.Fragment>
       <div className={styles['destinations__headline']}>
@@ -33,11 +35,11 @@ export default function Destinations() {
         destinations.map((destination, i) => (
           <div key={i} className={styles['destination']}>
             <Typography variant="h4" customStyles={{ paddingLeft: '15px' }}>
-              {destination.addr}
+              {destination.formattedAddress}
             </Typography>
 
             <div className={styles['destination__buttons']}>
-              <Button color={colors.primary.gradient.half} customStyles={{ marginRight: '20px' }} onClick={viewDestination.bind(null, destination.id)}>
+              <Button color={colors.primary.gradient.half} customStyles={{ marginRight: '20px' }} onClick={viewDestination.bind(null, destination.placeId)}>
                 View Destination
               </Button>
 
