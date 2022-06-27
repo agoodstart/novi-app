@@ -1,38 +1,59 @@
-.typography__heading-primary {
-  color: #f7f7f7;
-  // font-size: 4.5rem;
-  font-weight: 300;
-  font-size: 6rem;
-  backface-visibility: hidden;
-  margin-bottom: 6rem;
+@use "sass:math";
+
+@function type-scaling($heading) {
+  $scale: 6 - $heading;
+
+  $size: math.pow(1.333, $scale);
+  $font-size: $size + rem;
+
+  @return $font-size;
+}
+
+.typography {
+  &__heading {
+    // margin: 3rem 0 1.38rem;
+    font-weight: 300;
+    // line-height: 1.3;
+
+    @for $i from 1 through 5 {
+      &-#{$i} {
+        font-size: type-scaling($i);
+      }
+    }    
+  }
+
+  &__paragraph {
+    font-size: type-scaling(6);
+  }
+
+  &__small {
+    font-size: type-scaling(6);
+  }
+}
+
+$fontweights: (
+  "300": 300,
+  "400": 400,
+  "500": 500,
+  "700": 700
+);
+
+@each $key, $val in $fontweights {
+  .w#{$key} {
+    font-weight: $val;
+  }
+}
+
+@for $i from 1 through 10 {
+  .spacing-#{$i} {
+    letter-spacing: #{$i} + px;
+  }
+}
+
+.shadow {
   text-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
-.typography--uppercase {
+.uppercase {
   text-transform: uppercase;
-  
-}
-
-.typography__heading-secondary {
-  font-size: 3.5rem;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: #f7f7f7;
-  letter-spacing: .2rem;
-}
-
-.typography__heading-tertiary {
-  font-size: 3rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.typography__heading-quaternary {
-  font-size: 2.5rem;
-  font-weight: 700;
-  // text-transform: uppercase;
-}
-
-.typography__paragraph {
-  font-size: 1.5rem;
 }

@@ -10,6 +10,8 @@ export function Tabs({children, color, backgroundColor}) {
     const panelRefs = useRef([]);
     let realIndex = 0;
 
+    console.log(panelRefs)
+
     const colors = {
         backgroundColor,
         color,

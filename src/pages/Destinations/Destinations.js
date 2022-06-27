@@ -11,6 +11,7 @@ import Button from "../../components/Button/Button";
 import Destination from "./Destination/Destination";
 
 export default function Destinations() {
+  console.log('hello')
   const navigate = useNavigate();
   const {colors} = useTheme();
   const [destinations, setDestinations] = useLocalStorage("destinations", []);

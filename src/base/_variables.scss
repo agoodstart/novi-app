@@ -23,16 +23,29 @@ $cadetgray-dark: #829399;
 
 $darkjunglegreen: #041f1e;
 
+$emerald: #0cce6b;
+$fireopal: #ef6461;
+$electricblue: #87f6ff;
+$sunray: #e4b363;
+$cadetgray: #6ec5b4;
+
 $white: #fcfcfc;
-$blackfogra39: #0a0f0d;
-$blackfogra39-opacity: #0a0f0d80;
-$blackfogra39-opacity-20: #0a0f0d20;
+$black: #0a0f0d;
 
+$base-font-size: 100%; // which is equivalent to 15px
 
-// GRID
-$main-bg-color: transparent;
-$grid-width: 114rem;
+$fontweight-300: 300;
+$fontweight-400: 400;
+$fontweight-500: 500;
+$fontweight-700: 700;
 
-$gutter-vertical: 8rem;
-$gutter-vertical-small: 6rem;
-$gutter-horizontal: 6rem;
+$colors: (
+  "primary": $emerald,
+  "secondary": $fireopal,
+  "teriary": $electricblue,
+  "quaternary": $sunray,
+
+  "black": $black,
+  "white": $white,
+  "gray": $cadetgray
+);

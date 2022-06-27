@@ -79,11 +79,11 @@ const Location = ({
       gridArea: gridPosition
     }} onClick={changeColor}>
       <div className={styles['location__info']}>
-        <Typography variant="paragraph">
+        <Typography>
           {destination.formattedAddress}
         </Typography>
-        <p>Temperature: {destination.temperature} &#8451;</p>
-        <p>Distance: {destination.distance} km</p>
+        <Typography variant="small">Temperature: {destination.temperature} &#8451;</Typography>
+        <Typography variant="small">Distance: {destination.distance} km</Typography>
       </div>
       <div className={styles['location__buttons']}>
       <Button 

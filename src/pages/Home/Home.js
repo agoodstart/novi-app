@@ -33,7 +33,7 @@ export default function Home() {
         </div>
 
         <Center>
-          <Typography variant="h1">
+          <Typography textColor={colors.white} textShadow variant="h1">
             There is a world outside <br></br> 
             waiting for you
           </Typography>

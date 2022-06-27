@@ -38,6 +38,7 @@ const ColorTheme = {
     }
   },
 
+  // sunray
   quaternary: {
     light: '#e4b363',
     medium: '#b4aa49',

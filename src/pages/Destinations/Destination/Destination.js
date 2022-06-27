@@ -2,23 +2,26 @@ import { useCallback } from 'react';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
+
 import useTheme from '../../../hooks/useTheme';
+import useLocalStorage from '../../../hooks/useLocalStorage';
 
 import Typography from '../../../components/Typography/Typography';
 import Image from '../../../components/Image/Image';
+import Center from '../../../components/Center/Center';
+import { Tabs, Tab, TabList, TabPanel } from '../../../components/Tabs/Tabs';
 
 import styles from './Destination.module.scss';
 
-// import { TranslationServiceClient } from '@google-cloud/translate';
-
-import useLocalStorage from '../../../hooks/useLocalStorage';
+import Currency from './Currency';
+import MemoizedDestinationTabs from './DestinationTabs';
 const { REACT_APP_PEXELS_API_KEY } = process.env;
 
 export default function Destination() {
+  console.log('hello');
   const params = useParams();
   const {colors} = useTheme();
   
-
   const [savedDestination, setSavedDestination] = useState(null);
   const [imageSource, setImageSource] = useState("");
   const [destinations, setDestinations] = useLocalStorage("destinations", []);
@@ -28,40 +31,42 @@ export default function Destination() {
   }, [setSavedDestination])
 
   useEffect(() => {
+    console.log('test');
     setData();
   }, [setData]);
 
   useEffect(() => {
-    console.log(savedDestination);
     if(savedDestination) {
-      axios.get(`https://api.pexels.com/v1/search?query=${savedDestination.city.short_name}`, {
+      axios.get(`https://api.pexels.com/v1/search?query=${savedDestination.city.short_name}&orientation=landscape`, {
         headers: {
           "Authorization": REACT_APP_PEXELS_API_KEY
         }
       }).then(result => {
-        console.log(result.data.photos[0])
-        setImageSource(result.data.photos[0].src.original);
+        setImageSource(result.data.photos[0].src.landscape);
       })
     }
   }, [savedDestination])
 
-  useEffect(() => {
-    console.log(imageSource);
-  }, [imageSource])
-
   return(
     <>
       <div className={styles['destination__headline']}>
-        <Typography textColor={colors.grey.dark} variant="h1">
-          {savedDestination?.city.long_name}
-        </Typography>
+      <Image source={imageSource} />
 
-        <Typography variant="h2">
-          {savedDestination?.country.long_name}
-        </Typography>
+        <Center>
+          <Typography fontWeight="700" textShadow textColor={colors.white} variant="h1">
+            {savedDestination?.city.long_name}
+          </Typography>
+
+          <Typography textShadow textColor={colors.white} variant="h2">
+            {savedDestination?.country.long_name}
+          </Typography>
+        </Center>
       </div>
 
-      {/* <Image source={imageSource} /> */}
+      <div className={styles['destination__tabs']}>
+        <MemoizedDestinationTabs />
+      </div>
+      {/* <Currency styles={styles} /> */}
     </>
   )
 }

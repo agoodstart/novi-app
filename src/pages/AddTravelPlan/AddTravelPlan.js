@@ -21,6 +21,8 @@ import useTheme from '../../hooks/useTheme';
 import useAuth from '../../hooks/useAuth';
 
 export default function AddTravelPlan() {
+  console.log('hello');
+
   const navigate = useNavigate();
   const { modalRef } = useAuth();
   const { colors } = useTheme()
