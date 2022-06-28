@@ -1,11 +1,23 @@
+.destination {
+  overflow-y: scroll;
+}
+
 .destination__headline {
   grid-area: 1 / 1 / 4 / 9;
   background-color: blueviolet;
-  position: relative;
+  position: sticky;
+  top: 0;
   // margin: 0 auto;
 }
 
 .destination__tabs {
   grid-area: 4 / 1 / 7 / 9;
   // background-color: red;
+}
+
+.test__div {
+  grid-area: 6 / 1 / 9 / 9;
+  height: 200rem;
+
+  background: greenyellow;
 }

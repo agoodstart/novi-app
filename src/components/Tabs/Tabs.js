@@ -97,10 +97,13 @@ export const Tab = (props) => {
 
     return (
         <li className={styles['tabs__item']} style={customStyles}>
-            <a
+            <p
+            style={{
+                cursor: 'pointer'
+            }}
             onClick={activate} 
             className={styles['tabs__link']}
-            href="#">{props.children}</a>
+            >{props.children}</p>
         </li>
     )
 }

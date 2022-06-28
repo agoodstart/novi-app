@@ -1,3 +1,12 @@
+.travelplan {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 30px 30px;
+  overflow: hidden;
+}
+
 .locations {
   grid-area: 1 / 6 / 7 / 9;
   padding: 15px;

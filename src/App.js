@@ -15,6 +15,7 @@ import Destination from './pages/Destinations/Destination/Destination';
 
 import WebsiteLayout from './layout/WebsiteLayout/WebsiteLayout';
 import DashboardLayout from './layout/DashboardLayout/DashboardLayout';
+import DestinationRouting from './routes/DestinationRouting';
 
 export default function App() {
   return (
@@ -32,7 +33,11 @@ export default function App() {
       <Route path="/" element={<DashboardLayout />} >
         <Route path="dashboard" element={<DashboardHome />} />
         <Route path="destinations" element={<Destinations/>} />
-        <Route path="destinations/:id" element={<Destination />} />
+
+        <Route path="destinations/destination/" element={<DestinationRouting />}>
+          <Route index={true} path=":id" element={<Destination />} />
+        </Route>
+        
         <Route path="addtravelplan" element={<AddTravelPlan />} />
         <Route path="account" element={<Account />} />
         <Route path="social" element={<Social />} />

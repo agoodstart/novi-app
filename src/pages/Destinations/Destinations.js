@@ -14,16 +14,19 @@ export default function Destinations() {
   console.log('hello')
   const navigate = useNavigate();
   const {colors} = useTheme();
-  const [destinations, setDestinations] = useLocalStorage("destinations", []);
+  const [destinations, _] = useLocalStorage("destinations", []);
 
-  const viewDestination = (id) => {
-    navigate(`/destinations/${id}`)
+  const viewDestination = (destination) => {
+    navigate(`/destinations/destination/${destination.placeId}`, { 
+      state: destination
+     })
   }
 
   console.log(styles['destinations__headline']);
 
   return (
     <React.Fragment>
+
       <div className={styles['destinations__headline']}>
         <Typography textColor={colors.grey.dark} variant="h1">Your Destinations</Typography>
       </div>
@@ -40,7 +43,7 @@ export default function Destinations() {
             </Typography>
 
             <div className={styles['destination__buttons']}>
-              <Button color={colors.primary.gradient.half} customStyles={{ marginRight: '20px' }} onClick={viewDestination.bind(null, destination.placeId)}>
+              <Button color={colors.primary.gradient.half} customStyles={{ marginRight: '20px' }} onClick={viewDestination.bind(null, destination)}>
                 View Destination
               </Button>
 
