@@ -1,3 +1,14 @@
+.destinations {
+  grid-area: section;
+  padding: 30px;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 30px 30px;
+  overflow: hidden;
+}
+
 .destinations__headline {
   grid-area: 1 / 1 / 8 / 8;
   // margin: 0 auto;
@@ -23,7 +34,7 @@
   background: #6ec5b495;
   padding: 30px;
   border-radius: 5px;
-  border: 1px solid rgba(0, 0, 0, .10); 
+  border: 1px solid rgba(0, 0, 0); 
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;  
 
   &:not(:last-child) {

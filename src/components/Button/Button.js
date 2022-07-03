@@ -1,6 +1,8 @@
 import styles from './Button.module.scss';
+import { useRef } from 'react';
 
 export default function Button({color, variant, size, boxShadow, onClick, customStyles, isDisabled, children}) {
+  const buttonRef = useRef();
 
   const setCustomStyles = () => {
     if(!isDisabled) {
@@ -24,7 +26,7 @@ export default function Button({color, variant, size, boxShadow, onClick, custom
   );  
 
   return (
-    <button className={setClassNames()} style={setCustomStyles()} onClick={onClick} disabled={isDisabled}>
+    <button ref={buttonRef} className={setClassNames()} style={setCustomStyles()} onClick={onClick} disabled={isDisabled}>
       {children}
     </button>
   )

@@ -34,7 +34,7 @@ const withPlaces = (Component) => ({autocompleteInstance, defaultLocation, onPla
   }, [autocomplete, onPlaceChange])
 
   return (
-    <Component fref={autocompleteRef} />
+    <Component iRef={autocompleteRef} />
   )
 }
 

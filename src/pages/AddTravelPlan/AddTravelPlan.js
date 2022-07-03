@@ -12,6 +12,7 @@ import { NumberInput } from '../../components/Form/Form';
 import Typography from '../../components/Typography/Typography';
 import Button from '../../components/Button/Button';
 import Modal from '../../components/Modal/Modal';
+import Container from '../../components/Container/Container';
 
 import styles from './AddTravelPlan.module.scss';
 
@@ -285,10 +286,17 @@ export default function AddTravelPlan() {
   }, [recommended]);
 
   return (
-    <React.Fragment>
+    <Container element="section">
+    <div className={styles['travelplan']}>
       <div className={styles['travelplan__control']}>
         <div className={styles['travelplan__places']}>
-          <label className={styles['travelplan__label']}>Your current location: </label>
+          <label>
+            <Typography variant="small" customStyles={{
+                marginLeft: '5px'
+            }}>
+              Your current location: 
+            </Typography>
+          </label>
           <TextInputWithGooglePlaces 
             autocompleteInstance={api.autocomplete.geo} 
             onPlaceChange={onOriginPlaceChange}
@@ -301,7 +309,13 @@ export default function AddTravelPlan() {
         </div>
 
         <div className={styles['travelplan__places']}>
-          <label className={styles['travelplan__label']}>Current Map center: </label>
+        <label>
+            <Typography variant="small" customStyles={{
+              marginLeft: '5px'
+            }}>
+              Current center: 
+            </Typography>
+          </label>
           <TextInputWithGooglePlaces 
             autocompleteInstance={api.autocomplete.center} 
             onPlaceChange={onPlaceChange}
@@ -314,7 +328,13 @@ export default function AddTravelPlan() {
         </div>
 
         <div className={styles['travelplan__places']}>
-          <label className={styles['travelplan__label']}>Max travel distance: </label>
+        <label>
+            <Typography variant="small" customStyles={{
+              marginLeft: '5px'
+            }}>
+              Max travel distance
+            </Typography>
+          </label>
           <NumberInput 
             value={maxTravelDistance}
             onChange={onDistanceChange}
@@ -440,6 +460,8 @@ export default function AddTravelPlan() {
           </div>
         </div>
       </Modal>
-    </React.Fragment>
+    </div>
+          
+    </Container>
   );
 }
