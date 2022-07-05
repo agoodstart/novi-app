@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import ColorTheme from "../ColorTheme";
-import styles from '../base/Colors.module.scss';
+import styles from './Theme.module.scss';
 import { useCallback } from "react";
 
 export const ThemeContext = createContext(null);
@@ -85,7 +84,7 @@ export const ThemeProvider = ({ children }) => {
     }, [textColor])
 
     return (
-        <ThemeContext.Provider value={{ colors: ColorTheme }}>
+        <ThemeContext.Provider value={{ colors: { background: backgroundColor, text: textColor} }}>
             {children}
         </ThemeContext.Provider>
     )

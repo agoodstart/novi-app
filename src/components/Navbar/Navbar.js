@@ -44,19 +44,19 @@ const Navbar = () => {
         </li>
         <li className={styles.navigation__item}>
           <Button
-            color={colors.primary.gradient.half}
-            variant="pill"
+            color={colors.background.primary.main}
+            pill
             size="medium"
-            boxShadow="light"
+            elevation={2}
             onClick={handleOpenModal}
           >Inloggen</Button>
         </li>
         <li className={styles.navigation__item}>
         <Button
-            color={colors.tertiary.gradient.half}
-            variant="pill"
+            color={colors.background.tertiary.dark}
+            pill
             size="medium"
-            boxShadow="light"
+            elevation={2}
             onClick={handleOpenModal}
           >Registreren</Button>
         </li>

@@ -1,32 +1,42 @@
 import styles from './Button.module.scss';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
+import useTheme from '../../hooks/useTheme';
 
-export default function Button({color, variant, size, boxShadow, onClick, customStyles, isDisabled, children}) {
+export default function Button({color, size, pill, elevation, onClick, customStyles, isDisabled, children}) {
+  const { colors } = useTheme();
+
   const buttonRef = useRef();
 
-  const setCustomStyles = () => {
-    if(!isDisabled) {
-      return {
-        background: color,
-        ...customStyles
-      }
-    } else {
-      return {
-        background: '#6ec5b485',
-        ...customStyles
-      }
+  useEffect(() => {
+    console.log('button render');
+    if(isDisabled && isDisabled instanceof Function) {
+      isDisabled(buttonRef.current)
     }
-  }
 
-  const setClassNames = () => ( 
-    `${styles['btn']}` + 
-      ' ' + ( variant === 'pill' ? `${styles['btn--pill']}` : variant === 'contained' ? `${styles['btn--contained']}` : `${styles['btn--contained']}` ) +
-      ' ' + ( size === 'small' ? `${styles['btn--small']}` : size === 'medium' ? `${styles['btn--medium']}` : size === 'large' ? `${styles['btn--large']}` : `${styles['btn--medium']}`) +
-      ' ' + ( boxShadow === 'light' ? `${styles['btn--shadow-light']}` : boxShadow === 'dark' ? `${styles['btn--shadow-dark']}` : `${styles['btn--shadow-light']}`)
-  );  
+    if(buttonRef.current.disabled) {
+      buttonRef.current.classList.remove(color);
+      buttonRef.current.classList.add(colors.background.secondary.alpha['50']);
+    } else {
+      buttonRef.current.classList.remove(colors.background.secondary.alpha['50']);
+      buttonRef.current.classList.add(color);
+    }
+  })
+  
+  useEffect(() => {
+
+    buttonRef.current.classList.add(styles[`btn-${size}`]);
+    buttonRef.current.classList.add(styles[`elevation-${elevation}`])
+
+    if(pill) {
+      buttonRef.current.classList.add(styles['btn--pill'])
+    }
+
+
+    // console.log(isDisabled);
+  }, [])
 
   return (
-    <button ref={buttonRef} className={setClassNames()} style={setCustomStyles()} onClick={onClick} disabled={isDisabled}>
+    <button ref={buttonRef} style={customStyles} onClick={onClick}>
       {children}
     </button>
   )

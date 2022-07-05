@@ -1,0 +1,80 @@
+@use "sass:map";
+@use "sass:math";
+@use "sass:color";
+
+@use "../base/variables";
+@use "../base/functions";
+@use "../base/mixins";
+
+// COLORS
+$emerald: #0cce6b;
+$fireopal: #ef6461;
+$electricblue: #87f6ff;
+$goldmetallic: #DEB841;
+
+$opal: #85BDBF;
+$white: #FCF7F8;
+$black: #11151C;
+
+$colors-map: (
+  "primary": functions.create_color_map(
+    map.get(variables.$colors, "primary"), 
+    15%
+  ),
+  "secondary": functions.create_color_map(
+    map.get(variables.$colors, "secondary"), 
+    15%
+  ),
+  "tertiary": functions.create_color_map(
+    map.get(variables.$colors, "tertiary"), 
+    15%
+  ),
+  "quaternary": functions.create_color_map(
+    map.get(variables.$colors, "quaternary"), 
+    15%
+  ),
+
+  "gray": functions.create_color_map(
+    map.get(variables.$colors, "gray"), 
+    15%
+  )
+);
+
+@each $color, $colormapping in $colors-map {
+  @each $colorvariation, $colorvalue in $colormapping {
+
+    .text-#{$color}-#{$colorvariation} {
+      color: $colorvalue;
+    }
+
+    .bg-#{$color}-#{$colorvariation} {
+      background-color: $colorvalue;
+    }
+
+    @if($colorvariation == "dark") {
+      @include mixins.alpha($color, $colorvalue);
+    }
+  }
+}
+
+.text {
+  &-white {
+    color: map.get(variables.$colors, "white");
+  }
+
+  &-black {
+    color: map.get(variables.$colors, "black");
+  }
+}
+
+.bg {
+  &-white {
+    background-color: map.get(variables.$colors, "white");
+  }
+
+  &-black {
+    background-color: map.get(variables.$colors, "black");
+  }
+}
+
+@include mixins.alpha("black", map.get(variables.$colors, "black"));

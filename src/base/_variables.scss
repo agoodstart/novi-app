@@ -1,45 +1,14 @@
 @use "sass:map";
 
 // COLORS
-$emerald-light: #0cce6b;
-$emerald-medium: #00bc71;
-$emerald-dark: #00aa74;
-
-$gold: #9D8420;
-$darkjunglegreen2: #171D1C;
-$white2: #FCF7F8;
-$malachite: #09E85E;
-$mintgreen: #AEF78E;
-
-$fireopal-light: #ef6461;
-$fireopal-medium: #e05685;
-$fireopal-dark: #bc58a4;
-
-$electricblue-light: #87f6ff;
-$electricblue-medium: #67d5ff;
-$electricblue-dark: #72b1f2;
-
-$sunray-light: #e4b363;
-$sunray-medium: #b4aa49;
-$sunray-dark: #7da03d;
-
-$grey-light-1: #f7f7f7;
-$grey-light-2: #eee;
-
-$cadetgray-light: #6ec5b4;
-$cadetgray-medium: #75acaf;
-$cadetgray-dark: #829399;
-
-$darkjunglegreen: #041f1e;
-
 $emerald: #0cce6b;
 $fireopal: #ef6461;
 $electricblue: #87f6ff;
-$sunray: #e4b363;
-$cadetgray: #6ec5b4;
+$goldmetallic: #DEB841;
 
-$white: #fcfcfc;
-$black: #0a0f0d;
+$opal: #85BDBF;
+$white: #FCF7F8;
+$black: #11151C;
 
 $base-font-size: 100%; // which is equivalent to 16px
 
@@ -49,59 +18,28 @@ $shadow-3: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 $shadow-4: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 $shadow-5: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 
-$fontweight-300: 300;
-$fontweight-400: 400;
-$fontweight-500: 500;
-$fontweight-700: 700;
-
-@function create_alpha($color) {
-  $i: 95;
-  $alpha-map: ();
-
-  @while $i > 10 {
-    $map: ();
-    $map: map.merge($map, ("#{$i}": transparentize($color, $i / 100)));
-
-    $alpha-map: map.merge($alpha-map, $map);
-    $i: $i - 5;
-  };
-
-  @return $alpha-map;
-}
-
-@function create_color_map($base, $light, $dark) {
-  $color-map: (
-    base: $base,
-    light: $light,
-    dark: $dark,
-    // alpha: create_alpha($dark)
-  );
-
-  @return $color-map;
-}
-
-$colors-map: (
-  "primary": create_color_map($emerald-medium, $emerald-light, $emerald-dark),
-  // "secondary": create_color_map($fireopal-medium, $fireopal-light, $fireopal-dark),
-  // "tertiary": create_color_map($electricblue-medium, $electricblue-light, $electricblue-dark),
-  // "quaternary": create_color_map($sunray-medium, $sunray-light, $sunray-dark)
-);
-
-$colors: (
-  "primary": $emerald,
-  "secondary": $fireopal,
-  "tertiary": $electricblue,
-  "quaternary": $sunray,
-
-  "black": $black,
-  "white": $white,
-  "gray": $cadetgray
-);
-
 $shadows: (
   "1": $shadow-1,
   "2": $shadow-2,
   "3": $shadow-3,
   "4": $shadow-4,
   "5": $shadow-5
-)
+);
+
+$fontweights: (
+  "300": 300,
+  "400": 400,
+  "500": 500,
+  "700": 700
+);
+
+$colors: (
+  "primary": $emerald,
+  "secondary": $fireopal,
+  "tertiary": $electricblue,
+  "quaternary": $goldmetallic,
+
+  "black": $black,
+  "white": $white,
+  "gray": $opal
+);

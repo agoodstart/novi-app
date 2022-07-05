@@ -7,18 +7,18 @@ move activecolors to tablist
 */
 
 export function Tabs({children, color, backgroundColor}) {
+    const tabsRef = useRef();
     const panelRefs = useRef([]);
     let realIndex = 0;
 
-    console.log(panelRefs)
-
-    const colors = {
-        backgroundColor,
-        color,
-    }
+    useEffect(() => {
+        if(backgroundColor) {
+            tabsRef.current.classList.add(backgroundColor)
+        }
+    }, [])
 
     return (
-        <div className={styles['tabs']} style={colors}>
+        <div ref={tabsRef} className={styles['tabs']}>
             {React.Children.map(children, (child, index) => {
                 if (child.type === TabPanel) {
                     panelRefs.current.push(React.createRef());
@@ -32,10 +32,15 @@ export function Tabs({children, color, backgroundColor}) {
 }
 
 export const TabPanel = React.forwardRef(({children, backgroundColor}, ref) => {
+    const tabPanelRef = useRef();
     const [active, setActive] = useState(false)
 
-    const customStyles = {
-        backgroundColor
+    useEffect(() => {
+        console.log(ref.current)
+    }, [])
+
+    const setClassNames = () => {
+
     }
 
     useImperativeHandle(ref, () => ({
@@ -47,7 +52,7 @@ export const TabPanel = React.forwardRef(({children, backgroundColor}, ref) => {
     return (
         <React.Fragment>
             {active ?
-                <div className={styles['tabs__panel']} style={customStyles}>
+                <div ref={tabPanelRef} className={styles['tabs__panel']}>
                     {children}
                 </div>: 
             null}
@@ -87,16 +92,22 @@ export function TabList({children, panelRefs}) {
 }
 
 export const Tab = (props) => {
+    const tabRef = useRef();
     const activate = () => {
         props.toggleState(props.index);
     }
 
-    const customStyles = {
-        backgroundColor: props.isActive ? props.activeBackgroundColor : props.inactiveBackgroundColor
-    }
+    useEffect(() => {
+        console.log(props);
+        if(props.isActive) {
+            tabRef.current.classList.add(props.activeBackgroundColor)
+        } else {
+            tabRef.current.classList.add(props.inactiveBackgroundColor)
+        }
+    }, [])
 
     return (
-        <li className={styles['tabs__item']} style={customStyles}>
+        <li ref={tabRef} className={styles['tabs__item']}>
             <p
             style={{
                 cursor: 'pointer'

@@ -18,6 +18,15 @@ export default function RegisterForm() {
     setFormValid(isValid)
   }
 
+  const checkButtonDisabled = (target) => {
+    console.log(target instanceof HTMLInputElement);
+    if(!formValid) {
+      target.disabled = true;
+    } else {
+      target.disabled = false;
+    }
+  }
+
   const registerUser = (data) => {
     const credentials = {
         username: data.registerusername,
@@ -59,11 +68,10 @@ export default function RegisterForm() {
         <PasswordInput placeholder="Confirm Password" name="confirmpassword" />
       </FormControl>
 
-      <Button color={colors.primary.gradient.full}
-      isDisabled={!formValid}
-      variant="contained"
+      <Button color={colors.background.primary.dark}
+      isDisabled={checkButtonDisabled}
       size="medium"
-      boxShadow="light"
+      elevation={2}
       customStyles={{
           width: '100%'
       }}>Login</Button>

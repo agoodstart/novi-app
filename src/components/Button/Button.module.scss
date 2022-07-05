@@ -1,67 +1,37 @@
+@use "sass:math";
+@use "../../base/mixins";
+@use "../../base/functions";
+@use "../../base/variables";
+
 .btn {
-  cursor: pointer;
-  font-size: 2.2rem;
-  border: none;
-  font-family: inherit;
-  color: #f7f7f7;
-  // padding: 1rem 2.5rem;
-  padding: 1.5rem 3.5rem;
-  border-radius: 10rem;
-  text-decoration: none;
-  // background: linear-gradient(to right, #0cce6b, #00c56f, #00bc71, #00b373, #00aa74);
-  // box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-
-  &--shadow-light {
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  &-small {
+    @include mixins.button(functions.type-scaling(7), .8rem 1rem, 10px)
   }
 
-  &--shadow-dark {
-    //box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-    // box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  &-medium {
+    @include mixins.button(functions.type-scaling(6), 1rem 1.5rem, 10px)
   }
 
-  &--small {
-    font-size: 1.5rem;
-    padding: 1rem 2rem;
+  &-large {
+    @include mixins.button(functions.type-scaling(4), 1.5rem 2rem, 10px)
   }
 
-  &--medium {
-    font-weight: 500;
-    font-size: 1rem;
-    padding: 1rem 2rem;
-  }
-
-  &--large {
-    font-size: 1.75rem;
-    padding: 1.5rem 2.5rem;
-  }
-
-  &--contained {
-    border-radius: 7px;
+  &-xl {
+    @include mixins.button(functions.type-scaling(3), 2rem 2.5rem, 10px)
   }
 
   &--pill {
     border-radius: 80px;
   }
 
-  &:disabled {
-    cursor: default;
-    background-color: -internal-light-dark(rgba(239, 239, 239, 0.3), rgba(19, 1, 1, 0.3)) !important;
-    color: -internal-light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3)) !important;
-    border-color: -internal-light-dark(rgba(118, 118, 118, 0.3), rgba(195, 195, 195, 0.3)) !important;
-  }
+  &--outlined {
+    background-color: transparent;
+    border: 1px solid inherit;
 
-  // &:hover {
-    
-  // }
-
-  &:active {
-    outline: none;
-    border: none;
-  }
-
-  &:focus {
-    outline: 0;
+    &:hover {
+      background-color: inherit;
+    }
   }
 }
+
+@include mixins.elevation("box");

@@ -19,6 +19,15 @@ export default function LoginForm() {
     setFormValid(isValid)
   }
 
+  const checkButtonDisabled = (target) => {
+    console.log(target instanceof HTMLInputElement);
+    if(!formValid) {
+      target.disabled = true;
+    } else {
+      target.disabled = false;
+    }
+  }
+
   const loginUser = (data) => {
     const credentials = {
       username: data.loginusername,
@@ -46,11 +55,10 @@ export default function LoginForm() {
         <PasswordInput placeholder="Password" name="loginpassword" />
       </FormControl>
 
-      <Button color={colors.primary.gradient.full}
-      isDisabled={!formValid}
-      variant="contained"
+      <Button color={colors.background.primary.dark}
+      isDisabled={checkButtonDisabled}
       size="medium"
-      boxShadow="light"
+      elevation={2}
       customStyles={{
         width: '100%'
       }}>Login</Button>

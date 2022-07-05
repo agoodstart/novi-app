@@ -1,13 +1,7 @@
 @use "sass:math";
-
-@function type-scaling($heading) {
-  $scale: 6 - $heading;
-
-  $size: math.pow(1.333, $scale);
-  $font-size: $size + rem;
-
-  @return $font-size;
-}
+@use "../../base/functions";
+@use "../../base/variables";
+@use "../../base/mixins";
 
 .typography {
   &__heading {
@@ -17,28 +11,21 @@
 
     @for $i from 1 through 5 {
       &-#{$i} {
-        font-size: type-scaling($i);
+        font-size: functions.type-scaling($i);
       }
     }    
   }
 
   &__paragraph {
-    font-size: type-scaling(6);
+    font-size: functions.type-scaling(6);
   }
 
   &__small {
-    font-size: type-scaling(6);
+    font-size: functions.type-scaling(7);
   }
 }
 
-$fontweights: (
-  "300": 300,
-  "400": 400,
-  "500": 500,
-  "700": 700
-);
-
-@each $key, $val in $fontweights {
+@each $key, $val in variables.$fontweights {
   .w#{$key} {
     font-weight: $val;
   }
@@ -49,6 +36,8 @@ $fontweights: (
     letter-spacing: #{$i} + px;
   }
 }
+
+@include mixins.elevation("text");
 
 .shadow {
   text-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;

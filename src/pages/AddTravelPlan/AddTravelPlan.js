@@ -309,41 +309,40 @@ export default function AddTravelPlan() {
         </div>
 
         <div className={styles['travelplan__places']}>
-        <label>
-            <Typography variant="small" customStyles={{
-              marginLeft: '5px'
-            }}>
-              Current center: 
-            </Typography>
-          </label>
-          <TextInputWithGooglePlaces 
-            autocompleteInstance={api.autocomplete.center} 
-            onPlaceChange={onPlaceChange}
-            defaultLocation={placeCenter}
-            types={['(cities)']}
-            customStyles={{
-              borderRadius: '10px'
-            }}
-          />
+          <label>
+              <Typography variant="small" customStyles={{
+                marginLeft: '5px'
+              }}>
+                Current center: 
+              </Typography>
+            </label>
+            <TextInputWithGooglePlaces 
+              autocompleteInstance={api.autocomplete.center} 
+              onPlaceChange={onPlaceChange}
+              defaultLocation={placeCenter}
+              types={['(cities)']}
+              customStyles={{
+                borderRadius: '10px'
+              }}
+            />
         </div>
 
         <div className={styles['travelplan__places']}>
-        <label>
-            <Typography variant="small" customStyles={{
-              marginLeft: '5px'
-            }}>
-              Max travel distance
-            </Typography>
-          </label>
-          <NumberInput 
-            value={maxTravelDistance}
-            onChange={onDistanceChange}
-            customStyles={{
-              borderRadius: '10px'
-            }}
-          />
+          <label>
+              <Typography variant="small" customStyles={{
+                marginLeft: '5px'
+              }}>
+                Max travel distance
+              </Typography>
+            </label>
+            <NumberInput 
+              value={maxTravelDistance}
+              onChange={onDistanceChange}
+              customStyles={{
+                borderRadius: '10px'
+              }}
+            />
         </div>
-        
       </div>
 
       <Suspense fallback={<p>Loading Google Maps....</p>}>
@@ -364,10 +363,6 @@ export default function AddTravelPlan() {
           ))}
         </GoogleMaps>
       </Suspense>
-
-      {/* <div className="travelplan__zoom">
-        
-      </div> */}
 
       <div className={styles['locations']}>
         {destinations.map((destination, i) => (

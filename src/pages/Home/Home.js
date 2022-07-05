@@ -33,16 +33,16 @@ export default function Home() {
         </div>
 
         <Center>
-          <Typography textColor={colors.white} textShadow variant="h1">
+          <Typography textColor={colors.text.white} elevation={2} variant="h1">
             There is a world outside <br></br> 
             waiting for you
           </Typography>
           
           <Button 
-            color={colors.primary.gradient.full}
-            variant="pill"
+            color={colors.background.primary.main}
             size="large"
-            boxShadow="dark"
+            pill
+            elevation="2"
             onClick={handleOpenModal}
             >
               Login to discover

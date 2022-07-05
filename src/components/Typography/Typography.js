@@ -1,89 +1,91 @@
 import styles from './Typography.module.scss';
+import { useRef, useEffect} from 'react';
 
-export default function Typography({children, variant, uppercase, textShadow, textColor, fontWeight, letterSpacing, customStyles}) {
-  const setCustomStyles = () => {
-    return {
-      color: textColor ?? null,
-      ...customStyles,
+export default function Typography({children, variant, uppercase, elevation, textColor, fontWeight, letterSpacing, customStyles}) {
+  const typographyRef = useRef();
+
+  useEffect(() => {
+
+    if(typographyRef.current.tagName.startsWith("H")) {
+      const elementSplit = typographyRef.current.tagName.split('')
+      typographyRef.current.classList.add(styles[`typography__heading`], styles[`typography__heading-${elementSplit[1]}`])
+    } else if(typographyRef.current.tagName.startsWith("P")) {
+      typographyRef.current.classList.add(styles[`typography__paragraph`])
+    } else if(typographyRef.current.tagName.startsWith("SMALL")) {
+      typographyRef.current.classList.add(styles[`typography__small`])
     }
-  }
 
-  const setClassNames = (type, number) => {
-    let classNameString = "";
-
-    if(type === 'heading') {
-      classNameString = classNameString.concat(' ', styles[`typography__heading`], ' ', styles[`typography__heading-${number}`])
-    } else if(type === 'paragraph') {
-      classNameString.concat(' ', styles[`typography_paragraph`])
-    } else if (type === 'small') {
-      classNameString.concat(' ', styles['typography__small'])
-    }
+    typographyRef.current.classList.add(textColor);
 
     if(uppercase) {
-      classNameString = classNameString.concat(' ', styles['uppercase'])
+      typographyRef.current.classList.add(styles['uppercase']);
+    }
+
+    if(elevation) {
+      typographyRef.current.classList.add(styles[`elevation-${elevation}`])
     }
 
     if(fontWeight) {
-      classNameString = classNameString.concat(' ', styles[`w${fontWeight}`])
-    }                                                                                       
+      typographyRef.current.classList.add(styles[`w${fontWeight}`]);
+    }
 
     if(letterSpacing) {
-      classNameString = classNameString.concat(' ', styles[`spacing-${letterSpacing}`])
+      typographyRef.current.classList.add(styles[`spacing-${letterSpacing}`]);
     }
+  }, [])
 
-    if(textShadow) {
-      classNameString = classNameString.concat(' ', styles['shadow'])
+  const setCustomStyles = () => {
+    return {
+      ...customStyles,
     }
-
-    return classNameString;
   }
 
   switch(variant) {
     case 'h1':
       return (
-        <h1 className={setClassNames('heading', 1)} style={setCustomStyles()}>
+        <h1 ref={typographyRef} style={setCustomStyles()}>
           {children}
         </h1>
       )
     case 'h2':
       return (
-        <h2 className={setClassNames('heading', 2)} style={setCustomStyles()}>
+        <h2 ref={typographyRef} style={setCustomStyles()}>
           {children}
         </h2>
       )
     case 'h3':
       return (
-        <h3 className={setClassNames('heading', 3)} style={setCustomStyles()}>
+        <h3 ref={typographyRef} style={setCustomStyles()}>
           {children}
         </h3>
       )
     case 'h4':
       return (
-        <h4 className={setClassNames('heading', 4)} style={setCustomStyles()}>
+        <h4 ref={typographyRef} style={setCustomStyles()}>
           {children}
         </h4>
       )
     case 'h5':
       return (
-        <h4 className={setClassNames('heading', 5)} style={setCustomStyles()}>
+        <h5 ref={typographyRef} style={setCustomStyles()}>
           {children}
-        </h4>
+        </h5>
       )
     case 'paragraph':
       return (
-        <p className={setClassNames('paragraph')} style={setCustomStyles()}>
+        <p ref={typographyRef} style={setCustomStyles()}>
           {children}
         </p>
       )
     case 'small':
       return (
-        <small className={setClassNames('small')} style={setCustomStyles()}>
+        <small ref={typographyRef} style={setCustomStyles()}>
           {children}
         </small>
       )
     default:
       return (
-        <p className={setClassNames('paragraph')} style={setCustomStyles()}>
+        <p ref={typographyRef} style={setCustomStyles()}>
           {children}
         </p>
       )

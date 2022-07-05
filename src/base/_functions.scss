@@ -1,0 +1,26 @@
+@use "sass:map";
+@use "sass:math";
+@use "sass:color";
+
+@use "./variables";
+
+@function create_color_map($colorvalue, $percentage) {
+  $map: ();
+
+  $color-map: (
+    "main": $colorvalue,
+    "light": mix(map.get(variables.$colors, "white"), $colorvalue, $percentage),
+    "dark": mix(map.get(variables.$colors, "black"), $colorvalue, $percentage),
+  );
+
+  @return $color-map;
+}
+
+@function type-scaling($heading) {
+  $scale: 6 - $heading;
+
+  $size: math.pow(1.333, $scale);
+  $font-size: $size + rem;
+
+  @return $font-size;
+}
