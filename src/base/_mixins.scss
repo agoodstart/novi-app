@@ -62,3 +62,19 @@
     }
   }
 }
+
+@mixin gaps {
+  $i: 5;
+
+  @while $i < 50 {
+    .gap-rows-#{$i} {
+      row-gap: $i + px;
+    }
+
+    .gap-columns-#{$i} {
+      column-gap: $i + px;
+    }
+
+    $i: $i - 5;
+  };
+}

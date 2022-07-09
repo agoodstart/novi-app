@@ -1,0 +1,47 @@
+@use "../../base/functions";
+@use "../../base/variables";
+@use "../../base/mixins";
+
+.grid {
+  display: grid;
+  width: 100%;
+  height: 100%;
+
+  @for $i from 1 through 10 {
+    &__rows--#{$i} {
+      grid-template-rows: functions.grid_calc($i);
+    }
+  
+    &__columns--#{$i} {
+      grid-template-columns: functions.grid_calc($i);
+    }
+
+    &__gap-rows--#{$i * 5} {
+      row-gap: #{$i * 5} + px;
+    }
+
+    &__gap-columns--#{$i * 5} {
+      column-gap: #{$i * 5} + px;
+    }
+  }
+}
+
+.item {
+  @for $i from 1 through 10 {
+    &__row-start--#{$i} {
+      grid-row-start: $i;
+    }
+  
+    &__row-end--#{$i} {
+      grid-row-end: $i;
+    }
+
+    &__column-start--#{$i} {
+      grid-column-start: $i;
+    }
+
+    &__column-end--#{$i} {
+      grid-column-end: $i;
+    }
+  }
+}

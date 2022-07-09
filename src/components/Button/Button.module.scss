@@ -4,20 +4,32 @@
 @use "../../base/variables";
 
 .btn {
-  &-small {
-    @include mixins.button(functions.type-scaling(7), .8rem 1rem, 10px)
+  &--xs {
+    @include mixins.button(functions.type-scaling(-2), .8rem 1rem, 10px)
   }
 
-  &-medium {
-    @include mixins.button(functions.type-scaling(6), 1rem 1.5rem, 10px)
+  &--small {
+    @include mixins.button(functions.type-scaling(-1), .8rem 1rem, 10px)
   }
 
-  &-large {
-    @include mixins.button(functions.type-scaling(4), 1.5rem 2rem, 10px)
+  &--medium {
+    @include mixins.button(functions.type-scaling(0), 1rem 1.5rem, 10px)
   }
 
-  &-xl {
+  &--medium-large {
+    @include mixins.button(functions.type-scaling(1), 1.2rem 1.8rem, 10px)
+  }
+
+  &--large {
+    @include mixins.button(functions.type-scaling(2), 1.5rem 2rem, 10px)
+  }
+
+  &--xl {
     @include mixins.button(functions.type-scaling(3), 2rem 2.5rem, 10px)
+  }
+
+  &--xxl {
+    @include mixins.button(functions.type-scaling(4), 2rem 2.5rem, 10px)
   }
 
   &--pill {

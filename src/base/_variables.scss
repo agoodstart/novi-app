@@ -5,12 +5,13 @@ $emerald: #0cce6b;
 $fireopal: #ef6461;
 $electricblue: #87f6ff;
 $goldmetallic: #DEB841;
+$capri: #48BEFF;
 
 $opal: #85BDBF;
 $white: #FCF7F8;
 $black: #11151C;
 
-$base-font-size: 100%; // which is equivalent to 16px
+$base-font-size: 87.5%; // which is equivalent to 16px
 
 $shadow-1: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 $shadow-2: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
@@ -36,7 +37,7 @@ $fontweights: (
 $colors: (
   "primary": $emerald,
   "secondary": $fireopal,
-  "tertiary": $electricblue,
+  "tertiary": $capri,
   "quaternary": $goldmetallic,
 
   "black": $black,

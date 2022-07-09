@@ -30,14 +30,14 @@ export default function Destinations() {
       <section className={styles['destinations']}>
 
         <div className={styles['destinations__headline']}>
-          <Typography textColor={colors.grey.dark} variant="h1">Your Destinations</Typography>
+          <Typography textColor={colors.text.gray.dark} variant="h1">Your Destinations</Typography>
         </div>
 
         <div className={styles['destinations__divider']} />
 
         <div className={styles['destinations__list']}>
           {!destinations.length ? 
-          <Typography variant="h2" textColor={colors.grey.medium}>There are no destinations set yet</Typography> :
+          <Typography variant="h2" textColor={colors.text.gray.main}>There are no destinations set yet</Typography> :
           destinations.map((destination, i) => (
             <div key={i} className={styles['destination']}>
               <Typography variant="h4" customStyles={{ paddingLeft: '15px' }}>
@@ -45,11 +45,11 @@ export default function Destinations() {
               </Typography>
 
               <div className={styles['destination__buttons']}>
-                <Button color={colors.primary.gradient.half} customStyles={{ marginRight: '20px' }} onClick={viewDestination.bind(null, destination)}>
+                <Button color={colors.background.primary.main} customStyles={{ marginRight: '20px' }} onClick={viewDestination.bind(null, destination)}>
                   View Destination
                 </Button>
 
-                <Button color={colors.secondary.gradient.half}>
+                <Button color={colors.background.secondary.main}>
                   Remove Destination
               </Button>
               </div>

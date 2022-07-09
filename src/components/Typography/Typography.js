@@ -6,16 +6,25 @@ export default function Typography({children, variant, uppercase, elevation, tex
 
   useEffect(() => {
 
+    console.log(typographyRef.current.className);
+
     if(typographyRef.current.tagName.startsWith("H")) {
       const elementSplit = typographyRef.current.tagName.split('')
       typographyRef.current.classList.add(styles[`typography__heading`], styles[`typography__heading-${elementSplit[1]}`])
     } else if(typographyRef.current.tagName.startsWith("P")) {
       typographyRef.current.classList.add(styles[`typography__paragraph`])
     } else if(typographyRef.current.tagName.startsWith("SMALL")) {
-      typographyRef.current.classList.add(styles[`typography__small`])
+
+      if(typographyRef.current.className === "small") {
+        typographyRef.current.classList.add(styles[`typography__small`]);
+      } else if(typographyRef.current.className === "xs") {
+        typographyRef.current.classList.add(styles[`typography__xs`])
+      }
     }
 
-    typographyRef.current.classList.add(textColor);
+    if(textColor) {
+      typographyRef.current.classList.add(textColor);
+    }
 
     if(uppercase) {
       typographyRef.current.classList.add(styles['uppercase']);
@@ -79,7 +88,13 @@ export default function Typography({children, variant, uppercase, elevation, tex
       )
     case 'small':
       return (
-        <small ref={typographyRef} style={setCustomStyles()}>
+        <small ref={typographyRef} className="small" style={setCustomStyles()}>
+          {children}
+        </small>
+      )
+    case 'xs':
+      return (
+        <small ref={typographyRef} className="xs" style={setCustomStyles()}>
           {children}
         </small>
       )

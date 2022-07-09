@@ -33,7 +33,7 @@ export default function Home() {
         </div>
 
         <Center>
-          <Typography textColor={colors.text.white} elevation={2} variant="h1">
+          <Typography textColor={colors.text.white} fontWeight="500" elevation={2} variant="h1">
             There is a world outside <br></br> 
             waiting for you
           </Typography>

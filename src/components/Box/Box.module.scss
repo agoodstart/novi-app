@@ -1,11 +1,57 @@
+@use "sass:math";
+@use "../../base/mixins";
+@use "../../base/functions";
+@use "../../base/variables";
+
+$justify-contents: center, end, start, space-around, space-between, space-evenly;
+$align-items: center, end, start; 
+
 .box {
   display: block;
+  width: 100%;
+  height: 100%;
 
-  &-flex {
-    display: flex;
+  @for $i from 1 through 20 {
+    &--width-#{$i * 5} {
+      width: percentage(math.div($i * 5, 100));
+    }
+
+    &--height-#{$i * 5} {
+      height: percentage(math.div($i * 5, 100));
+    }
+
+    &--border-radius-#{$i * 5} {
+      border-radius: #{$i * 5} + px;
+    }
+
+    &--padding-#{$i * 5} {
+      padding: #{$i * 5} + px;
+    }
+  }
+
+  &__flex {
+    &--row {
+      display: flex;
+      flex-direction: row;
+    }
+
+    &--column {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @each $value in $justify-contents {
+      &--justify-#{$value} {
+        justify-content: $value;
+      }
+    }
+  
+    @each $value in $align-items {
+      &--align-#{$value} {
+        align-items: $value;
+      }
+    }
   }
 }
 
-.box-flex {
-  display: flex;
-}
+@include mixins.elevation("box");

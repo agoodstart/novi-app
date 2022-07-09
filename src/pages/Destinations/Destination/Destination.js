@@ -18,11 +18,11 @@ export default function Destination() {
       <Image source={imageSource} />
 
       <Center>
-        <Typography fontWeight="700" textShadow textColor={colors.white} variant="h1">
+        <Typography fontWeight="700" elevation={3} textColor={colors.text.white} variant="h1">
           {destination?.city.long_name}
         </Typography>
 
-        <Typography textShadow textColor={colors.white} variant="h2">
+        <Typography elevation={3} textColor={colors.text.white} variant="h2">
           {destination?.country.long_name}
         </Typography>
       </Center>

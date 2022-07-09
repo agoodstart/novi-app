@@ -19,7 +19,6 @@ export default function RegisterForm() {
   }
 
   const checkButtonDisabled = (target) => {
-    console.log(target instanceof HTMLInputElement);
     if(!formValid) {
       target.disabled = true;
     } else {

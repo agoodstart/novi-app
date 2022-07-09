@@ -24,8 +24,15 @@ export default function Button({color, size, pill, elevation, onClick, customSty
   
   useEffect(() => {
 
-    buttonRef.current.classList.add(styles[`btn-${size}`]);
-    buttonRef.current.classList.add(styles[`elevation-${elevation}`])
+    if(size) {
+      buttonRef.current.classList.add(styles[`btn--${size}`]);
+    } else {
+      buttonRef.current.classList.add(styles[`btn--medium`]);
+    }
+
+    if(elevation) {
+      buttonRef.current.classList.add(styles[`elevation-${elevation}`])
+    }
 
     if(pill) {
       buttonRef.current.classList.add(styles['btn--pill'])

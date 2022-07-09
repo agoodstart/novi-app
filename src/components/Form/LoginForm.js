@@ -20,7 +20,6 @@ export default function LoginForm() {
   }
 
   const checkButtonDisabled = (target) => {
-    console.log(target instanceof HTMLInputElement);
     if(!formValid) {
       target.disabled = true;
     } else {

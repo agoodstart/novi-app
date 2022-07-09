@@ -53,7 +53,7 @@ const Navbar = () => {
         </li>
         <li className={styles.navigation__item}>
         <Button
-            color={colors.background.tertiary.dark}
+            color={colors.background.tertiary.main}
             pill
             size="medium"
             elevation={2}

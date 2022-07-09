@@ -11,17 +11,21 @@
 
     @for $i from 1 through 5 {
       &-#{$i} {
-        font-size: functions.type-scaling($i);
+        font-size: functions.type-scaling(6 - $i);
       }
     }    
   }
 
   &__paragraph {
-    font-size: functions.type-scaling(6);
+    font-size: functions.type-scaling(0);
   }
 
   &__small {
-    font-size: functions.type-scaling(7);
+    font-size: functions.type-scaling(-1);
+  }
+
+  &__xs {
+    font-size: functions.type-scaling(-2);
   }
 }
 

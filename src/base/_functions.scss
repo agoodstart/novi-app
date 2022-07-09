@@ -1,6 +1,7 @@
 @use "sass:map";
 @use "sass:math";
 @use "sass:color";
+@use "sass:list";
 
 @use "./variables";
 
@@ -16,11 +17,19 @@
   @return $color-map;
 }
 
-@function type-scaling($heading) {
-  $scale: 6 - $heading;
-
+@function type-scaling($scale) {
   $size: math.pow(1.333, $scale);
   $font-size: $size + rem;
 
   @return $font-size;
+}
+
+@function grid_calc($i: 1) {
+  $fr_list: ();
+
+  @for $i from 1 through $i {
+    $fr_list: list.append($fr_list, 1fr);
+  }
+
+  @return $fr_list;
 }

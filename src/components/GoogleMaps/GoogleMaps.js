@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState, useMemo } from "react";
 import { createCustomEqual } from "fast-equals";
 import useGoogleApi from "../../hooks/useGoogleApi";
-import DeviceLocationSuspender from "../../api/services/Google";
+
+import styles from './GoogleMaps.module.scss';
 
 // deepCompare compares nested objects, like the map instance
 const deepCompareEqualsForMaps = createCustomEqual((deepEqual) => (a, b) => {
@@ -22,8 +23,6 @@ const useDeepCompareEffectForMaps = (callback, dependencies) => {
   useEffect(callback, dependencies.map(useDeepCompareMemoize))
 }
 
-const currentlocation = DeviceLocationSuspender()
-
 export default function GoogleMaps({ 
   onClick, 
   onIdle, 
@@ -43,14 +42,25 @@ export default function GoogleMaps({
   const ref = useRef(null);
   const netherlands = { lat: 52.132633, lng: 5.2912659 };
 
+  useEffect(() => {
+    window.onerror = (e) => {
+      console.log(e);
+    }
+  }, [])
+
+  let deviceLocation = defaultCenter.read();
+
+
   const currentCenter = useMemo(() => {
+    // return netherlands;
+    return defaultCenter.read();
     if(defaultCenter) {
       return defaultCenter;
     }
 
     let deviceLocation; 
     try {
-      deviceLocation = currentlocation.unwrap()
+      // deviceLocation = currentlocation.unwrap()
     }
     catch(e) {
       deviceLocation = null;
@@ -121,14 +131,15 @@ export default function GoogleMaps({
   ]);
 
   const mapSize = {
-    borderRadius: '20px',
+    // borderRadius: '20px',
     // boxShadow: 'rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px',
-    boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
+    // boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
+    height: '100%'
   }
 
   return (
     <>
-      <div ref={ref} style={mapSize} className={customClassname}  />
+      <div ref={ref} style={mapSize} className={styles['maps']}  />
       {children}
     </>
   )

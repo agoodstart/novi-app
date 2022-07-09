@@ -7,6 +7,7 @@ $emerald: #0cce6b;
 $fireopal: #ef6461;
 $electricblue: #87f6ff;
 $goldmetallic: #DEB841;
+$capri: #48BEFF;
 
 $opal: #85BDBF;
 $white: #FCF7F8;
@@ -43,7 +44,7 @@ $black: #11151C;
 $colors-map: (
   "primary": create_color_map($emerald, 15%),
   "secondary": create_color_map($fireopal, 15%),
-  "tertiary": create_color_map($electricblue, 15%),
+  "tertiary": create_color_map($capri, 15%),
   "quaternary": create_color_map($goldmetallic, 15%),
 
   "gray": create_color_map($opal, 15%)
