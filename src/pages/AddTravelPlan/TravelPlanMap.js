@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { Suspense, useEffect, useState, useMemo } from 'react';
+import React, { useState } from 'react';
 
 import GoogleMaps from '../../components/GoogleMaps/GoogleMaps';
 import { DestinationMarker, OriginMarker } from '../../components/GoogleMaps/Marker';
@@ -9,81 +9,18 @@ import useGoogleApi from '../../hooks/useGoogleApi';
 
 const { REACT_APP_OPENWEATHER_API_KEY } = process.env;
 
-const fetchCurrentLocation = () => {
-  let status = 'pending';
-  let response;
-
-  const suspender = new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(
-      pos => {
-        return resolve({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        })
-      },
-      error => reject(error)
-    )
-  })
-  .then(
-    (res) => {  
-      setTimeout(() => {
-        status = 'success';
-        response = res;
-      })
-    },
-    (err) => {
-      status = 'error';
-      console.log('error');
-      response = err;
-    })
-
-  const read = () => {
-    switch (status) {
-      case 'pending':
-        throw suspender;
-      case 'error':
-        throw response;
-      default:
-        return response;
-    }
-  }
-
-  return { read }
-}
-
-
 export default function TravelPlanMap(props) {
-  useEffect(() => {
-    window.onerror = (e) => {
-      try {
-        console.log('catching error')
-      } catch(e) {
-        console.log(e);
-      }
-      // if(e) {
-      //   console.log('geolocationerror');
-      // }
+  let location = props.deviceLocation.read();
 
-      return true;
-    }
-  }, [])
-
-  const currentLocation = useMemo(() => {
-    try {
-      return fetchCurrentLocation();
-    } catch(e) {
-      console.log("ERROR");
-
-      return { lat: 52.132633, lng: 5.2912659 };
-    }
-  }, []);
   const { api } = useGoogleApi();
 
   const [mapZoom, setMapZoom] = useState(8);
-  const [mapCenter, setMapCenter] = useState();
+  const [mapCenter, setMapCenter] = useState(location);
 
   const onMapsLoaded = () => {
     const latlng = api.map.getCenter().toJSON();
+
+    console.log('travelplan Map loaded');
 
     api.getGeocodedAddress(latlng)
       .then(locationInfo => {
@@ -92,6 +29,7 @@ export default function TravelPlanMap(props) {
           latlng,
           ...locationInfo,
         });
+        
 
         props.setPlaceOrigin(locationInfo.formattedAddress)
       }, err => {
@@ -185,8 +123,7 @@ export default function TravelPlanMap(props) {
 
   return (
     <Box elevation={1} borderRadius={10}>
-      <Suspense fallback={<p>Loading Google Maps....</p>}>
-        <GoogleMaps
+      <GoogleMaps
         onClick={onClick}
         onZoomChange={onZoomChange}
         onMapsLoaded={onMapsLoaded}
@@ -194,14 +131,13 @@ export default function TravelPlanMap(props) {
         zoom={mapZoom}
         disableDefaultUI={true}
         zoomControl={true}
-        defaultCenter={currentLocation}
+        defaultCenter={mapCenter}
         >
-          <OriginMarker onDragend={onOriginDragend} marker={props.origin} />
-          {props.destinations.map((destination, i) => (
-            <DestinationMarker marker={destination} key={i} />
-          ))}
-        </GoogleMaps>
-      </Suspense>
+        <OriginMarker onDragend={onOriginDragend} marker={props.origin} />
+        {props.destinations.map((destination, i) => (
+          <DestinationMarker marker={destination} key={i} />
+        ))}
+      </GoogleMaps>
     </Box>
   )
 }

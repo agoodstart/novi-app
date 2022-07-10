@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useCallback, useEffect, useState } from "react";
 
 import Typography from "../../components/Typography/Typography";
 import TextInputWithGooglePlaces from "../../components/GoogleMaps/TextInputWithGooglePlaces";
@@ -24,8 +24,9 @@ export default function TravelPlanControl(props) {
       lat: place.geometry.location.lat(),
       lng: place.geometry.location.lng()
     };
+    // console.log(place.photos[0].getUrl());
 
-    console.log(place.photos[0].getUrl());
+    // console.log(api.getMap());
 
     api.map.panTo(latlng);
 
@@ -36,7 +37,7 @@ export default function TravelPlanControl(props) {
       formattedAddress: place.formatted_address,
       placeId: place.placeId
     })
-  }
+  };
 
   const onDistanceChange = (e) => {
     props.setMaxTravelDistance(e.target.value);

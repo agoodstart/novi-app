@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,10 +13,51 @@ import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import { Grid, GridItem } from '../../components/Grid/Grid';
 
-import useGoogleApi from '../../hooks/useGoogleApi';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import useTheme from '../../hooks/useTheme';
 import useAuth from '../../hooks/useAuth';
+import Typography from '../../components/Typography/Typography';
+
+const fetchCurrentLocation = (fallback) => {
+  let status = 'pending';
+  let response;
+
+  const suspender = new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        return resolve({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude
+        })
+      },
+      error => reject(error)
+    )
+  })
+  .then(
+    (res) => {  
+      setTimeout(() => {
+        status = 'success';
+        response = res;
+      })
+    },
+    (err) => {
+      status = 'error';
+      response = fallback;
+    })
+
+  const read = () => {
+    switch (status) {
+      case 'pending':
+        throw suspender;
+      case 'error':
+        return fallback;
+      default:
+        return response;
+    }
+  }
+
+  return { read }
+}
 
 export default function AddTravelPlan() {
   const navigate = useNavigate();
@@ -35,6 +76,10 @@ export default function AddTravelPlan() {
 
   const [recommended, setRecommended] = useState({});
   const [chosen, setChosen] = useState({});
+
+  const deviceLocation = useMemo(() => {
+    return fetchCurrentLocation({ lat: 52.132633, lng: 5.2912659 });
+  }, []);
 
   const showWarning = (text) => {
     toast.warn(text);
@@ -141,14 +186,17 @@ export default function AddTravelPlan() {
         </GridItem>
 
         <GridItem rowStart={2} columnStart={1} rowEnd={8} columnEnd={6}>
-          <TravelPlanMap 
-            origin={origin}
-            setOrigin={setOrigin}
-            destinations={destinations}
-            setDestinations={setDestinations}
-            setPlaceOrigin={setPlaceOrigin} 
-            setPlaceCenter={setPlaceCenter} 
-            showWarning={showWarning} />
+          <Suspense fallback={<Typography variant="paragraph">Loading Google Maps... </Typography>}>
+            <TravelPlanMap 
+              origin={origin}
+              setOrigin={setOrigin}
+              destinations={destinations}
+              setDestinations={setDestinations}
+              setPlaceOrigin={setPlaceOrigin} 
+              setPlaceCenter={setPlaceCenter} 
+              showWarning={showWarning}
+              deviceLocation={deviceLocation} />
+          </Suspense>
         </GridItem>
 
         <GridItem rowStart={1} columnStart={6} rowEnd={7} columnEnd={9}> 

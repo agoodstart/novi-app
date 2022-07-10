@@ -38,40 +38,8 @@ export default function GoogleMaps({
 
   ...options
 }) {
-  const { map, createMap } = useGoogleApi();
+  const { map, createMap, api } = useGoogleApi();
   const ref = useRef(null);
-  const netherlands = { lat: 52.132633, lng: 5.2912659 };
-
-  useEffect(() => {
-    window.onerror = (e) => {
-      console.log(e);
-    }
-  }, [])
-
-  let deviceLocation = defaultCenter.read();
-
-
-  const currentCenter = useMemo(() => {
-    // return netherlands;
-    return defaultCenter.read();
-    if(defaultCenter) {
-      return defaultCenter;
-    }
-
-    let deviceLocation; 
-    try {
-      // deviceLocation = currentlocation.unwrap()
-    }
-    catch(e) {
-      deviceLocation = null;
-    }
-
-    if(deviceLocation) {
-      return deviceLocation
-    } else {
-      return netherlands
-    }
-  }, [defaultCenter])
 
   useEffect(() => {
     if (ref.current && !map) {
@@ -82,7 +50,7 @@ export default function GoogleMaps({
   useDeepCompareEffectForMaps(() => {
     if(map) {
       map.setOptions(
-        {center: currentCenter , ...options}
+        {center: defaultCenter , ...options}
       );
     }
   }, [map, options])

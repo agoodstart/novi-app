@@ -4,11 +4,15 @@ import styles from './Container.module.scss';
 /**
  * A generic container with preset values
  */
- export default function Container({children, element}) {
+ export default function Container({children, element, backgroundColor}) {
   const containerRef = useRef();
 
   useEffect(() => {
-    containerRef.current.classList.add(styles['container'])
+    containerRef.current.classList.add(styles['container']);
+
+    if(backgroundColor) {
+      containerRef.current.classList.add(backgroundColor);
+    }
   }, [])
 
   switch (element) {

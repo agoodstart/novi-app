@@ -24,6 +24,14 @@ export const GoogleApiProvider = ({ children }) => {
   const createMap = (refEl, options = {}) => {
     setMap(new google.maps.Map(refEl, options))
   } 
+
+  const getMap = () => {
+    return map;
+  }
+
+  const unsetMap = () => {
+    setMap(null);
+  }
   
   const createAutocompleteCenter = (refEl, options = {}) => {
     setAutocompleteCenter(new google.maps.places.Autocomplete(refEl, options))
@@ -89,6 +97,7 @@ export const GoogleApiProvider = ({ children }) => {
   const api = {
     map,
     createMap,
+    getMap,
 
     geocoder,
     getGeocodedAddress,

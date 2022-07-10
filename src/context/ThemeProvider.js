@@ -23,11 +23,12 @@ export const ThemeProvider = ({ children }) => {
                         ...colorMap[color],
                     };
 
-                    if(color === "white" && classNameArr.includes(color)) {
-                        colorMap.white = value;
+                    if(color === "white" && classNameArr.includes(color) && !classNameArr.includes("alpha")) {
+                        console.log(value)
+                        colorMap.white.main = value;
                     }
 
-                    if(color === "black" && classNameArr.includes(color)) {
+                    if(color === "black" && classNameArr.includes(color) && !classNameArr.includes("alpha")) {
                         colorMap.black.main = value;
                     }
 
@@ -78,10 +79,6 @@ export const ThemeProvider = ({ children }) => {
     useEffect(() => {
         createColorTheme();
     }, [createColorTheme]);
-
-    useEffect(() => {
-        console.log(textColor);
-    }, [textColor])
 
     return (
         <ThemeContext.Provider value={{ colors: { background: backgroundColor, text: textColor} }}>

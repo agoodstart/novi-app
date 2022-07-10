@@ -88,4 +88,5 @@ $colors-map: (
 }
 
 @include alpha("black", $black);
+@include alpha("white", $white);
 // @error darken(#f44336, 20%);

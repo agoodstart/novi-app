@@ -79,3 +79,4 @@ $colors-map: (
 }
 
 @include mixins.alpha("black", map.get(variables.$colors, "black"));
+@include mixins.alpha("white", map.get(variables.$colors, "white"));
