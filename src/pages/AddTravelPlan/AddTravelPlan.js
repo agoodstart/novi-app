@@ -12,54 +12,15 @@ import TravelPlanModal from './TravelPlanModal';
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import { Grid, GridItem } from '../../components/Grid/Grid';
+import Typography from '../../components/Typography/Typography';
 
+import useSuspense from '../../hooks/useSuspense';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import useTheme from '../../hooks/useTheme';
 import useAuth from '../../hooks/useAuth';
-import Typography from '../../components/Typography/Typography';
-
-const fetchCurrentLocation = (fallback) => {
-  let status = 'pending';
-  let response;
-
-  const suspender = new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(
-      pos => {
-        return resolve({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        })
-      },
-      error => reject(error)
-    )
-  })
-  .then(
-    (res) => {  
-      setTimeout(() => {
-        status = 'success';
-        response = res;
-      })
-    },
-    (err) => {
-      status = 'error';
-      response = fallback;
-    })
-
-  const read = () => {
-    switch (status) {
-      case 'pending':
-        throw suspender;
-      case 'error':
-        return fallback;
-      default:
-        return response;
-    }
-  }
-
-  return { read }
-}
 
 export default function AddTravelPlan() {
+  const suspender = useSuspense();
   const navigate = useNavigate();
   const { modalRef } = useAuth();
   const { colors } = useTheme();
@@ -78,7 +39,7 @@ export default function AddTravelPlan() {
   const [chosen, setChosen] = useState({});
 
   const deviceLocation = useMemo(() => {
-    return fetchCurrentLocation({ lat: 52.132633, lng: 5.2912659 });
+    return suspender.fetchCurrentLocation({ lat: 52.132633, lng: 5.2912659 });
   }, []);
 
   const showWarning = (text) => {

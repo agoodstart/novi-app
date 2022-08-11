@@ -1,16 +1,24 @@
-
+import styles from './Image.module.scss';
+import { useEffect, useRef} from 'react';
 
 /**
  * General component description in JSDoc format. Markdown is *supported*.
  */
-export default function Image({source, ...rest}) {
+export default function Image({source, alt, width, height, ...rest}) {
+  const imageRef = useRef();
 
-  console.log(rest);
+  useEffect(() => {
+    if(width) {
+      imageRef.current.classList.add(styles[`image--width-${width}`]);
+    }
+
+    if(height) {
+      imageRef.current.classList.add(styles[`image--height-${height}`]);
+    }
+  }, [])
+
+
   return (
-    <img src={source} alt="" sizes="" style={{
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover'
-    }} />
+    <img ref={imageRef} src={source} alt={alt} className={styles['image']} />
   )
 }

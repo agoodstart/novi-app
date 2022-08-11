@@ -35,14 +35,6 @@ export const TabPanel = React.forwardRef(({children, backgroundColor}, ref) => {
     const tabPanelRef = useRef();
     const [active, setActive] = useState(false)
 
-    useEffect(() => {
-        console.log(ref.current)
-    }, [])
-
-    const setClassNames = () => {
-
-    }
-
     useImperativeHandle(ref, () => ({
         toggleActive: (isActive) => {
             setActive(isActive);
@@ -98,7 +90,6 @@ export const Tab = (props) => {
     }
 
     useEffect(() => {
-        console.log(props);
         if(props.isActive) {
             tabRef.current.classList.add(props.activeBackgroundColor)
         } else {

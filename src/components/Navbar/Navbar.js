@@ -8,8 +8,7 @@ import useAuth from "../../hooks/useAuth";
 const Navbar = () => {
   const {modalRef} = useAuth();
   const {colors} = useTheme();
-  console.log('navbar component rendered');
-
+  
   const handleOpenModal = () => {
     modalRef.current.openModal();
   }

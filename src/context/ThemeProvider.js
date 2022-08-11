@@ -24,7 +24,6 @@ export const ThemeProvider = ({ children }) => {
                     };
 
                     if(color === "white" && classNameArr.includes(color) && !classNameArr.includes("alpha")) {
-                        console.log(value)
                         colorMap.white.main = value;
                     }
 

@@ -12,23 +12,7 @@ $align-items: center, end, start;
   height: 100%;
   position: relative;
 
-  @for $i from 1 through 20 {
-    &--width-#{$i * 5} {
-      width: percentage(math.div($i * 5, 100));
-    }
-
-    &--height-#{$i * 5} {
-      height: percentage(math.div($i * 5, 100));
-    }
-
-    &--border-radius-#{$i * 5} {
-      border-radius: #{$i * 5} + px;
-    }
-
-    &--padding-#{$i * 5} {
-      padding: #{$i * 5} + px;
-    }
-  }
+  @include mixins.sizes;
 
   &__flex {
     &--row {

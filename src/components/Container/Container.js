@@ -4,7 +4,7 @@ import styles from './Container.module.scss';
 /**
  * A generic container with preset values
  */
- export default function Container({children, element, backgroundColor}) {
+ export default function Container({children, element, backgroundColor, id}) {
   const containerRef = useRef();
 
   useEffect(() => {
@@ -12,6 +12,10 @@ import styles from './Container.module.scss';
 
     if(backgroundColor) {
       containerRef.current.classList.add(backgroundColor);
+    }
+
+    if(id) {
+      containerRef.current.id = id;
     }
   }, [])
 

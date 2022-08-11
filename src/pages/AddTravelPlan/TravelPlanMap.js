@@ -50,26 +50,24 @@ export default function TravelPlanMap(props) {
   }
 
   const createNewDestination = (latlng, locationInfo) => {
-    setTimeout(() => {
-      axios.get('https://api.openweathermap.org/data/3.0/onecall', {
-        params: {
-          lat: latlng.lat,
-          lon: latlng.lng,
-          units: 'metric',
-          appid: REACT_APP_OPENWEATHER_API_KEY,
-        }
-      }).then(result => {
-        const markerDistance = calculateMarkerDistance(latlng);
-        props.setDestinations([...props.destinations, {
-          latlng,
-          ...locationInfo,
-          distance: markerDistance,
-          temperature: result.data.current.temp,
-        }]);
-      }).catch(e => {
-        console.log('error')
-      })
-    }, 200);
+    axios.get('https://api.openweathermap.org/data/3.0/onecall', {
+      params: {
+        lat: latlng.lat,
+        lon: latlng.lng,
+        units: 'metric',
+        appid: REACT_APP_OPENWEATHER_API_KEY,
+      }
+    }).then(result => {
+      const markerDistance = calculateMarkerDistance(latlng);
+      props.setDestinations([...props.destinations, {
+        latlng,
+        ...locationInfo,
+        distance: markerDistance,
+        temperature: result.data.current.temp,
+      }]);
+    }).catch(e => {
+      console.log('error')
+    })
   }
 
   const onClick = (e) => {

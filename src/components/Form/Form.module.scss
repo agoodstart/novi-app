@@ -19,4 +19,8 @@
   padding: 1rem 1.5rem;
   border-radius: 2px;
   border: none;
+
+  &--error {
+    color: #ef6461;
+  }
 }

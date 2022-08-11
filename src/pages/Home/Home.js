@@ -13,8 +13,6 @@ export default function Home() {
   const { modalRef, auth } = useAuth();
   const {colors } = useTheme();
 
-  console.log(colors.text.white);
-
   const handleOpenModal = () => {
     modalRef.current.openModal();
   }
@@ -23,7 +21,6 @@ export default function Home() {
     auth.testConnection();
   }, [])
 
-  console.log('home route rendered');
     return (
       <React.Fragment>
         <div className={styles['bg-video']}>

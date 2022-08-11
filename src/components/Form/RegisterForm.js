@@ -42,7 +42,7 @@ export default function RegisterForm() {
             console.log(data);
       },
       err => {
-          toast.error(err, {
+          toast.error(err.message, {
               position: toast.POSITION.TOP_CENTER
           })
       });
@@ -73,7 +73,7 @@ export default function RegisterForm() {
       elevation={2}
       customStyles={{
           width: '100%'
-      }}>Login</Button>
+      }}>Register</Button>
     </Form>
   )
 }

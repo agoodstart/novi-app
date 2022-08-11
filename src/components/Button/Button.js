@@ -8,7 +8,6 @@ export default function Button({color, size, pill, elevation, onClick, customSty
   const buttonRef = useRef();
 
   useEffect(() => {
-    console.log('button render');
     if(isDisabled && isDisabled instanceof Function) {
       isDisabled(buttonRef.current)
     }

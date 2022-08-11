@@ -8,21 +8,21 @@ export default function ModalContent() {
     const {colors } = useTheme();
 
     return (
-        <Tabs backgroundColor={colors.background.gray.light}>
+        <Tabs backgroundColor={colors.background.black.alpha['50']}>
             <TabList>
                 <Tab
-                    activeBackgroundColor={colors.background.gray.light}
-                    inactiveBackgroundColor={colors.background.gray.main}
+                    activeBackgroundColor={colors.background.black.alpha['15']}
+                    inactiveBackgroundColor={colors.background.black.alpha['50']}
                 >Log in</Tab>
                 <Tab
-                    activeBackgroundColor={colors.background.gray.light}
-                    inactiveBackgroundColor={colors.background.gray.main}
+                    activeBackgroundColor={colors.background.black.alpha['15']}
+                    inactiveBackgroundColor={colors.background.black.alpha['80']}
                 >Register</Tab>
             </TabList>
-            <TabPanel backgroundColor={colors.background.gray.light}>
+            <TabPanel backgroundColor={colors.background.black.alpha['95']}>
                 <LoginForm />
             </TabPanel>
-            <TabPanel backgroundColor={colors.background.gray.light}>
+            <TabPanel backgroundColor={colors.background.black.alpha['95']}>
                 <RegisterForm />
             </TabPanel>
       </Tabs>

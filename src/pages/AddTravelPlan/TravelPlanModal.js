@@ -12,10 +12,10 @@ export default function TravelPlanModal({chosen, modalRef, saveDestination, hand
 
   return (
     <Modal ref={modalRef} >
-      <Box backgroundColor={colors.background.white} borderRadius={10} padding={50}>
+      <Box backgroundColor={colors.background.white.main} borderRadius={10} padding={50}>
         <Typography variant="h4" fontWeight="400" >Are you sure you want to save <strong>{chosen.formattedAddress}</strong> as your next destination?</Typography>
         
-        <Box flexDirection="row" justifyContent="space-around">
+        <Box flexDirection="row" justifyContent="space-around" padding={20}>
           <Button
             onClick={saveDestination}
             color={colors.background.primary.main}

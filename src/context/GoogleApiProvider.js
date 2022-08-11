@@ -56,15 +56,17 @@ export const GoogleApiProvider = ({ children }) => {
           }
         })
     }).then(results => {
+      console.log(results);
       const locationMatch = results.reduce((res, location) => {
         if(location.types.includes('locality') || 
-        location.types.includes('postal_town') || 
-        location.types.includes('administrative_area_level_3')) {
+        location.types.includes('postal_town')) {
           res = location;
         };
         
         return res;
       }, null);
+
+      console.log(locationMatch.address_components.find(location => location.types.includes('locality') || location.types.includes('postal_town') || location.types.includes('administrative_area_level_2 ')));
 
         if(!locationMatch) {
           return Promise.reject('cannot resolve address');

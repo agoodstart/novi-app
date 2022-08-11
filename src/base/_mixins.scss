@@ -63,6 +63,34 @@
   }
 }
 
+@mixin sizes {
+  &--width-auto {
+    width: auto;
+  }
+
+  &--height-auto {
+    height: auto;
+  }
+
+  @for $i from 1 through 20 {
+    &--width-#{$i * 5} {
+      width: percentage(math.div($i * 5, 100));
+    }
+
+    &--height-#{$i * 5} {
+      height: percentage(math.div($i * 5, 100));
+    }
+
+    &--border-radius-#{$i * 5} {
+      border-radius: #{$i * 5} + px;
+    }
+
+    &--padding-#{$i * 5} {
+      padding: #{$i * 5} + px;
+    }
+  }
+}
+
 @mixin gaps {
   $i: 5;
 

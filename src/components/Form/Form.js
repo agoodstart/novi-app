@@ -188,7 +188,7 @@ export const FormControl = ({children, validations, ...rest}) => {
         formComponents.includes(child.type) ? React.cloneElement(child, { onChange: checkValidations }) : null
       )}
       {state.errorMessage && !state.isValid && (
-        <span className="error">{state.errorMessage}</span>
+        <span className={styles['form__input--error']}>{state.errorMessage}</span>
       )}
     </div>
   )

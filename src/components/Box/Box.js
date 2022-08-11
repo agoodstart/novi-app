@@ -15,7 +15,9 @@ export default function Box({
   borderRadius, 
   width, 
   height,
-  padding
+  padding,
+
+  customStyles
 }) {
   const boxRef = useRef();
 
@@ -62,7 +64,7 @@ export default function Box({
   }, []);
 
   return (
-    <div className={styles['box']} ref={boxRef}>
+    <div className={styles['box']} ref={boxRef} style={customStyles}>
       {children}
     </div>
   )
