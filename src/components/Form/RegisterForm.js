@@ -31,7 +31,7 @@ export default function RegisterForm() {
         username: data.registerusername,
         email: data.registeremail,
         password: data.registerpassword,
-        role: ["user", "admin"]   
+        roles: ["user", "admin"]
     }
 
     auth.signup(credentials)

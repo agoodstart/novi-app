@@ -1,4 +1,5 @@
-import React, { Suspense, useMemo, useEffect, useState, useDeferredValue} from 'react';
+import React, { Suspense, useMemo, useEffect, useState } from 'react';
+import axios from 'axios';
 import { useOutletContext } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -7,25 +8,45 @@ import Typography from '../../components/Typography/Typography';
 import Box from '../../components/Box/Box';
 import { Grid, GridItem } from '../../components/Grid/Grid';
 import Button from '../../components/Button/Button';
+import Image from '../../components/Image/Image';
+
+import DashboardWeather from './DashboardWeather';
 
 import useTheme from '../../hooks/useTheme';
 import useSuspense from '../../hooks/useSuspense';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import DashboardWeather from './DashboardWeather';
+import useAuth from '../../hooks/useAuth';
+
 
 export default function DashboardHome() {
   const suspender = useSuspense();
   const navigate = useNavigate();
+  const { auth } = useAuth();
   const { colors } = useTheme();
   const user = useOutletContext();
 
   const [destinations, _] = useLocalStorage("destinations", []);
 
   const [currentLocation, setCurrentLocation] = useState(null);
+  const [profileInformation, setProfileInformation] = useState({});
 
   const memoizedWeather = useMemo(() => {
     return suspender.fetchOpenWeatherAPI({ lat: 52.132633, lng: 5.2912659 });
   }, []);
+
+  useEffect(() => {
+    auth.profile(user.accessToken).then(data => {
+      setProfileInformation(data);
+      console.log(data);
+    },
+    err => {
+      console.log(err)
+    })
+  }, []);
+
+  useEffect(() => {
+    console.log(profileInformation);
+  })
 
   const getCurrentDateTime = () => {
     const today = new Date();
@@ -67,7 +88,7 @@ export default function DashboardHome() {
         <Grid gridRows={8} gridColumns={8} rowGap={30} columnGap={30}>
           <GridItem rowStart={1} columnStart={1} rowEnd={1} columnEnd={8}>
             <Typography textColor={colors.text.black.alpha['50']} variant="h1">
-              <strong>Welcome,</strong> {user}
+              <strong>Welcome,</strong> {profileInformation?.username}
             </Typography>
           </GridItem>
 
@@ -84,14 +105,20 @@ export default function DashboardHome() {
             <Typography variant={"h4"} fontWeight="700" textColor={colors.text.black.alpha['80']}>Current weather:</Typography>
               <Suspense fallback={<Typography>Loading current Weather information...</Typography>}>
                 <DashboardWeather weather={memoizedWeather} />
-                {/* <ReadLocation /> */}
               </Suspense>
             </Box>
           </GridItem>
 
           <GridItem columnStart={6} columnEnd={9} rowStart={2} rowEnd={9} >
-            <Box borderRadius={30} backgroundColor={colors.background.white.alpha['30']} elevation={2}>
+            <Box borderRadius={30} padding={20} backgroundColor={colors.background.white.alpha['30']} elevation={2} flexDirection="column" alignItems="center">
+              <Typography variant="h2" fontWeight={700} textColor={colors.text.black.alpha['80']}>My Profile</Typography>
+              <Image height={40} width="auto" source="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg" />
+              <Typography variant="h3" fontWeight={700} textColor={colors.text.black.alpha['80']}>{profileInformation?.username}</Typography>
+              <Typography variant="h3">{profileInformation?.email}</Typography>
 
+              <Button customStyles={{
+                marginTop: '2rem'
+              }} color={colors.background.primary.light} elevation={1} size="large" onClick={() => { navigate('/account')}}>Change Profile</Button>
             </Box>
           </GridItem>
 

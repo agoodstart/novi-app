@@ -73,7 +73,11 @@ export default function useProvideAuth() {
             })
     }
     const signup = (credentials) => {
-        return novi.post('/auth/signup', credentials)
+        const json = JSON.stringify(credentials);
+        return novi.post('/auth/signup', json, {
+            headers: {
+              'Content-Type': 'application/json'
+            }})
             .then(data => {
                 console.log(data);
                 return data;
@@ -84,10 +88,24 @@ export default function useProvideAuth() {
             })
     }
 
+    const profile = (accessToken) => {
+        return novi.get('/user', {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        }).then(data => {
+            return data;
+        },
+        err => {
+            return Promise.reject(new String('Unable to receive profile information, following error: \n ', err));
+        })
+    }
+
     return {
         user,
         testConnection,
         signin,
         signup,
+        profile,
     }
 }

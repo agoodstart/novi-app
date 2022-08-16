@@ -147,7 +147,7 @@ export default function AddTravelPlan() {
         </GridItem>
 
         <GridItem rowStart={2} columnStart={1} rowEnd={8} columnEnd={6}>
-          <Suspense fallback={<Typography variant="paragraph">Loading Google Maps... </Typography>}>
+          <Suspense fallback={<Typography variant="h1">Loading Google Maps... </Typography>}>
             <TravelPlanMap 
               origin={origin}
               setOrigin={setOrigin}

@@ -6,7 +6,7 @@ export default function DashboardMain({styles}) {
 
     return (
       <main className={styles['layout__main']}>
-          <Outlet context={auth?.user?.username} />
+          <Outlet context={auth?.user} />
       </main>
     )
 }

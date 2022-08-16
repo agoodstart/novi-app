@@ -6,7 +6,7 @@ export default function Social() {
 
   return (
     <React.Fragment>
-      <h2>welcome {user}!</h2>
+      <h2>welcome {user?.username}!</h2>
     </React.Fragment>
   );
 }
