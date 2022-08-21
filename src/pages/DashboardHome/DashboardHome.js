@@ -10,8 +10,6 @@ import { Grid, GridItem } from '../../components/Grid/Grid';
 import Button from '../../components/Button/Button';
 import Image from '../../components/Image/Image';
 
-import DashboardWeather from './DashboardWeather';
-
 import useTheme from '../../hooks/useTheme';
 import useSuspense from '../../hooks/useSuspense';
 import useLocalStorage from '../../hooks/useLocalStorage';
@@ -27,7 +25,6 @@ export default function DashboardHome() {
 
   const [destinations, _] = useLocalStorage("destinations", []);
 
-  const [currentLocation, setCurrentLocation] = useState(null);
   const [profileInformation, setProfileInformation] = useState({});
 
   const memoizedWeather = useMemo(() => {
@@ -35,9 +32,8 @@ export default function DashboardHome() {
   }, []);
 
   useEffect(() => {
-    auth.profile(user.accessToken).then(data => {
+    auth.profile(user?.accessToken).then(data => {
       setProfileInformation(data);
-      console.log(data);
     },
     err => {
       console.log(err)
@@ -77,14 +73,8 @@ export default function DashboardHome() {
     })
   }
 
-  const setLocationData = (loc) => {
-    setCurrentLocation(loc);
-    console.log(loc);
-  } 
-
-
   return (
-    <Container element="section" backgroundColor={colors.background.black.alpha['15']}>
+    <Container element="section" id="dashboard" backgroundColor={colors.background.black.alpha['15']}>
         <Grid gridRows={8} gridColumns={8} rowGap={30} columnGap={30}>
           <GridItem rowStart={1} columnStart={1} rowEnd={1} columnEnd={8}>
             <Typography textColor={colors.text.black.alpha['50']} variant="h1">
@@ -95,14 +85,13 @@ export default function DashboardHome() {
           <GridItem columnStart={1} columnEnd={6} rowStart={2} rowEnd={5} >
             <Box padding={20} borderRadius={30} backgroundColor={colors.background.tertiary.light} elevation={2}>
               <Typography variant={"h2"} fontWeight="700" textColor={colors.text.white.main}>Today is</Typography>
-
               <Typography variant="h3" textColor={colors.text.white.main}>{getCurrentDateTime()}</Typography>
             </Box>
           </GridItem>
 
           <GridItem columnStart={1} columnEnd={3} rowStart={5} rowEnd={8} >
             <Box padding={20} borderRadius={30} backgroundColor={colors.background.white.alpha['30']} elevation={2}>
-            <Typography variant={"h4"} fontWeight="700" textColor={colors.text.black.alpha['80']}>Current weather:</Typography>
+            <Typography variant={"h4"} fontWeight="700" textColor={colors.text.black.alpha['80']}>Today's forecast:</Typography>
               <Suspense fallback={<Typography>Loading current Weather information...</Typography>}>
                 <DashboardWeather weather={memoizedWeather} />
               </Suspense>
@@ -118,7 +107,7 @@ export default function DashboardHome() {
 
               <Button customStyles={{
                 marginTop: '2rem'
-              }} color={colors.background.primary.light} elevation={1} size="large" onClick={() => { navigate('/account')}}>Change Profile</Button>
+              }} color={colors.background.primary.light} elevation={1} size="large" onClick={() => { navigate('/profile')}}>Edit Profile</Button>
             </Box>
           </GridItem>
 
@@ -142,4 +131,27 @@ export default function DashboardHome() {
         </Grid>
     </Container>
   );
+}
+
+function DashboardWeather(props) {
+
+  const weather = props.weather.read();
+  console.log(weather.current);
+
+  return (
+    <>
+      <Typography fontWeight="700">Temperature:</Typography> 
+      <Typography>{weather.current.temp} &#8451;</Typography>
+
+      <Typography fontWeight="700" customStyles={{
+        marginTop: '1rem'
+      }}>Feels like:</Typography> 
+      <Typography>{weather.current.feels_like} &#8451;</Typography>
+      
+      <Typography fontWeight="700" customStyles={{
+        marginTop: '1rem'
+      }}>Weather:</Typography>
+      <Typography>{weather.current.weather[0].description}</Typography>
+    </>
+  )
 }

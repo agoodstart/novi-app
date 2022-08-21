@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import useLocalStorage from './useLocalStorage';
+import { useNavigate } from 'react-router-dom';
+
 const { REACT_APP_AUTH_URL } = process.env;
 
 const novi = axios.create({
@@ -41,7 +43,8 @@ novi.interceptors.response.use(
 
 export default function useProvideAuth() {
     const [user, setUser] = useLocalStorage("user", null);
-
+    const navigate = useNavigate();
+    
     useEffect(() => {
     //   console.log('user is logged in: ', user)
     }, [user])
@@ -72,6 +75,12 @@ export default function useProvideAuth() {
                 return Promise.reject(err);
             })
     }
+
+    const signout = () => {
+        setUser(null);
+        navigate('/')
+    }
+
     const signup = (credentials) => {
         const json = JSON.stringify(credentials);
         return novi.post('/auth/signup', json, {
@@ -97,7 +106,20 @@ export default function useProvideAuth() {
             return data;
         },
         err => {
-            return Promise.reject(new String('Unable to receive profile information, following error: \n ', err));
+            return Promise.reject(`Unable to receive profile information, following error: \n ${err}`);
+        })
+    }
+
+    const all = (accessToken) => {
+        return novi.get('/admin/all', {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        }).then(data => {
+            return data;
+        },
+        err => {
+            return Promise.reject(`Unable to receive all users, following error: \n ${err}`)
         })
     }
 
@@ -105,7 +127,9 @@ export default function useProvideAuth() {
         user,
         testConnection,
         signin,
+        signout,
         signup,
         profile,
+        all
     }
 }

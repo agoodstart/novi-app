@@ -37,6 +37,10 @@ $align-items: center, end, start;
       }
     }
   }
+
+  &--scrollable {
+    overflow-y: scroll;
+  }
 }
 
 @include mixins.elevation("box");

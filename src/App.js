@@ -6,7 +6,7 @@ import Contact from './pages/Contact/Contact';
 import DashboardHome from './pages/DashboardHome/DashboardHome';
 import Unauthorized from './pages/Unauthorized/Unauthorized';
 import NotFound from './pages/NotFound/NotFound';
-import Account from './pages/Account/Account';
+import Profile from './pages/Profile/Profile';
 import Social from './pages/Social/Social';
 import Test from './pages/Test/Test'
 import AddTravelPlan from './pages/AddTravelPlan/AddTravelPlan';
@@ -15,6 +15,7 @@ import Destination from './pages/Destinations/Destination/Destination';
 
 import WebsiteLayout from './layout/WebsiteLayout/WebsiteLayout';
 import DashboardLayout from './layout/DashboardLayout/DashboardLayout';
+import RequireAuth from './routes/RequireAuth';
 import DestinationRouting from './routes/DestinationRouting';
 
 export default function App() {
@@ -39,7 +40,7 @@ export default function App() {
         </Route>
         
         <Route path="addtravelplan" element={<AddTravelPlan />} />
-        <Route path="account" element={<Account />} />
+        <Route path="profile" element={<Profile />} />
         <Route path="social" element={<Social />} />
       </Route>
     </Routes>

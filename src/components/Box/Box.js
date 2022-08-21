@@ -14,6 +14,7 @@ export default function Box({
   elevation, 
   borderRadius, 
   width, 
+  scrollable,
   height,
   padding,
 
@@ -60,6 +61,10 @@ export default function Box({
 
     if(padding) {
       boxRef.current.classList.add(styles[`box--padding-${padding}`]);
+    }
+
+    if (scrollable) {
+      boxRef.current.classList.add(styles['box--scrollable'])
     }
   }, []);
 

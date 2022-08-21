@@ -48,7 +48,7 @@ const Navbar = () => {
             size="medium"
             elevation={2}
             onClick={handleOpenModal}
-          >Inloggen</Button>
+          >Login</Button>
         </li>
         <li className={styles.navigation__item}>
         <Button
@@ -57,7 +57,7 @@ const Navbar = () => {
             size="medium"
             elevation={2}
             onClick={handleOpenModal}
-          >Registreren</Button>
+          >Register</Button>
         </li>
       </ul>
     </nav>

@@ -1,7 +1,7 @@
 import React, {useReducer, useEffect, useState, Children} from 'react';
 import styles from './Form.module.scss';
 
-export const TextInput = ({placeholder, inputMode, name, onChange, iRef, customStyles, pattern}) => {
+export const TextInput = ({placeholder, inputMode, name, onChange, iRef, customStyles, pattern, readonly}) => {
   return (
       <input
         style={customStyles}
@@ -13,7 +13,8 @@ export const TextInput = ({placeholder, inputMode, name, onChange, iRef, customS
         id={name}
         name={name}
         onChange={onChange}
-        ref={iRef} />
+        ref={iRef}
+        readOnly={readonly} />
   )
 };
 

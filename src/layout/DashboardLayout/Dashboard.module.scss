@@ -30,8 +30,8 @@
 
     // background: #041f1e;
     display: flex;
-    flex-flow: wrap row;
-    align-items: center;
+    flex-flow: column wrap;
+    justify-content: space-evenly;
   }
 
   &__top {
