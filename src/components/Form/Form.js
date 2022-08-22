@@ -96,7 +96,7 @@ const validationReducer = (_state, action) => {
   }
 }
 
-const Form = ({children, onSubmit, onValidate}) => {
+const Form = ({children, onSubmit, onValidate, customStyles}) => {
   let realIndex = 0;
   const [formElementsValid, setFormElementsValid] = useState(Array.from(children, (child, i) => child.type === FormControl ? false : null).filter(el => el !== null));
 
@@ -123,7 +123,7 @@ const Form = ({children, onSubmit, onValidate}) => {
   }
 
   return (
-    <div className={styles['form__wrapper']}>
+    <div className={styles['form__wrapper']} style={customStyles}>
       <form className="" onSubmit={formSubmission}>
         {Children.map(children, (child) => {
           if(child.type === FormControl) {

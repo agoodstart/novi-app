@@ -123,6 +123,19 @@ export default function useProvideAuth() {
         })
     }
 
+    const update = (accessToken, data) => {
+        return novi.put('/user', data, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        }).then(data => {
+            return data
+        },
+        err => {
+            return Promise.reject(`Unable to update profile information, following error: \n ${err}`)
+        })
+    }
+
     return {
         user,
         testConnection,
@@ -130,6 +143,7 @@ export default function useProvideAuth() {
         signout,
         signup,
         profile,
-        all
+        all,
+        update
     }
 }

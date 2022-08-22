@@ -38,12 +38,15 @@ export default function Social() {
             {!users.length ?
               <Typography variant="h2" textColor={colors.text.gray.main}>There are no users registered</Typography> :
               users.map((user, i) => (
-                <Box key={i} height="auto" width={95} elevation={2} borderRadius={5} flexDirection="row" justifyContent="space-between" padding={30} backgroundColor={colors.background.white.main} customStyles={{
+                <Box key={i} height="auto" width={95} elevation={2} borderRadius={5} flexDirection="column" justifyContent="space-between" padding={30} backgroundColor={colors.background.white.main} customStyles={{
                   marginTop: '2rem',
                   border: '1px solid rgba(0, 0, 0, .50)'
                 }}>
-                  <Typography variant="h4" customStyles={{ paddingLeft: '15px' }}>
+                  <Typography variant="h4" textColor={colors.text.black.alpha['50']}>
                     {user.email}
+                  </Typography>
+                  <Typography variant="h5" fontWeight={700} textColor={colors.text.black.alpha['50']}>
+                    {user.username}
                   </Typography>
                 </Box>
               ))
