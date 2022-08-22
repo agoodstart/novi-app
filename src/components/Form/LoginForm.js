@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 import useAuth from "../../hooks/useAuth";
 import useTheme from '../../hooks/useTheme';
@@ -39,6 +40,9 @@ export default function LoginForm() {
         navigate('/dashboard')
       },
       err => {
+        toast.error('Invalid credentials', {
+          position: toast.POSITION.TOP_CENTER
+      })
         console.log(err);
     });
   }

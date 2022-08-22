@@ -19,6 +19,7 @@ novi.interceptors.response.use(
 
         switch (status) {
             case 401: {
+                console.log(err.response);
                 return Promise.reject('Authentication Error');
             }
 
