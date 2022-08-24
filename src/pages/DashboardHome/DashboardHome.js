@@ -101,7 +101,7 @@ export default function DashboardHome() {
           <GridItem columnStart={6} columnEnd={9} rowStart={2} rowEnd={9} >
             <Box borderRadius={30} padding={20} backgroundColor={colors.background.white.alpha['30']} elevation={2} flexDirection="column" alignItems="center">
               <Typography variant="h2" fontWeight={700} textColor={colors.text.black.alpha['80']}>My Profile</Typography>
-              <Image height={40} width="auto" source="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg" />
+              <Image height={40} width="auto" source={profileInformation?.profilePicture} />
               <Typography variant="h3" fontWeight={700} textColor={colors.text.black.alpha['80']}>{profileInformation?.username}</Typography>
               <Typography variant="h3">{profileInformation?.email}</Typography>
 

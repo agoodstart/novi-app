@@ -30,6 +30,34 @@ export const EmailInput = ({placeholder, name, onChange}) => {
   )
 };
 
+export const HiddenInput = ({placeholder, name, onChange, iRef}) => {
+  return (
+      <input
+        className={styles['form__input']}
+        placeholder={placeholder} 
+        type="hidden"
+        id={name}
+        name={name}
+        ref={iRef}
+        // value={value}
+        onChange={onChange} />
+  )
+};
+
+export const ImageInput = ({placeholder, name, onChange, iRef}) => {
+  return (
+    <input
+      className={styles['form__input']}
+      placeholder={placeholder} 
+      type="file"
+      accept="image/png, image/jpeg"
+      id={name}
+      name={name}
+      ref={iRef}
+      onChange={onChange} />
+  )
+};
+
 export const PasswordInput = ({placeholder, name, onChange}) => {
   return (
       <input
@@ -62,6 +90,8 @@ const formComponents = [
   EmailInput,
   NumberInput,
   PasswordInput,
+  HiddenInput,
+  ImageInput
 ]
 
 const validationReducer = (_state, action) => {
@@ -111,7 +141,9 @@ const Form = ({children, onSubmit, onValidate, customStyles}) => {
   }
 
   useEffect(() => {
-    onValidate(formElementsValid.every(el => el))
+    if(onValidate) {
+      onValidate(formElementsValid.every(el => el))
+    }
   }, [formElementsValid])
 
   const formSubmission = (e) => {

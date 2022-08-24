@@ -1,5 +1,5 @@
-
 import React, { useEffect, useState, useRef } from 'react';
+import axios from 'axios';
 import { useOutletContext } from "react-router-dom";
 import { toast } from 'react-toastify';
 
@@ -7,7 +7,7 @@ import Container from '../../components/Container/Container';
 import Modal from '../../components/Modal/Modal';
 import Typography from '../../components/Typography/Typography';
 import { Grid, GridItem } from '../../components/Grid/Grid';
-import Form, { FormControl, TextInput, PasswordInput } from '../../components/Form/Form';
+import Form, { FormControl, TextInput, PasswordInput, HiddenInput, ImageInput } from '../../components/Form/Form';
 import Image from '../../components/Image/Image';
 import Box from '../../components/Box/Box';
 
@@ -23,6 +23,7 @@ export default function Profile() {
   const usernameRef = useRef();
   const emailRef = useRef();
   const infoRef = useRef();
+  const imageRef = useRef();
 
   const user = useOutletContext();
   const { auth, modalRef } = useAuth(); 
@@ -32,6 +33,16 @@ export default function Profile() {
   const [emailFormValid, setEmailFormValid] = useState(false);
   const [infoFormValid, setInfoFormValid] = useState(false);
   const [passwordFormValid, setPasswordFormValid] = useState(false);
+  const [imageFormValid, setImageFormValid] = useState(false);
+
+  const [imageSource, setImageSource] = useState("")
+
+  const reader = new FileReader();
+
+  reader.onloadend = () => {
+    const base64data = reader.result;
+    setImageSource(base64data);                
+  }
 
   const checkButtonDisabled = (target, formValid) => {
     if(!formValid) {
@@ -44,11 +55,6 @@ export default function Profile() {
   const handleOpenModal = () => {
     modalRef.current.openModal();
   }
-
-  const handleCloseModal = () => {
-    modalRef.current.closeModal();
-  }
-
 
   const updateProfile = (data) => {
     const field = Object.keys(data)[0];
@@ -64,19 +70,41 @@ export default function Profile() {
       })
     })
   }
+  
+  const updateProfilePicture = (data) => {
+    auth.picture(user.accessToken, {
+      base64Image: imageSource
+    }).then(data => {
+      toast.success(`Profile image successfully updated`, {
+        position: toast.POSITION.TOP_CENTER
+      });
+    }, err => {
+      toast.error(`Unable to update Profile picture`, {
+        position: toast.POSITION.TOP_CENTER
+      })
+    })
+  }
+
+  const checkInput = (e) => {
+    const file = e.target.files[0];
+    reader.readAsDataURL(file);
+  }
 
   useEffect(() => {
-
+    axios.get('https://i.picsum.photos/id/1025/4951/3301.jpg?hmac=_aGh5AtoOChip_iaMo8ZvvytfEojcgqbCH7dzaz-H8Y', {
+      responseType: 'blob'
+    })
+    .then(response => reader.readAsDataURL(response.data))
   }, [])
 
   useEffect(() => {
-    console.log(profileInformation)
     if(Object.keys(profileInformation).length !== 0) {
       usernameRef.current.value = profileInformation.username;
       emailRef.current.value = profileInformation.email;
       infoRef.current.value = profileInformation?.info ?? "";
+      // imageRef.current.value = imageSource;
     }
-  }, [profileInformation])
+  }, [profileInformation, imageSource])
 
   useEffect(() => {
     auth.profile(user.accessToken).then(data => {
@@ -131,9 +159,6 @@ export default function Profile() {
               Info
             </Typography>
 
-            {/* <TextInput iRef={infoRef}/>
-            <Button color={colors.background.primary.alpha['80']} elevation={1} customStyles={{marginTop: '1rem'}}>Change</Button> */}
-
             <Form onSubmit={updateProfile} onValidate={(isValid) => { setInfoFormValid(isValid) }} customStyles={{ padding: '0' }}>
               <FormControl validations={[ Validate.isRequired() ]}>
                 <TextInput iRef={infoRef} name="info" />
@@ -155,8 +180,12 @@ export default function Profile() {
 
         <GridItem rowStart={2} columnStart={4} rowEnd={6} columnEnd={8}>
           <Box flexDirection="column">
-            <Image width="auto" source="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg" />
-            <Button size="large" color={colors.background.secondary.alpha['80']} onClick={() => { handleOpenModal() }} elevation={3} customStyles={{marginTop: '1rem'}}>Change Profile image</Button>
+            <Image width="auto" source={profileInformation?.profilePicture} />
+            
+            <Form onSubmit={updateProfilePicture} customStyles={{ padding: '0' }}>
+              <ImageInput onChange={checkInput} iRef={imageRef} />
+              <Button size="large" color={colors.background.secondary.alpha['80']} elevation={3} customStyles={{marginTop: '1rem', width: '100%'}}>Change Profile image</Button>
+            </Form>
           </Box>
         </GridItem>
       </Grid>

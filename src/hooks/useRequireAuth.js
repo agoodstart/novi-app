@@ -6,8 +6,6 @@ export default function useRequireAuth() {
     const {auth} = useAuth();
     const navigate = useNavigate();
 
-    console.log(auth.user);
-
     useEffect(() => {
         if(!auth.user) {
             console.log('test');

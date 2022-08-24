@@ -48,6 +48,9 @@
       "google": "readonly"
     }
   },
+  "browser": {
+    "fs": false
+  },
   "browserslist": {
     "production": [
       ">0.2%",
