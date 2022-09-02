@@ -8,7 +8,6 @@ import Button from '../../components/Button/Button';
 import Typography from '../../components/Typography/Typography';
 import Center from '../../components/Center/Center';
 
-
 export default function NotFound() {
   const {colors } = useTheme();
   const navigate = useNavigate();

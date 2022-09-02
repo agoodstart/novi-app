@@ -1,5 +1,7 @@
 import { NavLink } from "react-router-dom";
 import Button from "../../components/Button/Button";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEarthEurope, faGauge, faUser, faUserGroup, faRoute, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 import useTheme from "../../hooks/useTheme";
 import useAuth from "../../hooks/useAuth";
@@ -15,37 +17,60 @@ export default function DashboardSidebar({styles}) {
       <nav className={styles['sidebarnav']}>
         <ul className={styles['sidebarnav__list']}>
           <li className={styles['sidebarnav__item']}>
-          <NavLink 
-            to='/dashboard'
-            className={checkIfActive}>Dashboard</NavLink>
+            <NavLink 
+              to='/dashboard'
+              className={checkIfActive}>
+                <FontAwesomeIcon icon={faGauge} /> &nbsp;
+                Dashboard
+            </NavLink>
           </li>
           <li className={styles['sidebarnav__item']}>
           <NavLink 
             to='/Destinations'
-            className={checkIfActive}>Destinations</NavLink>
+            className={checkIfActive}>
+              <FontAwesomeIcon icon={faEarthEurope} /> &nbsp;
+              Destinations
+            </NavLink>
           </li>
           <li className={styles['sidebarnav__item']}>
           <NavLink 
             to='/profile'
-            className={checkIfActive}>Profile</NavLink>
+            className={checkIfActive}>
+              <FontAwesomeIcon icon={faUser} /> &nbsp;
+              Profile
+            </NavLink>
           </li>
           <li className={styles['sidebarnav__item']}>
           <NavLink 
             to='/social'
-            className={checkIfActive}>Social</NavLink>
+            className={checkIfActive}>
+              <FontAwesomeIcon icon={faUserGroup} /> &nbsp; 
+              Social
+            </NavLink>
           </li>
           <li className={styles['sidebarnav__item']}>
           <NavLink 
             to='/addtravelplan'
-            className={checkIfActive}>Add Travel Plan</NavLink>
+            className={checkIfActive}>
+              <FontAwesomeIcon icon={faRoute} /> &nbsp;
+              Add Travel Plan
+            </NavLink>
           </li>
           <li className={styles['sidebarnav__item']}>
           </li>
         </ul>
       </nav>
-      <Button size="medium" onClick={() => auth.signout()} elevation={1} color={colors.background.secondary.alpha['80']} customStyles={{
+      <Button 
+        size="medium" 
+        elevation={1} 
+        color={colors.background.secondary.alpha['80']} 
+        onClick={() => auth.signout()} 
+        customStyles={{
         margin: '0 1rem'
-      }}>Logout</Button>
+      }}>
+        <FontAwesomeIcon icon={faRightFromBracket} /> &nbsp;
+        Logout
+      </Button>
     </div>
   )
 }

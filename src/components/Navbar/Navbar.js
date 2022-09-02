@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserPlus, faRightToBracket, faUser } from '@fortawesome/free-solid-svg-icons';
+
 import Button from "../Button/Button";
 
 import useTheme from "../../hooks/useTheme";
@@ -57,17 +60,23 @@ const Navbar = () => {
             size="medium"
             elevation={2}
             onClick={() => { navigate('/profile')}}
-            >Your Profile</Button>
+            >
+              <FontAwesomeIcon icon={faUser} /> &nbsp;
+              Your Profile
+            </Button>
           </li> : 
           <>
             <li className={styles.navigation__item}>
+
               <Button
                 color={colors.background.primary.main}
                 pill
                 size="medium"
                 elevation={2}
                 onClick={handleOpenModal}
-              >Login</Button>
+              >
+                <FontAwesomeIcon icon={faRightToBracket} /> &nbsp;
+                Login</Button>
             </li>
             <li className={styles.navigation__item}>
               <Button
@@ -76,7 +85,10 @@ const Navbar = () => {
                 size="medium"
                 elevation={2}
                 onClick={handleOpenModal}
-              >Register</Button>
+              >
+                <FontAwesomeIcon icon={faUserPlus} /> &nbsp;
+                Register
+              </Button>
             </li>
           </>
         }

@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEarthEurope, faGauge } from '@fortawesome/free-solid-svg-icons';
 
 import useTheme from '../../hooks/useTheme';
 import useAuth from '../../hooks/useAuth';
@@ -50,6 +52,7 @@ export default function Home() {
             onClick={() => { navigate('/dashboard') }}
             customStyles={{ marginTop: '1rem'}}
             >
+              <FontAwesomeIcon icon={faGauge} /> &nbsp;
               To your dashboard
             </Button> :
 
@@ -61,6 +64,7 @@ export default function Home() {
             onClick={handleOpenModal}
             customStyles={{ marginTop: '1rem'}}
             >
+              <FontAwesomeIcon icon={faEarthEurope} /> &nbsp;
               Login to discover
             </Button>
           }
