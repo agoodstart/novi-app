@@ -1,11 +1,17 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
-import styles from './Navbar.module.scss';
+import { NavLink, useNavigate } from "react-router-dom";
 import Button from "../Button/Button";
+
 import useTheme from "../../hooks/useTheme";
 import useAuth from "../../hooks/useAuth";
+import useLocalStorage from "../../hooks/useLocalStorage";
+
+import styles from './Navbar.module.scss';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const [user, _setUser] = useLocalStorage("user", null);
+
   const {modalRef} = useAuth();
   const {colors} = useTheme();
   
@@ -41,24 +47,39 @@ const Navbar = () => {
         <li className={styles.navigation__item}>
           <div className={styles['divider']}></div>
         </li>
-        <li className={styles.navigation__item}>
-          <Button
-            color={colors.background.primary.main}
-            pill
-            size="medium"
-            elevation={2}
-            onClick={handleOpenModal}
-          >Login</Button>
-        </li>
-        <li className={styles.navigation__item}>
-        <Button
+
+        {/* if user exists --> button to profile; else --> Login & register buttons */}
+        {user ? 
+          <li className={styles.navigation__item}>
+            <Button
             color={colors.background.tertiary.main}
             pill
             size="medium"
             elevation={2}
-            onClick={handleOpenModal}
-          >Register</Button>
-        </li>
+            onClick={() => { navigate('/profile')}}
+            >Your Profile</Button>
+          </li> : 
+          <>
+            <li className={styles.navigation__item}>
+              <Button
+                color={colors.background.primary.main}
+                pill
+                size="medium"
+                elevation={2}
+                onClick={handleOpenModal}
+              >Login</Button>
+            </li>
+            <li className={styles.navigation__item}>
+              <Button
+                color={colors.background.tertiary.main}
+                pill
+                size="medium"
+                elevation={2}
+                onClick={handleOpenModal}
+              >Register</Button>
+            </li>
+          </>
+        }
       </ul>
     </nav>
   );

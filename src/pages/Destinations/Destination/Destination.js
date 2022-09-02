@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 import Typography from '../../../components/Typography/Typography';
 import Box from "../../../components/Box/Box";
-import Image from '../../../components/Image/Image';
+import { Image } from '../../../components/Media/Media';
 import Center from '../../../components/Center/Center';
 import Container from "../../../components/Container/Container";
 import Card, { CardBody, CardHeader } from "../../../components/Card/Card";

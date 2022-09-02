@@ -8,7 +8,7 @@ import Typography from '../../components/Typography/Typography';
 import Box from '../../components/Box/Box';
 import { Grid, GridItem } from '../../components/Grid/Grid';
 import Button from '../../components/Button/Button';
-import Image from '../../components/Image/Image';
+import { Image } from '../../components/Media/Media';
 
 import useTheme from '../../hooks/useTheme';
 import useSuspense from '../../hooks/useSuspense';

@@ -1,0 +1,34 @@
+@use "sass:math";
+@use "../../base/mixins";
+@use "../../base/functions";
+@use "../../base/variables";
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  @include mixins.sizes;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  @include mixins.sizes;
+
+  &__content {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+}
+
+.coverpage {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
