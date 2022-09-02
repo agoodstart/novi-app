@@ -15,19 +15,19 @@ import Destination from './pages/Destinations/Destination/Destination';
 
 import WebsiteLayout from './layout/WebsiteLayout/WebsiteLayout';
 import DashboardLayout from './layout/DashboardLayout/DashboardLayout';
-import RequireAuth from './routes/RequireAuth';
 import DestinationRouting from './routes/DestinationRouting';
 
 export default function App() {
   return (
     <Routes>
+      <Route path="*" element={<NotFound />} />      
+      <Route path="unauthorized" element={<Unauthorized />} />
+
       <Route path="/" element={<WebsiteLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />
-        <Route path="unauthorized" element={<Unauthorized />} />
         <Route path="test" element={<Test />} />
-        <Route path="*" element={<NotFound />} />      
       </Route>
 
       {/* User authentication beyond this point */}

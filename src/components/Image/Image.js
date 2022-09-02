@@ -4,7 +4,7 @@ import { useEffect, useRef} from 'react';
 /**
  * General component description in JSDoc format. Markdown is *supported*.
  */
-export default function Image({source, alt, width, height, ...rest}) {
+export default function Image({source, alt, width, height, customStyles, ...rest}) {
   const imageRef = useRef();
 
   useEffect(() => {
@@ -19,6 +19,6 @@ export default function Image({source, alt, width, height, ...rest}) {
 
 
   return (
-    <img ref={imageRef} src={source} alt={alt} className={styles['image']} />
+    <img ref={imageRef} src={source} alt={alt} className={styles['image']} style={customStyles} />
   )
 }
