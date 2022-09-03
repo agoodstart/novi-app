@@ -7,7 +7,7 @@ import Container from '../../components/Container/Container';
 import Modal from '../../components/Modal/Modal';
 import Typography from '../../components/Typography/Typography';
 import { Grid, GridItem } from '../../components/Grid/Grid';
-import Form, { FormControl, TextInput, PasswordInput, HiddenInput, ImageInput } from '../../components/Form/Form';
+import Form, { FormControl, TextInput, PasswordInput, ImageInput } from '../../components/Form/Form';
 import { Image } from '../../components/Media/Media';
 import Box from '../../components/Box/Box';
 

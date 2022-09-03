@@ -1,12 +1,10 @@
 import React, {useReducer, useEffect, useState, Children} from 'react';
 import styles from './Form.module.scss';
 
-export const TextInput = ({placeholder, inputMode, name, onChange, iRef, customStyles, pattern, readonly}) => {
+export const TextInput = ({placeholder, name, onChange, iRef, customStyles, readonly}) => {
   return (
       <input
         style={customStyles}
-        inputMode={inputMode}
-        pattern={pattern}
         className={styles['form__input']}
         placeholder={placeholder} 
         type="text"
@@ -18,29 +16,18 @@ export const TextInput = ({placeholder, inputMode, name, onChange, iRef, customS
   )
 };
 
-export const EmailInput = ({placeholder, name, onChange}) => {
+export const EmailInput = ({placeholder, name, onChange, iRef, customStyles, readOnly}) => {
   return (
       <input
+        style={customStyles}
         className={styles['form__input']}
         placeholder={placeholder} 
         type="email"
         id={name}
         name={name}
-        onChange={onChange} />
-  )
-};
-
-export const HiddenInput = ({placeholder, name, onChange, iRef}) => {
-  return (
-      <input
-        className={styles['form__input']}
-        placeholder={placeholder} 
-        type="hidden"
-        id={name}
-        name={name}
+        onChange={onChange}
         ref={iRef}
-        // value={value}
-        onChange={onChange} />
+        readOnly={readOnly} />
   )
 };
 
@@ -58,19 +45,22 @@ export const ImageInput = ({placeholder, name, onChange, iRef}) => {
   )
 };
 
-export const PasswordInput = ({placeholder, name, onChange}) => {
+export const PasswordInput = ({placeholder, name, onChange, iRef, customStyles, readOnly}) => {
   return (
       <input
+        style={customStyles}
         className={styles['form__input']}
         placeholder={placeholder} 
         type="password"
         id={name}
         name={name}
-        onChange={onChange} />
+        onChange={onChange}
+        ref={iRef}
+        readOnly={readOnly} />
   )
 };
 
-export const NumberInput = ({placeholder, name, onChange, value, customStyles}) => {
+export const NumberInput = ({placeholder, name, onChange, iRef, value, customStyles, readOnly}) => {
   return (
       <input
         style={customStyles}
@@ -81,7 +71,9 @@ export const NumberInput = ({placeholder, name, onChange, value, customStyles}) 
         id={name}
         name={name}
         onChange={onChange}
-        value={value} />
+        ref={iRef}
+        value={value}
+        readOnly={readOnly} />
   )
 };
 
@@ -90,7 +82,6 @@ const formComponents = [
   EmailInput,
   NumberInput,
   PasswordInput,
-  HiddenInput,
   ImageInput
 ]
 

@@ -1,9 +1,39 @@
+@use "sass:math";
+@use "../../base/functions";
+@use "../../base/variables";
+@use "../../base/mixins";
+
 .form__wrapper {
   padding: 6rem;
   
   // background-color: var(--cadetgray-light);
   // border-radius: 3px;
   // box-shadow: 0 1.5rem 4rem rgba(10, 15, 13, 0.2);
+}
+
+.form {
+
+  &__wrapper {
+    padding: 6rem;
+  }
+
+  &__group {
+
+  }
+
+  &__input {
+
+    &--error {
+      
+    }
+  }
+
+  &__text {
+
+    &--size {
+      
+    }
+  }
 }
 
 .form__group {
@@ -19,6 +49,7 @@
   padding: 1rem 1.5rem;
   border-radius: 2px;
   border: none;
+  
 
   &--error {
     color: #ef6461;
