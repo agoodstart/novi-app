@@ -1,14 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAt } from '@fortawesome/free-solid-svg-icons';
 
 import { Image } from '../../components/Media/Media';
 import Button from '../../components/Button/Button';
 import Typography from '../../components/Typography/Typography';
 import Box from '../../components/Box/Box';
 import Center from '../../components/Center/Center';
-import Form, { FormControl, TextInput, EmailInput } from '../../components/Form/Form';
+import Form, { FormControl, TextInput, EmailInput, TextArea } from '../../components/Form/Form';
 
 import useTheme from '../../hooks/useTheme';
 
@@ -17,14 +15,18 @@ export default function Contact() {
   const navigate = useNavigate();
 
   const inputStyle = {
-    borderRadius: '20px',
+    borderRadius: '30px',
     border: '1px solid rgba(0, 0, 0, .20)',
-    width: '25rem'
   }
 
-  console.log('Not found page rendered');
+  const areaStyle = {
+    borderRadius: '15px',
+    border: '1px solid rgba(0, 0, 0, .20)'
+  }
+
   return (
     <React.Fragment>
+
       <Image coverPage source="/assets/mountains3.jpg" />
 
       <Center>
@@ -36,24 +38,30 @@ export default function Contact() {
             }}>Contact Us
           </Typography>
 
-          <Box flexDirection={"row"}>
-            <FontAwesomeIcon size='8x' icon={faAt} />
-
+          <Box flexDirection={"row"} alignItems="center">
             <Box flexDirection={"column"}>
-              <Form>
+              <Form customStyles={{ padding: '2rem', width: '40rem'}}>
                 <FormControl>
-                  <TextInput customStyles={inputStyle} placeholder="First Name" />
+                  <TextInput size="3x" customStyles={inputStyle} placeholder="First Name" />
                 </FormControl>
                 
                 <FormControl>
-                  <TextInput customStyles={inputStyle} placeholder="Last Name" />
+                  <TextInput size="3x" customStyles={inputStyle} placeholder="Last Name" />
                 </FormControl>
 
                 <FormControl>
-                  <EmailInput customStyles={inputStyle} placeholder="Your Email" />
+                  <EmailInput size="3x" customStyles={inputStyle} placeholder="Your Email" />
                 </FormControl>
     
+                <FormControl>
+                  <TextArea textSize="3x" customStyles={areaStyle} placeholder="Your Questions..." rows={5} />
+                </FormControl>
 
+                <Button
+                  fullWidth
+                  color={colors.background.tertiary.main}>
+                    Send Message
+                  </Button>
               </Form>
             </Box>
           </Box>

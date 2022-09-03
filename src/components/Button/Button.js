@@ -2,7 +2,7 @@ import styles from './Button.module.scss';
 import { useRef, useEffect } from 'react';
 import useTheme from '../../hooks/useTheme';
 
-export default function Button({color, size, pill, elevation, onClick, customStyles, isDisabled, children}) {
+export default function Button({color, size, pill, fullWidth, elevation, onClick, customStyles, isDisabled, children}) {
   const { colors } = useTheme();
 
   const buttonRef = useRef();
@@ -37,7 +37,10 @@ export default function Button({color, size, pill, elevation, onClick, customSty
       buttonRef.current.classList.add(styles['btn--pill'])
     }
 
-
+        
+    if(fullWidth) {
+      buttonRef.current.classList.add(styles['btn--w100'])
+    }
     // console.log(isDisabled);
   }, [])
 

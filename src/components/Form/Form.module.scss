@@ -15,25 +15,32 @@
     &:not(:last-child) {
       margin-bottom: 2rem;
     }
+    & > * {
+      width: 100%;
+    }
   }
 
   &__input {
     padding: 1rem 1.5rem;
     border-radius: 2px;
     border: none;
+    font-family: "Ubuntu", sans-serif;
+
+    &-text {
+  
+      @for $i from 1 through 8 {
+        &--size-#{$i}x {
+          font-size: functions.type-scaling($i - 3);
+        }
+      }
+    }
 
     &--error {
       color: #ef6461;
     }
   }
+}
 
-  &__text {
-    font-family: "Ubuntu", sans-serif;
-
-    @for $i from 1 through 8 {
-      &--size-#{$i}x {
-        font-size: functions.type-scaling($i - 3);
-      }
-    }
-  }
+textarea {
+  resize: none;
 }

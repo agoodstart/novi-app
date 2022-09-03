@@ -1,21 +1,23 @@
-import React, {useReducer, useEffect, useState, Children} from 'react';
+import React, {useReducer, useEffect, useState, useRef, Children} from 'react';
 import styles from './Form.module.scss';
 
-const DefaultInput = ({placeholder, name, onChange, iRef, customStyles, readOnly}) => {
+export const TextInput = ({placeholder, name, onChange, iRef, size, padding, customStyles, readonly}) => {
+  const defRef = useRef(null);
+  
+  const createRefs = (element) => {
+    defRef.current = element
+    
+    if(iRef) iRef.current = element
+  }
+  
+  useEffect(() => {
+    defRef.current.classList.add(styles['form__input-text'])
 
-  return (
-    <input
-      style={customStyles}
-      className={styles['form__input']}
-      placeholder={placeholder}
-      id={name}
-      name={name}
-      onChange={onChange}
-    />
-  )
-}
+    if(size) {
+      defRef.current.classList.add(styles[`form__input-text--size-${size}`])
+    }
+  }, []);
 
-export const TextInput = ({placeholder, name, onChange, iRef, customStyles, readonly}) => {
   return (
       <input
         style={customStyles}
@@ -25,12 +27,29 @@ export const TextInput = ({placeholder, name, onChange, iRef, customStyles, read
         id={name}
         name={name}
         onChange={onChange}
-        ref={iRef}
+        ref={createRefs}
         readOnly={readonly} />
   )
 };
 
-export const EmailInput = ({placeholder, name, onChange, iRef, customStyles, readOnly}) => {
+export const EmailInput = ({placeholder, name, onChange, iRef, size, padding, customStyles, readOnly}) => {
+  const defRef = useRef(null);
+  
+  const createRefs = (element) => {
+    defRef.current = element
+    
+    if(iRef) iRef.current = element
+  }
+  
+  useEffect(() => {
+    defRef.current.classList.add(styles['form__input-text'])
+
+    if(size) {
+      defRef.current.classList.add(styles[`form__input-text--size-${size}`])
+    }
+  }, []);
+
+
   return (
       <input
         style={customStyles}
@@ -40,7 +59,7 @@ export const EmailInput = ({placeholder, name, onChange, iRef, customStyles, rea
         id={name}
         name={name}
         onChange={onChange}
-        ref={iRef}
+        ref={createRefs}
         readOnly={readOnly} />
   )
 };
@@ -91,12 +110,45 @@ export const NumberInput = ({placeholder, name, onChange, iRef, value, customSty
   )
 };
 
+export const TextArea = ({placeholder, name, onChange, iRef, rows, cols, textSize, padding, customStyles, readOnly}) => {
+  const defRef = useRef(null);
+  
+  const createRefs = (element) => {
+    defRef.current = element
+    
+    if(iRef) iRef.current = element
+  }
+  
+  useEffect(() => {
+    defRef.current.classList.add(styles['form__input-text'])
+
+    if(textSize) {
+      defRef.current.classList.add(styles[`form__input-text--size-${textSize}`])
+    }
+  }, []);
+
+  return (
+    <textarea
+      style={customStyles}
+      className={styles['form__input']}
+      placeholder={placeholder} 
+      rows={rows}
+      cols={cols}
+      id={name}
+      name={name}
+      onChange={onChange}
+      ref={createRefs}
+      readOnly={readOnly} />
+  )
+}
+
 const formComponents = [
   TextInput,
   EmailInput,
   NumberInput,
   PasswordInput,
-  ImageInput
+  ImageInput,
+  TextArea
 ]
 
 const validationReducer = (_state, action) => {

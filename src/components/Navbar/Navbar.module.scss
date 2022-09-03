@@ -2,9 +2,10 @@
     background: transparent;
     padding: 20px;
     display: flex;
+    right: 0;
     justify-content: flex-end;
     color: #fff;
-    position: relative;
+    position: fixed;
     z-index: 99;
 
     &__logo {
