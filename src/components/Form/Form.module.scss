@@ -3,55 +3,37 @@
 @use "../../base/variables";
 @use "../../base/mixins";
 
-.form__wrapper {
-  padding: 6rem;
-  
-  // background-color: var(--cadetgray-light);
-  // border-radius: 3px;
-  // box-shadow: 0 1.5rem 4rem rgba(10, 15, 13, 0.2);
-}
-
 .form {
-
   &__wrapper {
     padding: 6rem;
   }
 
   &__group {
+    display: flex;
+    flex-flow: column wrap;
 
+    &:not(:last-child) {
+      margin-bottom: 2rem;
+    }
   }
 
   &__input {
+    padding: 1rem 1.5rem;
+    border-radius: 2px;
+    border: none;
 
     &--error {
-      
+      color: #ef6461;
     }
   }
 
   &__text {
+    font-family: "Ubuntu", sans-serif;
 
-    &--size {
-      
+    @for $i from 1 through 8 {
+      &--size-#{$i}x {
+        font-size: functions.type-scaling($i - 3);
+      }
     }
-  }
-}
-
-.form__group {
-  display: flex;
-  flex-flow: column wrap;
-}
-
-.form__group:not(:last-child) {
-  margin-bottom: 2rem;
-}
-
-.form__input {
-  padding: 1rem 1.5rem;
-  border-radius: 2px;
-  border: none;
-  
-
-  &--error {
-    color: #ef6461;
   }
 }

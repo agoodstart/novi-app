@@ -1,6 +1,20 @@
 import React, {useReducer, useEffect, useState, Children} from 'react';
 import styles from './Form.module.scss';
 
+const DefaultInput = ({placeholder, name, onChange, iRef, customStyles, readOnly}) => {
+
+  return (
+    <input
+      style={customStyles}
+      className={styles['form__input']}
+      placeholder={placeholder}
+      id={name}
+      name={name}
+      onChange={onChange}
+    />
+  )
+}
+
 export const TextInput = ({placeholder, name, onChange, iRef, customStyles, readonly}) => {
   return (
       <input
