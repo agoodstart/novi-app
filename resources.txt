@@ -21,12 +21,12 @@ https://kml4earth.appspot.com/icons.html
 https://cloud.google.com/blog/products/maps-platform/how-calculate-distances-map-maps-javascript-api
 https://www.ventureharbour.com/15-contact-form-examples-help-design-ultimate-contact-page/#6-zeroqode
 
-https://dribbble.com/shots/11474539-Weather-App
-https://dribbble.com/shots/13339138-Edit-Profile
-
 Framer Motion
 React DnD
 
 Spotify Website
 Lava Drops Website
 https://onthegrid.city/
+https://mailchimp.com/about/
+https://dribbble.com/shots/11474539-Weather-App
+https://dribbble.com/shots/13339138-Edit-Profile

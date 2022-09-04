@@ -37,7 +37,7 @@ export default function Home() {
               It is nice to have you back
             </Typography> :
 
-            <Typography textColor={colors.text.white.main} fontWeight="500" elevation={2} variant="h1">
+            <Typography textColor={colors.text.white.main} fontWeight="500" elevation={2} variant="h1" customStyles={{ lineHeight: '1.4'}}>
               There is a world outside <br></br> 
               waiting for you
             </Typography>
@@ -50,7 +50,7 @@ export default function Home() {
             pill
             elevation="2"
             onClick={() => { navigate('/dashboard') }}
-            customStyles={{ marginTop: '1rem'}}
+            customStyles={{ marginTop: '2.5rem'}}
             >
               <FontAwesomeIcon icon={faGauge} /> &nbsp;
               To your dashboard
@@ -62,7 +62,7 @@ export default function Home() {
             pill
             elevation="2"
             onClick={handleOpenModal}
-            customStyles={{ marginTop: '1rem'}}
+            customStyles={{ marginTop: '2.5rem'}}
             >
               <FontAwesomeIcon icon={faEarthEurope} /> &nbsp;
               Login to discover
