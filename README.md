@@ -1,70 +1,36 @@
-# Getting Started with Create React App
+# Travel Applicatie
+Een frontend applicatie, geschreven in Reactjs, in opdracht van NOVI Hogeschool. Het thema van deze applicatie is reizen.
+## Inleiding
+Deze applicatie bestaat uit 2 delen:
+* De website: openbaar
+* Het dashboard: alleen zichtbaar voor ingelogde gebruikers 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+*De werking van het inlogsysteem staat beschreven in het verantwoordingsdocument*
 
-## Available Scripts
+Wanneer je de applicatie opstart kom je om de Homepagina van de website terecht. De belangrijkste pagina zit achter authenticatie. Er dient dus eerst ingelogd te worden. Na het inloggen wordt de gebruiker meteen omgeleid naar het dashboard. Navigeer vanaf hier naar **Add Travel Plan**
 
-In the project directory, you can run:
+Op deze pagina kan je met gebruik van Embedded Google Maps maximaal 5 locaties op de wereld kiezen. De informatie van deze locaties worden aan de rechterkant weergegeven. Na het kiezen van minimaal 2 locaties wordt er een locatie gesuggereerd, op basis van afstand en weer. Uiteindelijk kies je zelf de locatie door op het sterretje naast een locatie in de weergave te klikken. Klik vervolgens op **Save chosen destination** om de locatie op te slaan.
 
-### `npm start`
+## Benodigdheden
+Het enige wat er nodig is zijn de API keys. Deze zijn bijgevoegd als apart pdf bestand bij de eindopdracht.
+Verder is het aanzetten van locatieservices op je laptop handig (niet noodzakelijk)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Installatie instructies
+1. Clone deze reposity om de applicatie lokaal te draaien. Voer een van deze commando's uit in je terminal of command prompt:
+    - HTTPS: `git clone https://github.com/agoodstart/novi-app.git`
+    - SSH: `git clone git@github.com:agoodstart/novi-app.git`
+2. Maak in de root map van het project een `.env` bestand aan. Kopieer en plak de gegevens vanuit de bijlage van de eindopdracht.
+3. Er is gebruik gemaakt van node versie 16.14.0 en 16.16.0. Probeer aan deze versies te houden. Controleer de huidige versie met `node -v`, en installeer waar nodig de juiste.
+4. Voer `npm install` uit in de terminal of command prompt om alle packages en dependencies op te halen.
+5. Voer `npm start` uit om de applicatie op te starten. Dit is de enige commando die je nodig hebt
+6. 
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+De applicatie maakt gebruik van locatieservices zoals GPS. Wegens privacy redenen voor de gebruiker is dit optioneel (je kan dit dus ook uitlaten). Wanneer je de pagina pagina ***Add Travel Plan*** opent, zal je huidige browser hierom vragen. Wil je gebruik maken van de GPS functionaliteit, controleer op je lokale machine of GPS aanstaat. Controleer ook in de browser of deze functie aanstaat. Ga in de browser naar Settings --> Privacy & Security --> Site Settings --> Location.
 
-### `npm test`
+## Inloggen
+Er wordt gebruik gemaakt van de NOVI backend. Er zijn geen aparte gegevens beschikbaar. Om volledig gebruik te maken van de functionaliteit van de applicatie, graag registreren en inloggen via de applicatie.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## NPM Commando's
+De enige NPM commando die gebruikt wordt is `npm start`. `npm build` zou in theorie werken, dit is alleen nooit getest.
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Overige screenshots

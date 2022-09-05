@@ -28,7 +28,7 @@ export default function About() {
         </div>
       </header>
 
-      <main className="main">
+      <main className="main-about">
         <section className="section-intro">
           <div className="u-center-text">
             <Typography elevation={1} fontWeight={700} variant="h2">Learn more about this project</Typography>
