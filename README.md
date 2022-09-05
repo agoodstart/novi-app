@@ -25,7 +25,6 @@ Verder is het aanzetten van locatieservices op je laptop handig (niet noodzakeli
 3. Er is gebruik gemaakt van node versie 16.14.0 en 16.16.0. Probeer aan deze versies te houden. Controleer de huidige versie met `node -v`, en installeer waar nodig de juiste.
 4. Voer `npm install` uit in de terminal of command prompt om alle packages en dependencies op te halen.
 5. Voer `npm start` uit om de applicatie op te starten. Dit is de enige commando die je nodig hebt
-6. 
 
 De applicatie maakt gebruik van locatieservices zoals GPS. Wegens privacy redenen voor de gebruiker is dit optioneel (je kan dit dus ook uitlaten). Wanneer je de pagina pagina ***Add Travel Plan*** opent, zal je huidige browser hierom vragen. Wil je gebruik maken van de GPS functionaliteit, controleer op je lokale machine of GPS aanstaat. Controleer ook in de browser of deze functie aanstaat. Ga in de browser naar Settings --> Privacy & Security --> Site Settings --> Location.
 
@@ -36,3 +35,10 @@ Er wordt gebruik gemaakt van de NOVI backend. Er zijn geen aparte gegevens besch
 De enige NPM commando die gebruikt wordt is `npm start`. `npm build` zou in theorie werken, dit is alleen nooit getest.
 
 ## Overige screenshots
+![Home Page](https://raw.githubusercontent.com/agoodstart/novi-app/master/screenshots/homepage.png)
+
+![Login Modal](https://raw.githubusercontent.com/agoodstart/novi-app/master/screenshots/loginmodal.png)
+
+![Dashboard Home](https://raw.githubusercontent.com/agoodstart/novi-app/master/screenshots/dashboardhome.png)
+
+![Unauthorized Page](https://raw.githubusercontent.com/agoodstart/novi-app/master/screenshots/unauthorized.png)
