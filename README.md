@@ -35,10 +35,15 @@ Er wordt gebruik gemaakt van de NOVI backend. Er zijn geen aparte gegevens besch
 De enige NPM commando die gebruikt wordt is `npm start`. `npm build` zou in theorie werken, dit is alleen nooit getest.
 
 ## Overige screenshots
+
+### Home Page
 ![Home Page](https://raw.githubusercontent.com/agoodstart/novi-app/master/screenshots/homepage.png)
 
+### Login Modal
 ![Login Modal](https://raw.githubusercontent.com/agoodstart/novi-app/master/screenshots/loginmodal.png)
 
+### Dashboard Home
 ![Dashboard Home](https://raw.githubusercontent.com/agoodstart/novi-app/master/screenshots/dashboardhome.png)
 
+### Unauthorized
 ![Unauthorized Page](https://raw.githubusercontent.com/agoodstart/novi-app/master/screenshots/unauthorized.png)
