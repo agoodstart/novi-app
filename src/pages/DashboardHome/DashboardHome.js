@@ -52,8 +52,6 @@ export default function DashboardHome() {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
-      // timeZone: 'CET',
-      // timeZoneName: 'short'
     })
 
     return now;
@@ -136,7 +134,6 @@ export default function DashboardHome() {
 function DashboardWeather(props) {
 
   const weather = props.weather.read();
-  console.log(weather.current);
 
   return (
     <>

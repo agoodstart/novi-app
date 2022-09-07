@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { Image } from '../../components/Media/Media';
 import Button from '../../components/Button/Button';
@@ -12,7 +11,6 @@ import useTheme from '../../hooks/useTheme';
 
 export default function Contact() {
   const {colors } = useTheme();
-  const navigate = useNavigate();
 
   const inputStyle = {
     borderRadius: '30px',

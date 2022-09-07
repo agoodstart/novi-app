@@ -32,21 +32,6 @@ export default function TravelPlanDestinations(props) {
     props.setDestinations(props.destinations.filter(destination => destination.placeId !== destinationMarker.placeId))
   }
 
-  // useEffect(() => {
-  //   if(chosen.placeId === destination.placeId) {
-  //     locationRef.current.style.background = `${colors.quaternary.light}95`;
-  //   } else if(destination.distance >= parseInt(maxTravelDistance) || !maxTravelDistance) {
-  //     showWarning(`${destination.formattedAddress} is not within the specified travel distance range`)
-  //     locationRef.current.style.background = `${colors.secondary.light}95`;
-  //   } else {
-  //     locationRef.current.style.background = `${colors.grey.light}95`;
-  //   }
-  // }, [maxTravelDistance, destination, chosen]);
-
-  // const changeColor = () => {
-  //   updateChosen(destination);
-  // }
-
   return (
     <Box backgroundColor={colors.background.gray.alpha['15']} elevation={1} borderRadius={10} padding={15}>
       <Grid gridRows={5} rowGap={20}> 
