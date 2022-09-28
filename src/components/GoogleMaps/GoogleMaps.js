@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useMemo } from "react";
+import React, { useRef, useEffect } from "react";
 import { createCustomEqual } from "fast-equals";
 import useGoogleApi from "../../hooks/useGoogleApi";
 

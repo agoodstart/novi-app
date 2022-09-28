@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useCallback } from "react";
+import { createContext, useState } from "react";
 import { Wrapper } from "@googlemaps/react-wrapper";
 const { REACT_APP_GOOGLE_MAPS_API_KEY } = process.env;
 
@@ -27,10 +27,6 @@ export const GoogleApiProvider = ({ children }) => {
 
   const getMap = () => {
     return map;
-  }
-
-  const unsetMap = () => {
-    setMap(null);
   }
   
   const createAutocompleteCenter = (refEl, options = {}) => {
@@ -81,18 +77,6 @@ export const GoogleApiProvider = ({ children }) => {
         console.log('error')
       })
   }
-  
-  useEffect(() => {
-    if(geocoder) {
-      // console.log('geocoder is set!')
-    }
-  }, [geocoder])
-  
-  useEffect(() => {
-    if(map) {
-      // console.log('map is set!');
-    }
-  }, [map])
 
   const api = {
     map,
