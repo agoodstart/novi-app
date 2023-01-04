@@ -4,24 +4,32 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import useTheme from "../../hooks/useTheme";
 import useLocalStorage from "../../hooks/useLocalStorage";
+import { toast } from 'react-toastify';
 
 import { Grid, GridItem } from "../../components/Grid/Grid";
 import Typography from "../../components/Typography/Typography"
 import Box from "../../components/Box/Box";
 import Button from "../../components/Button/Button";
-import Destination from "./Destination/Destination";
 import Container from "../../components/Container/Container";
 
 export default function Destinations() {
-  console.log('hello')
   const navigate = useNavigate();
   const {colors} = useTheme();
-  const [destinations, _] = useLocalStorage("destinations", []);
+  const [destinations, setDestinations] = useLocalStorage("destinations", []);
 
   const viewDestination = (destination) => {
     navigate(`/destinations/destination/${destination.placeId}`, { 
       state: destination
      })
+  }
+
+  const removeDestination = (selectedDestination) => {
+    toast.warn(`Removed ${selectedDestination.formattedAddress} from the list`, {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 1000
+    });
+
+    setDestinations(destinations.filter(destination => destination.placeId !== selectedDestination.placeId))
   }
 
   return (
@@ -51,7 +59,7 @@ export default function Destinations() {
                       View Destination
                     </Button>
 
-                    <Button color={colors.background.secondary.main}>
+                    <Button color={colors.background.secondary.main} onClick={removeDestination.bind(null, destination)}>
                       Remove Destination
                     </Button>
                   </Box>

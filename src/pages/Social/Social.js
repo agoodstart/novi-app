@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useOutletContext } from "react-router-dom";
 import Container from '../../components/Container/Container';
+import { toast } from 'react-toastify';
 
 import Typography from '../../components/Typography/Typography';
 import { Grid, GridItem } from '../../components/Grid/Grid';
@@ -17,12 +18,20 @@ export default function Social() {
 
   const [users, setUsers] = useState([])
 
-  useEffect(() => {
-    auth.all(user.accessToken).then(data => {
+  const fetchAllUsers = useCallback(async () => {
+    try {
+      const data = await auth.all(user.accessToken);
       setUsers(data);
-      console.log(data);
-    })
-  }, [])
+    } catch(_err) {
+      toast.error("Unable to fetch users", {
+        position: toast.POSITION.TOP_CENTER
+      })
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAllUsers();
+  }, [fetchAllUsers])
 
   return (
     <Container element="section" id="social" backgroundColor={colors.background.black.alpha['15']}>

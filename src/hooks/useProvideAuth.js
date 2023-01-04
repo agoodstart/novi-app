@@ -57,19 +57,10 @@ export default function useProvideAuth() {
                 console.log('API connection successfull')
             }, () => {
                 console.log('cannot connect to api')
+            }).catch(err => {
+                console.error("Unable to connect to the API, following error: ", err);
             })
     }
-
-    const _decode = (data) => {
-        const decoded = jwt_decode(data.accessToken);
-        // console.log(data);
-        const user = {
-            username: decoded.sub,
-            accessToken: data.accessToken,
-        }
-        setUser(user)
-        return;
-    } 
 
     const signin = (credentials) => {
         return novi.post('/auth/signin', credentials)
@@ -92,6 +83,8 @@ export default function useProvideAuth() {
             },
             err => {
                 return Promise.reject(err);
+            }).catch(err => {
+                console.error("Unable to signin, following error: ", err);
             })
     }
 
@@ -102,9 +95,10 @@ export default function useProvideAuth() {
             }
         }).then(data => {
             return Promise.resolve(data);
-        },
-        err => {
+        }, () => {
             return Promise.reject('Unable to upload profile image')
+        }).catch(err => {
+            console.error("Cannot upload profile image, following error: ", err);
         })
     }
 
@@ -119,14 +113,12 @@ export default function useProvideAuth() {
         return novi.post('/auth/signup', json, {
             headers: {
               'Content-Type': 'application/json'
-            }})
-            .then(data => {
-                console.log(data);
+            }}).then(data => {
                 return Promise.resolve(data);
-            },
-            err => {
-                console.log(err);
+            }, err => {
                 return Promise.reject(err);
+            }).catch(err => {
+                console.log("Unable to sign up, following error: ", err);
             })
     }
 
@@ -140,6 +132,8 @@ export default function useProvideAuth() {
         },
         err => {
             return Promise.reject(`Unable to receive profile information, following error: \n ${err}`);
+        }).catch(err => {
+            console.error("Cannot receive profile information, following error: \n", err);
         })
     }
 
@@ -150,9 +144,10 @@ export default function useProvideAuth() {
             }
         }).then(data => {
             return data;
-        },
-        err => {
+        }, err => {
             return Promise.reject(`Unable to receive all users, following error: \n ${err}`)
+        }).catch(err => {
+            console.error("Unable to fetch all users, following error: \n", err);
         })
     }
 
@@ -161,11 +156,13 @@ export default function useProvideAuth() {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
-        }).then(data => {
+        }).then(() => {
             return Promise.resolve();
         },
         err => {
             return Promise.reject(`Unable to update profile information, following error: \n ${err}`)
+        }).catch(err => {
+            console.error("Unable to update profile information, following error: \n", err);
         })
     }
 

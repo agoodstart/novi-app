@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import axios from 'axios';
 import { useOutletContext } from "react-router-dom";
 import { toast } from 'react-toastify';
 
@@ -22,7 +21,6 @@ export default function Profile() {
   const emailRef = useRef();
   const infoRef = useRef();
   const imageInputRef = useRef();
-  const imageRef = useRef();
 
   const user = useOutletContext();
   const { auth, modalRef } = useAuth(); 
@@ -38,7 +36,6 @@ export default function Profile() {
   const reader = new FileReader();
 
   reader.onloadend = () => {
-    console.log(reader.result)
     const base64data = reader.result;
     setImageSource(base64data);                
   }

@@ -74,7 +74,9 @@ export const GoogleApiProvider = ({ children }) => {
         }
       },
       err => {
-        console.log('error')
+        console.log(err)
+      }).catch(err => {
+        console.error("Unable to fetch data, following error: ", err)
       })
   }
 

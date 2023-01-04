@@ -1,7 +1,7 @@
-import React, { Suspense, useMemo, useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { Suspense, useMemo, useEffect, useState, useCallback } from 'react';
 import { useOutletContext } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 import Container from '../../components/Container/Container';
 import Typography from '../../components/Typography/Typography';
@@ -23,7 +23,7 @@ export default function DashboardHome() {
   const { colors } = useTheme();
   const user = useOutletContext();
 
-  const [destinations, _] = useLocalStorage("destinations", []);
+  const [destinations,] = useLocalStorage("destinations", []);
 
   const [profileInformation, setProfileInformation] = useState({});
 
@@ -31,18 +31,21 @@ export default function DashboardHome() {
     return suspender.fetchOpenWeatherAPI({ lat: 52.132633, lng: 5.2912659 });
   }, []);
 
-  useEffect(() => {
-    auth.profile(user?.accessToken).then(data => {
+  const fetchProfileInformation = useCallback(async () => {
+    try {
+      const data = await auth.profile(user?.accessToken);
       setProfileInformation(data);
-    },
-    err => {
-      console.log(err)
-    })
-  }, []);
+    } catch(err) {
+      toast.error("Unable to fetch profile information", {
+        position: toast.POSITION.TOP_CENTER
+      })
+      navigate('/')
+    }
+  }, [])
 
   useEffect(() => {
-    console.log(profileInformation);
-  })
+    fetchProfileInformation();
+  }, [fetchProfileInformation]);
 
   const getCurrentDateTime = () => {
     const today = new Date();

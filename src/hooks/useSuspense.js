@@ -21,11 +21,12 @@ const useSuspense = () => {
       (res) => {
         status = 'success';
         response = res;
-      },
-      (err) => {
+      }, () => {
         status = 'error';
         response = fallback;
-      })
+    }).catch(err => {
+      console.error("Unable to receive coordinates using geolocation, following error: \n", err);
+    })
   
     const read = () => {
       switch (status) {
@@ -64,6 +65,8 @@ const useSuspense = () => {
         status = 'error';
         console.log('error');
         response = err;
+      }).catch(err => {
+        console.error("Unable to fetch image using the pexels API, followin error: \n", err);
       })
   
     const read = () => {
@@ -106,7 +109,9 @@ const useSuspense = () => {
         status = 'error';
         console.log('error');
         response = err;
-      })
+    }).catch(err => {
+      console.error("Unable to fetch forecast using the OpenWeather API, following error: \n", err);
+    });
   
     const read = () => {
       switch (status) {
