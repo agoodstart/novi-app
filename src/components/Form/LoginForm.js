@@ -35,10 +35,10 @@ export default function LoginForm() {
     }
 
     try {
-      const data = await auth.signin(credentials);
-      console.log(data);
+      await auth.signin(credentials);
       toast.success('Logging in...', {
-        position: toast.POSITION.TOP_CENTER
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000
       });
 
       modalRef.current.closeModal();

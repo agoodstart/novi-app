@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 import GoogleMaps from '../../components/GoogleMaps/GoogleMaps';
 import { DestinationMarker, OriginMarker } from '../../components/GoogleMaps/Marker';
@@ -19,17 +20,19 @@ export default function TravelPlanMap(props) {
 
   const onMapsLoaded = async () => {
     const latlng = api.map.getCenter().toJSON();
+    
+    try {
+      let locationInfo = await api.getGeocodedAddress(latlng);
 
-    console.log('travelplan Map loaded');
-    let locationInfo = await api.getGeocodedAddress(latlng);
-    console.log(locationInfo);
-
-    props.setOrigin({
-      latlng,
-      ...locationInfo,
-    });
-
-    props.setPlaceOrigin(locationInfo.formattedAddress);
+      props.setOrigin({
+        latlng,
+        ...locationInfo,
+      });
+  
+      props.setPlaceOrigin(locationInfo.formattedAddress);
+    } catch(err) {
+      props.showWarning("Unable to fetch location")
+    }
   }
 
   const calculateMarkerDistance = (latlng) => {
@@ -44,74 +47,85 @@ export default function TravelPlanMap(props) {
     return d.toFixed(2);
   }
 
-  const createNewDestination = (latlng, locationInfo) => {
-    axios.get('https://api.openweathermap.org/data/3.0/onecall', {
-      params: {
-        lat: latlng.lat,
-        lon: latlng.lng,
-        units: 'metric',
-        appid: REACT_APP_OPENWEATHER_API_KEY,
-      }
-    }).then(result => {
+  const createNewDestination = async (latlng, locationInfo) => {
+
+    try {
+      const weatherInfo = await axios.get('https://api.openweathermap.org/data/3.0/onecall', {
+        params: {
+          lat: latlng.lat,
+          lon: latlng.lng,
+          units: 'metric',
+          appid: REACT_APP_OPENWEATHER_API_KEY,
+        }
+      });
+  
       const markerDistance = calculateMarkerDistance(latlng);
+
       props.setDestinations([...props.destinations, {
         latlng,
         ...locationInfo,
         distance: markerDistance,
-        temperature: result.data.current.temp,
+        temperature: weatherInfo.data.current.temp,
       }]);
-    }).catch(e => {
-      console.log('error')
-    })
+    } catch(err) {
+      props.showWarning("Unable to create new destination");
+    }
   }
 
-  const onClick = (e) => {
+  const onClick = async (e) => {
+    toast.info('Creating destination...', {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 1000
+    });
+
     const latlng = {
       lat: e.latLng.lat(),
       lng: e.latLng.lng(),
     };
 
-    api.getGeocodedAddress(latlng)
-    .then(locationInfo => {
+    try {
+      const locationInfo = await api.getGeocodedAddress(latlng);
+
       if (props.destinations.some(destination => destination.placeId === locationInfo.placeId)) {
         props.showWarning(`${locationInfo.formattedAddress} is already present in the list`)
       } else {
         createNewDestination(latlng, locationInfo);
       }
-    }, err => {
-      console.log(err)
-    })
+
+    } catch(err) {
+      props.showWarning("Unable to fetch location")
+    }
   }
 
   const onZoomChange = () => {
     setMapZoom(api.map.getZoom());
   }
 
-  const onIdle = () => {
+  const onIdle = async () => {
     setMapCenter(api.map.getCenter().toJSON());
 
-    api.getGeocodedAddress(api.map.getCenter().toJSON())
-    .then(locationInfo => {
+    try {
+      const locationInfo = await api.getGeocodedAddress(api.map.getCenter().toJSON());
       props.setPlaceCenter(locationInfo.formattedAddress);
-    }, err => {
-      console.log(err)
-    })
+    } catch(err) {
+      props.showWarning(err);
+    }
   }
 
-  function onOriginDragend(e) {
+  const onOriginDragend = async (e) => {
     const latlng = { lat: e.latLng.lat(), lng: e.latLng.lng() };
 
-    api.getGeocodedAddress(latlng)
-    .then(locationInfo => {
+    try {
+      const locationInfo = await api.getGeocodedAddress(latlng);
       props.setOrigin({
         latlng,
         ...locationInfo
       });
 
       props.setPlaceOrigin(locationInfo.formattedAddress)
-    }, err => {
-      console.log(err)
-    })
+    } catch(err) {
+      props.showWarning(err);
+    }
   }
 
   return (

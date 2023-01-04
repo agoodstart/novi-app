@@ -83,13 +83,12 @@ export default function useProvideAuth() {
                 }
 
                 const decoded = jwt_decode(data.accessToken);
-                // console.log(data);
                 const user = {
                     username: decoded.sub,
                     accessToken: data.accessToken,
                 }
                 setUser(user);
-                return Promise.resolve(data);
+                return Promise.resolve();
             },
             err => {
                 return Promise.reject(err);
@@ -163,7 +162,7 @@ export default function useProvideAuth() {
                 'Authorization': `Bearer ${accessToken}`
             }
         }).then(data => {
-            return data
+            return Promise.resolve();
         },
         err => {
             return Promise.reject(`Unable to update profile information, following error: \n ${err}`)

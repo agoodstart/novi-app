@@ -17,12 +17,11 @@ import useAuth from '../../hooks/useAuth';
 import useTheme from '../../hooks/useTheme';
 import Button from '../../components/Button/Button';
 
-// import * as fs from 'fs';
-
 export default function Profile() {
   const usernameRef = useRef();
   const emailRef = useRef();
   const infoRef = useRef();
+  const imageInputRef = useRef();
   const imageRef = useRef();
 
   const user = useOutletContext();
@@ -30,16 +29,16 @@ export default function Profile() {
   const { colors } = useTheme();
 
   const [profileInformation, setProfileInformation] = useState({});
+  const [imageSource, setImageSource] = useState("");
   const [emailFormValid, setEmailFormValid] = useState(false);
   const [infoFormValid, setInfoFormValid] = useState(false);
   const [passwordFormValid, setPasswordFormValid] = useState(false);
-  const [imageFormValid, setImageFormValid] = useState(false);
 
-  const [imageSource, setImageSource] = useState("")
 
   const reader = new FileReader();
 
   reader.onloadend = () => {
+    console.log(reader.result)
     const base64data = reader.result;
     setImageSource(base64data);                
   }
@@ -56,41 +55,45 @@ export default function Profile() {
     modalRef.current.openModal();
   }
 
-  const fetchImage = useCallback(async () => {
-    const data = await axios.get('https://i.picsum.photos/id/1025/4951/3301.jpg?hmac=_aGh5AtoOChip_iaMo8ZvvytfEojcgqbCH7dzaz-H8Y', {
-      responseType: 'blob'
-    });
-
-    reader.readAsDataURL(data);
+  const fetchProfileInfo = useCallback(async () => {
+    try {
+      const data = await auth.profile(user.accessToken);
+      setProfileInformation(data);
+      setImageSource(data.profilePicture)
+    } catch(err) {
+      console.error(err);
+    }
   }, [])
 
-  const updateProfile = (data) => {
-    const field = Object.keys(data)[0];
-    console.log(data);
-    auth.update(user.accessToken, data).then(data => {
+  const updateProfile = async (input) => {
+    const field = Object.keys(input)[0];
+    
+    try {
+      await auth.update(user.accessToken, input);
       toast.success(`${field} successfully updated`, {
         position: toast.POSITION.TOP_CENTER
       });
-      console.log(data);
-    }, err => {
+    } catch(err) {
       toast.error(`Unable to update data for ${field}`, {
         position: toast.POSITION.TOP_CENTER
       })
-    })
+    }
   }
   
-  const updateProfilePicture = (data) => {
-    auth.picture(user.accessToken, {
-      base64Image: imageSource
-    }).then(data => {
+  const updateProfilePicture = async () => {
+    try {
+      await auth.picture(user.accessToken, {
+        base64Image: imageSource
+      });
+
       toast.success(`Profile image successfully updated`, {
         position: toast.POSITION.TOP_CENTER
       });
-    }, err => {
+    } catch(err) {
       toast.error(`Unable to update Profile picture`, {
         position: toast.POSITION.TOP_CENTER
       })
-    })
+    }
   }
 
   const checkInput = (e) => {
@@ -99,26 +102,16 @@ export default function Profile() {
   }
 
   useEffect(() => {
-    fetchImage()
-  }, fetchImage)
+    fetchProfileInfo()
+  }, [fetchProfileInfo])
 
   useEffect(() => {
     if(Object.keys(profileInformation).length !== 0) {
       usernameRef.current.value = profileInformation.username;
       emailRef.current.value = profileInformation.email;
       infoRef.current.value = profileInformation?.info ?? "";
-      // imageRef.current.value = imageSource;
     }
-  }, [profileInformation, imageSource])
-
-  useEffect(() => {
-    auth.profile(user.accessToken).then(data => {
-      setProfileInformation(data);
-    },
-    err => {
-      console.log(err)
-    })
-  }, []);
+  }, [profileInformation])
 
   return (
     <Container element="section" id="profile" backgroundColor={colors.background.black.alpha['15']}>
@@ -185,10 +178,10 @@ export default function Profile() {
 
         <GridItem rowStart={2} columnStart={4} rowEnd={6} columnEnd={8}>
           <Box flexDirection="column">
-            <Image width="auto" source={profileInformation?.profilePicture} />
+            <Image width="auto" source={imageSource} />
             
             <Form onSubmit={updateProfilePicture} customStyles={{ padding: '0' }}>
-              <ImageInput onChange={checkInput} iRef={imageRef} />
+              <ImageInput onChange={checkInput} iRef={imageInputRef} />
               <Button size="large" color={colors.background.secondary.alpha['80']} elevation={3} customStyles={{marginTop: '1rem', width: '100%'}}>Change Profile image</Button>
             </Form>
           </Box>
