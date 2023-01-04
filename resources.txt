@@ -1,3 +1,6 @@
+Git repo:
+https://github.com/agoodstart/novi-app
+
 https://github.com/adrianhajdin/project_travel_advisor
 https://github.com/shukerullah/react-geocode/blob/master/src/index.js
 https://docs.react-async.com/getting-started/usage

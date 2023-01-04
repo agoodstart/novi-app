@@ -28,23 +28,30 @@ export default function LoginForm() {
     }
   }
 
-  const loginUser = (data) => {
+  const loginUser = async (data) => {
     const credentials = {
       username: data.loginusername,
       password: data.loginpassword,
     }
 
-    auth.signin(credentials)
-      .then(() => {
-        modalRef.current.closeModal();
+    try {
+      const data = await auth.signin(credentials);
+      console.log(data);
+      toast.success('Logging in...', {
+        position: toast.POSITION.TOP_CENTER
+      });
+
+      modalRef.current.closeModal();
+      
+      setTimeout(() => {
         navigate('/dashboard')
-      },
-      err => {
-        toast.error('Invalid credentials', {
-          position: toast.POSITION.TOP_CENTER
-      })
-        console.log(err);
-    });
+      }, 1000);
+    } catch(err) {
+      toast.error('Invalid credentials', {
+        position: toast.POSITION.TOP_CENTER
+      });
+      console.log(err);
+    }
   }
 
   return (

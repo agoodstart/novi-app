@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { useOutletContext } from "react-router-dom";
 import { toast } from 'react-toastify';
@@ -56,6 +56,14 @@ export default function Profile() {
     modalRef.current.openModal();
   }
 
+  const fetchImage = useCallback(async () => {
+    const data = await axios.get('https://i.picsum.photos/id/1025/4951/3301.jpg?hmac=_aGh5AtoOChip_iaMo8ZvvytfEojcgqbCH7dzaz-H8Y', {
+      responseType: 'blob'
+    });
+
+    reader.readAsDataURL(data);
+  }, [])
+
   const updateProfile = (data) => {
     const field = Object.keys(data)[0];
     console.log(data);
@@ -91,11 +99,8 @@ export default function Profile() {
   }
 
   useEffect(() => {
-    axios.get('https://i.picsum.photos/id/1025/4951/3301.jpg?hmac=_aGh5AtoOChip_iaMo8ZvvytfEojcgqbCH7dzaz-H8Y', {
-      responseType: 'blob'
-    })
-    .then(response => reader.readAsDataURL(response.data))
-  }, [])
+    fetchImage()
+  }, fetchImage)
 
   useEffect(() => {
     if(Object.keys(profileInformation).length !== 0) {

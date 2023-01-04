@@ -1,5 +1,6 @@
 # Travel Applicatie
 Een frontend applicatie, geschreven in Reactjs, in opdracht van NOVI Hogeschool. Het thema van deze applicatie is reizen.
+Link naar de git repo: https://github.com/agoodstart/novi-app
 
 ![Important page](https://raw.githubusercontent.com/agoodstart/novi-app/master/screenshots/important.png)
 ## Inleiding

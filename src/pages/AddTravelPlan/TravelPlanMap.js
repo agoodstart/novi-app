@@ -17,24 +17,19 @@ export default function TravelPlanMap(props) {
   const [mapZoom, setMapZoom] = useState(8);
   const [mapCenter, setMapCenter] = useState(location);
 
-  const onMapsLoaded = () => {
+  const onMapsLoaded = async () => {
     const latlng = api.map.getCenter().toJSON();
 
     console.log('travelplan Map loaded');
+    let locationInfo = await api.getGeocodedAddress(latlng);
+    console.log(locationInfo);
 
-    api.getGeocodedAddress(latlng)
-      .then(locationInfo => {
-        // console.log(result);
-        props.setOrigin({
-          latlng,
-          ...locationInfo,
-        });
-        
+    props.setOrigin({
+      latlng,
+      ...locationInfo,
+    });
 
-        props.setPlaceOrigin(locationInfo.formattedAddress)
-      }, err => {
-        console.log(err)
-      })
+    props.setPlaceOrigin(locationInfo.formattedAddress);
   }
 
   const calculateMarkerDistance = (latlng) => {

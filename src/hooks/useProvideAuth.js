@@ -88,8 +88,8 @@ export default function useProvideAuth() {
                     username: decoded.sub,
                     accessToken: data.accessToken,
                 }
-                setUser(user)
-                return;
+                setUser(user);
+                return Promise.resolve(data);
             },
             err => {
                 return Promise.reject(err);
@@ -102,7 +102,7 @@ export default function useProvideAuth() {
                 'Authorization': `Bearer ${accessToken}`
             }
         }).then(data => {
-            return data
+            return Promise.resolve(data);
         },
         err => {
             return Promise.reject('Unable to upload profile image')
@@ -116,13 +116,14 @@ export default function useProvideAuth() {
 
     const signup = (credentials) => {
         const json = JSON.stringify(credentials);
+
         return novi.post('/auth/signup', json, {
             headers: {
               'Content-Type': 'application/json'
             }})
             .then(data => {
                 console.log(data);
-                return data;
+                return Promise.resolve(data);
             },
             err => {
                 console.log(err);
