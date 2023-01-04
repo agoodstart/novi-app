@@ -27,6 +27,20 @@ Verder is het aanzetten van locatieservices op je laptop handig (niet noodzakeli
 4. Voer `npm install` uit in de terminal of command prompt om alle packages en dependencies op te halen.
 5. Voer `npm start` uit om de applicatie op te starten. Dit is de enige commando die je nodig hebt
 
+## Installatie instructies voor first-time-users
+Is dit de eerste keer werken met Git of Nodejs, of heb je wat meer uitleg nodig, dan volgen hier uitgebreidere instructies. Staan er stappen tussen die je al hebt uitgevoerd, dan kan je die stappen overslaan.
+1. Ga naar de [NodeJS website](https://nodejs.org/en/ "Named link title") en download de LTS versie (dus niet de Current versie). Doorloop de installatie instructies van het programma.
+2. Open een command prompt of terminal en type in `node -v`. Als je de installatie instructies goed hebt doorlopen, zal er een node versie te zien zijn in de output.
+3. De meeste Operating Systems beschikken al over Git. Mocht dat niet zo zijn, ga naar de [Git website](https://git-scm.com/ "Named link title") en download de laatste versie. Volg de installatie instructies van het programma.
+4. Open opnieuw een command prompt of terminal (dus niet dezelfde van stap 2) en type `git -v`. Als het goed is zal de output een Git-versie terugsturen.
+5. Nu je beide programma's hebt geinstalleerd, kan je deze repository clonen. Klik rechtsboven in de repository op de groene knop "Code". Je ziet verschillende opties om deze repository op je lokale PC te zetten. Om het makkelijk te maken, gebruik de HTTPS-optie en kopieer het command. 
+    - Je kan de repository ook downloaden als ZIP-bestand. Dit raad ik echter af, omdat er dan geen lokale branch is die gelinkt staat met de remote branch. In dat geval kan je geen aanpassingen ophalen die zijn doorgevoerd in deze repository.
+6. Plak het command in de terminal en voer het uit. Git zal automatisch alle bestanden ophalen.
+7. Open lokaal de repository in een gewenste IDE. Je zal dezelfde mappenstructuur zien als op github, maar er missen nog 2 onderdelen: een node_modules map, en een .env bestand.
+8. Zorg dat je in de terminal in de root van deze repository zit. Voer vervolgens het volgende commando uit: `npm install`. Dit zorgt ervoor dat alle benodigde packages worden opgehaald om dit project te ondersteunen. De packages kan je terugzien in package.json, onder "dependencies". Wanneer dit goed verloopt, verschijnt er een node_modules map. Pas hier niets in aan, zorg er alleen voor dat deze map bestaat.
+9. Maak handmatig in de root van dit project een bestand .env aan (let op de punt aan het begin). Hier worden alle globale variabelen gedefinieerd wat heel de Reactjs applicatie kan gebruiken. In de bijlage LeestDitEerst.pdf staat onderaan de code met de API keys. Kopieer en plak dit in het .env bestand.
+10. Als laatste stap hoef je alleen dit command uit te voeren in de terminal: `npm start` (vanuit de root folder van dit project). Hiermee start je de applicatie op zonder fouten (hoop ik).
+
 De applicatie maakt gebruik van locatieservices zoals GPS. Wegens privacy redenen voor de gebruiker is dit optioneel (je kan dit dus ook uitlaten). Wanneer je de pagina pagina ***Add Travel Plan*** opent, zal je huidige browser hierom vragen. Wil je gebruik maken van de GPS functionaliteit, controleer op je lokale machine of GPS aanstaat. Controleer ook in de browser of deze functie aanstaat. Ga in de browser naar Settings --> Privacy & Security --> Site Settings --> Location.
 
 ## Inloggen
