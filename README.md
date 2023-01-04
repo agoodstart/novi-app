@@ -40,9 +40,9 @@ Is dit de eerste keer werken met Git of Nodejs, of heb je wat meer uitleg nodig,
 8. Zorg dat je in de terminal in de root van deze repository zit. Voer vervolgens het volgende commando uit: `npm install`. Dit zorgt ervoor dat alle benodigde packages worden opgehaald om dit project te ondersteunen. De packages kan je terugzien in package.json, onder "dependencies". Wanneer dit goed verloopt, verschijnt er een node_modules map. Pas hier niets in aan, zorg er alleen voor dat deze map bestaat.
 9. Maak handmatig in de root van dit project een bestand .env aan (let op de punt aan het begin). Hier worden alle globale variabelen gedefinieerd wat heel de Reactjs applicatie kan gebruiken. In de bijlage LeestDitEerst.pdf staat onderaan de code met de API keys. Kopieer en plak dit in het .env bestand.
 10. Als laatste stap hoef je alleen dit command uit te voeren in de terminal: `npm start` (vanuit de root folder van dit project). Hiermee start je de applicatie op zonder fouten (hoop ik).
-
+- - - -
 De applicatie maakt gebruik van locatieservices zoals GPS. Wegens privacy redenen voor de gebruiker is dit optioneel (je kan dit dus ook uitlaten). Wanneer je de pagina pagina ***Add Travel Plan*** opent, zal je huidige browser hierom vragen. Wil je gebruik maken van de GPS functionaliteit, controleer op je lokale machine of GPS aanstaat. Controleer ook in de browser of deze functie aanstaat. Ga in de browser naar Settings --> Privacy & Security --> Site Settings --> Location.
-
+- - - -
 ## Inloggen
 Er wordt gebruik gemaakt van de NOVI backend. Er zijn geen aparte gegevens beschikbaar. Om volledig gebruik te maken van de functionaliteit van de applicatie, graag registreren en inloggen via de applicatie.
 
