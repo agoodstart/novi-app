@@ -19,7 +19,6 @@ novi.interceptors.response.use(
 
         switch (status) {
             case 401: {
-                console.log(err.response);
                 return Promise.reject('Authentication Error');
             }
 
@@ -85,6 +84,7 @@ export default function useProvideAuth() {
                 return Promise.reject(err);
             }).catch(err => {
                 console.error("Unable to signin, following error: ", err);
+                return Promise.reject();
             })
     }
 
@@ -133,7 +133,9 @@ export default function useProvideAuth() {
         err => {
             return Promise.reject(`Unable to receive profile information, following error: \n ${err}`);
         }).catch(err => {
-            console.error("Cannot receive profile information, following error: \n", err);
+            console.error(err);
+            // signout();
+            // throw new Error();
         })
     }
 
@@ -147,7 +149,7 @@ export default function useProvideAuth() {
         }, err => {
             return Promise.reject(`Unable to receive all users, following error: \n ${err}`)
         }).catch(err => {
-            console.error("Unable to fetch all users, following error: \n", err);
+            console.error(err);
         })
     }
 
@@ -162,7 +164,7 @@ export default function useProvideAuth() {
         err => {
             return Promise.reject(`Unable to update profile information, following error: \n ${err}`)
         }).catch(err => {
-            console.error("Unable to update profile information, following error: \n", err);
+            console.error(err);
         })
     }
 

@@ -36,10 +36,10 @@ export default function DashboardHome() {
       const data = await auth.profile(user?.accessToken);
       setProfileInformation(data);
     } catch(err) {
-      toast.error("Unable to fetch profile information", {
-        position: toast.POSITION.TOP_CENTER
+      toast.error("Unable to fetch profile information, logging out...", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 1000
       })
-      navigate('/')
     }
   }, [])
 
