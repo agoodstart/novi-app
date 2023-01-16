@@ -6,7 +6,9 @@ import { faEarthEurope, faGauge, faUser, faUserGroup, faRoute, faRightFromBracke
 import useTheme from "../../hooks/useTheme";
 import useAuth from "../../hooks/useAuth";
 
-export default function DashboardSidebar({styles}) {
+import styles from './Sidebar.module.scss';
+
+export default function Sidebar() {
   const { colors } = useTheme();
   const { auth } = useAuth();
 

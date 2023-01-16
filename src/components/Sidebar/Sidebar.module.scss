@@ -1,22 +1,4 @@
-.App {
-  position: relative;
-}
-
 .layout {
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-columns: 280px auto;
-  grid-template-rows: 60px auto;
-  grid-template-areas: 
-    "sidebar main"
-    "sidebar main";
-  background: #fcfcfc;
-
-  &__main {
-    grid-area: main;
-  }
-
   &__sidebar {
     grid-area: sidebar;
     background: #48BEFF;
@@ -24,13 +6,6 @@
     display: flex;
     flex-flow: column wrap;
     justify-content: space-evenly;
-  }
-
-  &__top {
-    z-index: 99999;
-    grid-area: top;
-    background: linear-gradient(to right, #67d5ff, #68c4fa, #72b1f2);
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   }
 }
 
