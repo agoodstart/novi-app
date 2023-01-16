@@ -54,15 +54,20 @@ export default function LoginForm() {
     }
   }
 
+  const inputStyle = {
+    borderRadius: '30px',
+    border: '1px solid rgba(0, 0, 0, .20)',
+  }
+
   return (
     <Form onSubmit={loginUser} onValidate={changeFormValidation}>
 
       <FormControl validations={[ Validate.isRequired(), Validate.minLength(5) ]}>
-        <TextInput placeholder="Username" name="loginusername" />
+        <TextInput placeholder="Username" name="loginusername" customStyles={inputStyle} />
       </FormControl>
 
       <FormControl validations={[ Validate.isRequired(), Validate.minLength(6) ]}>
-        <PasswordInput placeholder="Password" name="loginpassword" />
+        <PasswordInput placeholder="Password" name="loginpassword" customStyles={inputStyle} />
       </FormControl>
 
       <Button color={colors.background.primary.dark}

@@ -2,6 +2,7 @@ import { useEffect, useRef, forwardRef, useImperativeHandle, useState } from "re
 import { CSSTransition } from "react-transition-group";
 import ReactPortal from "../Portal/ReactPortal";
 import styles from './Modal.module.scss';
+import Button from "../Button/Button";
 
 const Modal = (props, ref) => {
 	// console.log('modal component rendered');
@@ -41,7 +42,7 @@ const Modal = (props, ref) => {
 				nodeRef={nodeRef}
 			>
 				<div className={styles.modal} ref={nodeRef}>
-					<button onClick={() => setIsOpen(false)} className="close-btn">
+					<button onClick={() => setIsOpen(false)}>
 						Close
 					</button>
 					<div className={styles.modal__content}>{props.children}</div>

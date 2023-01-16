@@ -48,23 +48,28 @@ export default function RegisterForm() {
     }
   }
 
+  const inputStyle = {
+    borderRadius: '30px',
+    border: '1px solid rgba(0, 0, 0, .20)',
+  }
+
   return (
     <Form onSubmit={registerUser} onValidate={changeFormValidation}>
 
       <FormControl validations={[ Validate.isRequired(), Validate.minLength(5) ]}>
-        <TextInput placeholder="Username" name="registerusername" />
+        <TextInput placeholder="Username" name="registerusername" customStyles={inputStyle} />
       </FormControl>
 
       <FormControl validations={[ Validate.isRequired(), Validate.isEmail()]}>
-        <EmailInput placeholder="Email" name="registeremail" />
+        <EmailInput placeholder="Email" name="registeremail" customStyles={inputStyle} />
       </FormControl>
       
       <FormControl validations={[ Validate.isRequired(), Validate.minLength(6) ]}>
-        <PasswordInput placeholder="Password" name="registerpassword" />
+        <PasswordInput placeholder="Password" name="registerpassword" customStyles={inputStyle} />
       </FormControl>
 
       <FormControl validations={[ Validate.isRequired(), Validate.passwordMatch("registerpassword") ]}>
-        <PasswordInput placeholder="Confirm Password" name="confirmpassword" />
+        <PasswordInput placeholder="Confirm Password" name="confirmpassword" customStyles={inputStyle} />
       </FormControl>
 
       <Button color={colors.background.primary.dark}
