@@ -8,7 +8,7 @@ export default function useRequireAuth() {
 
     useEffect(() => {
         if(!auth.user) {
-            console.log('test');
+            console.log('test')
             navigate('/unauthorized')
         }
     }, [auth, navigate])

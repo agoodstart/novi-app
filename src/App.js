@@ -1,5 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 
+import RequireAuth from './routes/RequireAuth';
+
 import Home from './pages/Home/Home';
 import About from './pages/About/About';
 import Contact from './pages/Contact/Contact';
@@ -31,17 +33,19 @@ export default function App() {
       </Route>
 
       {/* User authentication beyond this point */}
-      <Route path="/" element={<DashboardLayout />} >
-        <Route path="dashboard" element={<DashboardHome />} />
-        <Route path="destinations" element={<Destinations/>} />
+      <Route path="/" element={<RequireAuth />} >
+        <Route path="/" element={<DashboardLayout />} >
+          <Route path="dashboard" element={<DashboardHome />} />
+          <Route path="destinations" element={<Destinations/>} />
 
-        <Route path="destinations/destination/" element={<DestinationRouting />}>
-          <Route index={true} path=":id" element={<Destination />} />
+          <Route path="destinations/destination/" element={<DestinationRouting />}>
+            <Route index={true} path=":id" element={<Destination />} />
+          </Route>
+          
+          <Route path="addtravelplan" element={<AddTravelPlan />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="social" element={<Social />} />
         </Route>
-        
-        <Route path="addtravelplan" element={<AddTravelPlan />} />
-        <Route path="profile" element={<Profile />} />
-        <Route path="social" element={<Social />} />
       </Route>
     </Routes>
   );

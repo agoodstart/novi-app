@@ -23,6 +23,8 @@ export default function DashboardHome() {
   const { colors } = useTheme();
   const user = useOutletContext();
 
+  console.log(user);
+
   const [destinations,] = useLocalStorage("destinations", []);
 
   const [profileInformation, setProfileInformation] = useState({});
@@ -32,6 +34,7 @@ export default function DashboardHome() {
   }, []);
 
   const fetchProfileInformation = useCallback(async () => {
+    console.log('gets called after mount, then runs console.log(user) again')
     try {
       const data = await auth.profile(user?.accessToken);
       setProfileInformation(data);

@@ -133,9 +133,8 @@ export default function useProvideAuth() {
         err => {
             return Promise.reject(`Unable to receive profile information, following error: \n ${err}`);
         }).catch(err => {
+            setUser(null);
             console.error(err);
-            // signout();
-            // throw new Error();
         })
     }
 
