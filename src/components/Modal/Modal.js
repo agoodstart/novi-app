@@ -2,9 +2,12 @@ import { useEffect, useRef, forwardRef, useImperativeHandle, useState } from "re
 import { CSSTransition } from "react-transition-group";
 import ReactPortal from "../Portal/ReactPortal";
 import styles from './Modal.module.scss';
+
+import useTheme from "../../hooks/useTheme";
 import Button from "../Button/Button";
 
 const Modal = (props, ref) => {
+	const { colors } = useTheme();
 	// console.log('modal component rendered');
 
 	const nodeRef = useRef(null);
@@ -42,9 +45,14 @@ const Modal = (props, ref) => {
 				nodeRef={nodeRef}
 			>
 				<div className={styles.modal} ref={nodeRef}>
-					<button onClick={() => setIsOpen(false)}>
-						Close
-					</button>
+				<Button color={colors.background.secondary.light}
+					onClick={() => setIsOpen(false)}
+					size="medium"
+					elevation={2}
+					customStyles={{
+						marginBottom: '1rem'
+					}}
+					>Close</Button>
 					<div className={styles.modal__content}>{props.children}</div>
 				</div>
 			</CSSTransition>
