@@ -27,7 +27,7 @@ export default function Unauthorized() {
           color={colors.background.primary.main}
           size="large"
           elevation="2"
-          onClick={() => navigate(-2)}
+          onClick={() => navigate('/')}
           customStyles={{
             marginTop: '1rem',
             width: '100%'

@@ -47,10 +47,9 @@ export default function LoginForm() {
         navigate('/dashboard')
       }, 1000);
     } catch(err) {
-      toast.error('Invalid credentials', {
+      toast.error(err, {
         position: toast.POSITION.TOP_CENTER
       });
-      console.log(err);
     }
   }
 

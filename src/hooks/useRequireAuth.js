@@ -7,14 +7,13 @@ export default function useRequireAuth() {
     const {auth} = useAuth();
     const navigate = useNavigate();
     const [profileInformation, setProfileInformation] = useState(null);
-
+    
     const fetchProfileInformation = useCallback(async () => {
-        console.log('gets called after mount, then runs console.log(user) again')
-        try {
+      try {
           const data = await auth.profile(auth.user?.accessToken);
           setProfileInformation(data);
         } catch(err) {
-          toast.error("Unable to fetch profile information, logging out...", {
+          toast.error(err, {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 1000
           })
@@ -25,9 +24,13 @@ export default function useRequireAuth() {
         if(!auth.user) {
             navigate('/unauthorized')
         }
+    }, [auth, navigate]);
 
+    useEffect(() => {
+      if(!profileInformation) {
         fetchProfileInformation();
-    }, [auth, navigate, fetchProfileInformation])
+      }
+    }, [fetchProfileInformation]);
 
     return profileInformation;
 }

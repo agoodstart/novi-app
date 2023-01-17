@@ -1,4 +1,4 @@
-import React, { Suspense, useMemo, useEffect, useState, useCallback } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import { useOutletContext } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -18,8 +18,6 @@ export default function DashboardHome() {
   const navigate = useNavigate();
   const { colors } = useTheme();
   const profileInformation = useOutletContext();
-
-  console.log('DashboardHome');
 
   const [destinations,] = useLocalStorage("destinations", []);
 
