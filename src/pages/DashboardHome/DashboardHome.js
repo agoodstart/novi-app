@@ -1,7 +1,6 @@
 import React, { Suspense, useMemo, useEffect, useState, useCallback } from 'react';
 import { useOutletContext } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { toast } from 'react-toastify';
 
 import Container from '../../components/Container/Container';
 import Typography from '../../components/Typography/Typography';
@@ -13,42 +12,20 @@ import { Image } from '../../components/Media/Media';
 import useTheme from '../../hooks/useTheme';
 import useSuspense from '../../hooks/useSuspense';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import useAuth from '../../hooks/useAuth';
-
 
 export default function DashboardHome() {
   const suspender = useSuspense();
   const navigate = useNavigate();
-  const { auth } = useAuth();
   const { colors } = useTheme();
-  const user = useOutletContext();
+  const profileInformation = useOutletContext();
 
-  console.log(user);
+  console.log('DashboardHome');
 
   const [destinations,] = useLocalStorage("destinations", []);
-
-  const [profileInformation, setProfileInformation] = useState({});
 
   const memoizedWeather = useMemo(() => {
     return suspender.fetchOpenWeatherAPI({ lat: 52.132633, lng: 5.2912659 });
   }, []);
-
-  const fetchProfileInformation = useCallback(async () => {
-    console.log('gets called after mount, then runs console.log(user) again')
-    try {
-      const data = await auth.profile(user?.accessToken);
-      setProfileInformation(data);
-    } catch(err) {
-      toast.error("Unable to fetch profile information, logging out...", {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 1000
-      })
-    }
-  }, [])
-
-  useEffect(() => {
-    fetchProfileInformation();
-  }, [fetchProfileInformation]);
 
   const getCurrentDateTime = () => {
     const today = new Date();
