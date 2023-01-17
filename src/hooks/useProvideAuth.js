@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import useLocalStorage from './useLocalStorage';
@@ -44,10 +43,6 @@ novi.interceptors.response.use(
 export default function useProvideAuth() {
     const [user, setUser] = useLocalStorage("user", null);
     const navigate = useNavigate();
-    
-    useEffect(() => {
-    //   console.log('user is logged in: ', user)
-    }, [user])
 
     const testConnection = () => {
         console.log('testing api connection...')
@@ -81,11 +76,9 @@ export default function useProvideAuth() {
                 return Promise.resolve();
             },
             err => {
-                return Promise.reject(err);
-            }).catch(err => {
-                console.error("Unable to signin, following error: ", err);
-                return Promise.reject();
-            })
+                console.error(err);
+                return Promise.reject("Invalid Credentials");
+            });
     }
 
     const picture = (accessToken, image) => {
@@ -95,11 +88,10 @@ export default function useProvideAuth() {
             }
         }).then(data => {
             return Promise.resolve(data);
-        }, () => {
-            return Promise.reject('Unable to upload profile image')
-        }).catch(err => {
-            console.error("Cannot upload profile image, following error: ", err);
-        })
+        }, (err) => {
+            console.error(err);
+            return Promise.reject('Unable to upload profile image');
+        });
     }
 
     const signout = () => {
@@ -117,9 +109,7 @@ export default function useProvideAuth() {
                 return Promise.resolve(data);
             }, err => {
                 return Promise.reject(err);
-            }).catch(err => {
-                console.log("Unable to sign up, following error: ", err);
-            })
+            });
     }
 
     const profile = (accessToken) => {
@@ -131,12 +121,10 @@ export default function useProvideAuth() {
             return data;
         },
         err => {
-            return Promise.reject(`Unable to receive profile information, following error: \n ${err}`);
-        }).catch(err => {
+            setUser(null);
             console.error(err);
-            // signout();
-            // throw new Error();
-        })
+            return Promise.reject(`Unable to fetch profile information, logging out...`);
+        });
     }
 
     const all = (accessToken) => {
@@ -147,10 +135,9 @@ export default function useProvideAuth() {
         }).then(data => {
             return data;
         }, err => {
-            return Promise.reject(`Unable to receive all users, following error: \n ${err}`)
-        }).catch(err => {
             console.error(err);
-        })
+            return Promise.reject(`Unable to receive all users`);
+        });
     }
 
     const update = (accessToken, data) => {
@@ -158,14 +145,14 @@ export default function useProvideAuth() {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
-        }).then(() => {
+        }).then((data) => {
+            console.log(data);
             return Promise.resolve();
         },
         err => {
-            return Promise.reject(`Unable to update profile information, following error: \n ${err}`)
-        }).catch(err => {
             console.error(err);
-        })
+            return Promise.reject(`Unable to update profile information`)
+        });
     }
 
     return {

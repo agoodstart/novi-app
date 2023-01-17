@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { useOutletContext } from "react-router-dom";
+import React, { useEffect, useState, useRef } from 'react';
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 
 import Container from '../../components/Container/Container';
@@ -22,16 +22,15 @@ export default function Profile() {
   const infoRef = useRef();
   const imageInputRef = useRef();
 
-  const user = useOutletContext();
   const { auth, modalRef } = useAuth(); 
+  const navigate = useNavigate();
   const { colors } = useTheme();
 
-  const [profileInformation, setProfileInformation] = useState({});
+  const profileInformation = useOutletContext();
   const [imageSource, setImageSource] = useState("");
   const [emailFormValid, setEmailFormValid] = useState(false);
   const [infoFormValid, setInfoFormValid] = useState(false);
   const [passwordFormValid, setPasswordFormValid] = useState(false);
-
 
   const reader = new FileReader();
 
@@ -52,26 +51,19 @@ export default function Profile() {
     modalRef.current.openModal();
   }
 
-  const fetchProfileInfo = useCallback(async () => {
-    try {
-      const data = await auth.profile(user.accessToken);
-      setProfileInformation(data);
-      setImageSource(data.profilePicture)
-    } catch(err) {
-      console.error(err);
-    }
-  }, [])
-
   const updateProfile = async (input) => {
     const field = Object.keys(input)[0];
     
     try {
-      await auth.update(user.accessToken, input);
+      await auth.update(auth.user.accessToken, input);
+      
+      navigate(0);
       toast.success(`${field} successfully updated`, {
         position: toast.POSITION.TOP_CENTER
       });
+
     } catch(err) {
-      toast.error(`Unable to update data for ${field}`, {
+      toast.error(err, {
         position: toast.POSITION.TOP_CENTER
       })
     }
@@ -79,15 +71,17 @@ export default function Profile() {
   
   const updateProfilePicture = async () => {
     try {
-      await auth.picture(user.accessToken, {
+      await auth.picture(auth.user.accessToken, {
         base64Image: imageSource
       });
 
+      navigate(0);
       toast.success(`Profile image successfully updated`, {
         position: toast.POSITION.TOP_CENTER
       });
+
     } catch(err) {
-      toast.error(`Unable to update Profile picture`, {
+      toast.error(err, {
         position: toast.POSITION.TOP_CENTER
       })
     }
@@ -99,14 +93,11 @@ export default function Profile() {
   }
 
   useEffect(() => {
-    fetchProfileInfo()
-  }, [fetchProfileInfo])
-
-  useEffect(() => {
     if(Object.keys(profileInformation).length !== 0) {
       usernameRef.current.value = profileInformation.username;
       emailRef.current.value = profileInformation.email;
       infoRef.current.value = profileInformation?.info ?? "";
+      setImageSource(profileInformation.profilePicture);
     }
   }, [profileInformation])
 

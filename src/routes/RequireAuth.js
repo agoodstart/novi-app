@@ -1,8 +1,9 @@
+import React from 'react';
 import {Outlet} from 'react-router-dom';
 import useRequireAuth from '../hooks/useRequireAuth';
 
 export default function RequireAuth() {
-  const auth = useRequireAuth();
+  const profileInformation = useRequireAuth() ?? null;
 
-  return <Outlet context={auth?.user} />
+  return profileInformation === null ? null : <Outlet context={profileInformation} />
 }

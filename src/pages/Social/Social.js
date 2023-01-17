@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useOutletContext } from "react-router-dom";
 import Container from '../../components/Container/Container';
 import { toast } from 'react-toastify';
 
@@ -11,8 +10,6 @@ import useAuth from '../../hooks/useAuth';
 import useTheme from '../../hooks/useTheme';
 
 export default function Social() {
-  const user = useOutletContext();
-
   const { auth } = useAuth();
   const { colors } = useTheme();
 
@@ -20,10 +17,10 @@ export default function Social() {
 
   const fetchAllUsers = useCallback(async () => {
     try {
-      const data = await auth.all(user.accessToken);
+      const data = await auth.all(auth.user.accessToken);
       setUsers(data);
-    } catch(_err) {
-      toast.error("Unable to fetch users", {
+    } catch(err) {
+      toast.error(err, {
         position: toast.POSITION.TOP_CENTER
       })
     }
