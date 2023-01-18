@@ -1,40 +1,124 @@
 .layout {
   &__sidebar {
     grid-area: sidebar;
-    background: #48BEFF;
+    background: #d0d1d2;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     display: flex;
     flex-flow: column wrap;
     justify-content: space-evenly;
+    z-index: 9999;
+    // pointer-events: none;
+    transition: all 0.3s ease-in-out;
   }
 }
 
 .sidebarnav {
-  width: 100%;
+  min-width: 240px;
+
+  & ~ button span {
+    opacity: 0;
+    visibility: hidden;
+    width: 100%
+  }
 
   &__list {
     list-style-type: none;
   }
 
   &__item {
-    margin: 1.5rem 0;
+    padding: 2rem 1.5rem;
     width: 100%;
   }
 
   &__link {
-    font-size: 1.333rem;
-    padding: 2rem;
+    font-size: 1rem;
     width: 100%;
     // font-size: 2rem;
     text-decoration: none;
-    display: inline-block;
-    position: relative;
-    color: #FCF7F860;
-    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    // color: #FCF7F860;
+    color: #11151C;
+    font-weight: 300;
     letter-spacing: 2px;
-    
+    height: 3rem;
+
+    & span {
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease-in-out;
+    }
+
     &--active {
-      color: #FCF7F8;
+      color: #11151C;
+      font-weight: 700;
+
+      & svg {
+        background-color: #11151C20;
+        border-radius: 4px;
+      }
+    }
+
+    &--logout {
+      color: #ce5857;
+    }
+
+    &--active icon {
+      color: #11151C;
+      font-weight: 700;
     }
   }
+
+  &__icon {
+    box-sizing: border-box !important;
+    height: 32px;
+    padding: 7px;
+  }
+}
+
+.drawer-enter {
+  width: 100%;
+}
+
+.drawer-active-enter {
+  width: 240px;
+  transition: all 0.3s ease-in-out;
+}
+
+.drawer-done-enter {
+  width: 240px;
+
+  & nav ul li a span {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  & nav ul li a.sidebarnav__link {
+    opacity: 1;
+    visibility: visible;
+
+    &--active,
+    &:hover {
+      background-color: #11151C20;
+      border-radius: 4px;
+    }
+  }
+
+  & nav ul li a svg {
+    background-color: unset;
+  }
+}
+
+.drawer-exit {
+  width: 240px;
+}
+
+.drawer-exit-active {
+  width: 100%;
+  transition: all 0.3s ease-in-out;
+}
+
+.drawer-done-exit {
+  width: 100%;
 }

@@ -15,7 +15,7 @@ export default function TravelPlanMap(props) {
 
   const { api } = useGoogleApi();
 
-  const [mapZoom, setMapZoom] = useState(8);
+  const [mapZoom, setMapZoom] = useState(6);
   const [mapCenter, setMapCenter] = useState(location);
 
   const onMapsLoaded = async () => {

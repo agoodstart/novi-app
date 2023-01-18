@@ -1,3 +1,5 @@
+import { useState, useRef } from "react";
+import { CSSTransition } from "react-transition-group";
 import { NavLink } from "react-router-dom";
 import Button from "../../components/Button/Button";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,70 +11,93 @@ import useAuth from "../../hooks/useAuth";
 import styles from './Sidebar.module.scss';
 
 export default function Sidebar() {
+  const nodeRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false)
+
+  const handleOpenDrawer = (e) => {
+    setIsOpen(true)
+  }
+
+  const handleCloseDrawer = (e) => {
+    setIsOpen(false);
+  }
+
   const { colors } = useTheme();
   const { auth } = useAuth();
 
   const checkIfActive = ({ isActive }) => ( `${styles['sidebarnav__link']} ` + ( isActive ? `${styles['sidebarnav__link--active']}` : "" ) );
+  const logout = () => `${styles['sidebarnav__link']} ${styles['sidebarnav__link--logout']}`
 
   return (
-    <div className={styles['layout__sidebar']}>
-      <nav className={styles['sidebarnav']}>
-        <ul className={styles['sidebarnav__list']}>
-          <li className={styles['sidebarnav__item']}>
+    <CSSTransition
+      nodeRef={nodeRef}
+      in={isOpen}
+      timeout={{ entry: 200, exit: 0 }}
+      classNames={{
+        enter: styles['drawer-enter'],
+        enterActive: styles['drawer-active-enter'],
+        enterDone: styles['drawer-done-enter'],
+        exit: styles['drawer-exit'],
+        exitActive: styles['drawer-active-exit'],
+        exitDone: styles['drawer-done-exit'],
+      }}
+    >
+      <div className={styles['layout__sidebar']} onMouseEnter={handleOpenDrawer} onMouseLeave={handleCloseDrawer} ref={nodeRef}>
+        <nav className={styles['sidebarnav']}>
+          <ul className={styles['sidebarnav__list']}>
+            <li className={styles['sidebarnav__item']}>
+              <NavLink 
+                to='/dashboard'
+                className={checkIfActive}>
+                  <FontAwesomeIcon icon={faGauge} size="2x" className={styles['sidebarnav__icon']} /> &nbsp;
+                  <span>Dashboard</span>
+              </NavLink>
+            </li>
+            <li className={styles['sidebarnav__item']}>
             <NavLink 
-              to='/dashboard'
+              to='/Destinations'
               className={checkIfActive}>
-                <FontAwesomeIcon icon={faGauge} /> &nbsp;
-                Dashboard
-            </NavLink>
-          </li>
-          <li className={styles['sidebarnav__item']}>
-          <NavLink 
-            to='/Destinations'
-            className={checkIfActive}>
-              <FontAwesomeIcon icon={faEarthEurope} /> &nbsp;
-              Destinations
-            </NavLink>
-          </li>
-          <li className={styles['sidebarnav__item']}>
-          <NavLink 
-            to='/profile'
-            className={checkIfActive}>
-              <FontAwesomeIcon icon={faUser} /> &nbsp;
-              Profile
-            </NavLink>
-          </li>
-          <li className={styles['sidebarnav__item']}>
-          <NavLink 
-            to='/social'
-            className={checkIfActive}>
-              <FontAwesomeIcon icon={faUserGroup} /> &nbsp; 
-              Social
-            </NavLink>
-          </li>
-          <li className={styles['sidebarnav__item']}>
-          <NavLink 
-            to='/addtravelplan'
-            className={checkIfActive}>
-              <FontAwesomeIcon icon={faRoute} /> &nbsp;
-              Add Travel Plan
-            </NavLink>
-          </li>
-          <li className={styles['sidebarnav__item']}>
-          </li>
-        </ul>
-      </nav>
-      <Button 
-        size="medium" 
-        elevation={1} 
-        color={colors.background.secondary.alpha['80']} 
-        onClick={() => auth.signout()} 
-        customStyles={{
-        margin: '0 1rem'
-      }}>
-        <FontAwesomeIcon icon={faRightFromBracket} /> &nbsp;
-        Logout
-      </Button>
-    </div>
+                <FontAwesomeIcon icon={faEarthEurope} size="2x" className={styles['sidebarnav__icon']} /> &nbsp;
+                <span>Destinations</span>
+              </NavLink>
+            </li>
+            <li className={styles['sidebarnav__item']}>
+            <NavLink 
+              to='/profile'
+              className={checkIfActive}>
+                <FontAwesomeIcon icon={faUser} size="2x" className={styles['sidebarnav__icon']} /> &nbsp;
+                <span>Profile</span>
+              </NavLink>
+            </li>
+            <li className={styles['sidebarnav__item']}>
+            <NavLink 
+              to='/social'
+              className={checkIfActive}>
+                <FontAwesomeIcon icon={faUserGroup} size="2x" className={styles['sidebarnav__icon']} /> &nbsp; 
+                <span>Social</span>
+              </NavLink>
+            </li>
+            <li className={styles['sidebarnav__item']}>
+            <NavLink 
+              to='/addtravelplan'
+              className={checkIfActive}>
+                <FontAwesomeIcon icon={faRoute} size="2x" className={styles['sidebarnav__icon']} /> &nbsp;
+                <span>Add Travel Plan</span>
+              </NavLink>
+            </li>
+            <li className={styles['sidebarnav__item']}>
+            </li>
+            <li className={styles['sidebarnav__item']}>
+            <NavLink 
+              onClick={() => auth.signout()}
+              className={logout}>
+                <FontAwesomeIcon icon={faRightFromBracket} size="2x" className={styles['sidebarnav__icon']} /> &nbsp;
+                <span>Logout</span>
+              </NavLink>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </CSSTransition>
   )
 }
