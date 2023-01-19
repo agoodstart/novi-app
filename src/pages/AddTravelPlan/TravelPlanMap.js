@@ -22,7 +22,7 @@ export default function TravelPlanMap(props) {
 
   const onMapsLoaded = async () => {
     const latlng = api.map.getCenter().toJSON();
-    
+
     try {
       let locationInfo = await api.getGeocodedAddress(latlng);
 
@@ -30,9 +30,9 @@ export default function TravelPlanMap(props) {
         latlng,
         ...locationInfo,
       });
-  
+
       props.setPlaceOrigin(locationInfo.formattedAddress);
-    } catch(err) {
+    } catch (err) {
       props.showWarning("Unable to fetch location")
     }
   }
@@ -40,12 +40,12 @@ export default function TravelPlanMap(props) {
   const calculateMarkerDistance = (latlng) => {
     const R = 6371.0710 // Radius of earth in km
     // var R = 3958.8; // Radius of the Earth in miles
-    var rlat1 = props.origin.latlng.lat * (Math.PI/180); // Convert degrees to radians
-    var rlat2 = latlng.lat * (Math.PI/180); // Convert degrees to radians
-    var difflat = rlat2-rlat1; // Radian difference (latitudes)
-    var difflon = (latlng.lng-props.origin.latlng.lng) * (Math.PI/180); // Radian difference (longitudes)
-  
-    var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat/2)*Math.sin(difflat/2)+Math.cos(rlat1)*Math.cos(rlat2)*Math.sin(difflon/2)*Math.sin(difflon/2)));
+    var rlat1 = props.origin.latlng.lat * (Math.PI / 180); // Convert degrees to radians
+    var rlat2 = latlng.lat * (Math.PI / 180); // Convert degrees to radians
+    var difflat = rlat2 - rlat1; // Radian difference (latitudes)
+    var difflon = (latlng.lng - props.origin.latlng.lng) * (Math.PI / 180); // Radian difference (longitudes)
+
+    var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat / 2) * Math.sin(difflat / 2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)));
     return d.toFixed(2);
   }
 
@@ -60,7 +60,7 @@ export default function TravelPlanMap(props) {
           appid: REACT_APP_OPENWEATHER_API_KEY,
         }
       });
-  
+
       const markerDistance = calculateMarkerDistance(latlng);
 
       props.setDestinations([...props.destinations, {
@@ -69,7 +69,7 @@ export default function TravelPlanMap(props) {
         distance: markerDistance,
         temperature: weatherInfo.data.current.temp,
       }]);
-    } catch(err) {
+    } catch (err) {
       props.showWarning("Unable to create new destination");
     }
   }
@@ -88,7 +88,9 @@ export default function TravelPlanMap(props) {
     try {
       const locationInfo = await api.getGeocodedAddress(latlng);
 
-      console.log(locationInfo);
+      if(Object.keys(locationInfo).length === 0) {
+        throw "Unable to fetch location";
+      }
 
       if (props.destinations.some(destination => destination.placeId === locationInfo.placeId)) {
         props.showWarning(`${locationInfo.formattedAddress} is already present in the list`)
@@ -96,8 +98,8 @@ export default function TravelPlanMap(props) {
         createNewDestination(latlng, locationInfo);
       }
 
-    } catch(err) {
-      props.showWarning("Unable to fetch location")
+    } catch (err) {
+      props.showWarning(err)
     }
   }
 
@@ -110,8 +112,10 @@ export default function TravelPlanMap(props) {
 
     try {
       const locationInfo = await api.getGeocodedAddress(api.map.getCenter().toJSON());
-      props.setPlaceCenter(locationInfo.formattedAddress);
-    } catch(err) {
+
+
+      props.setPlaceCenter(locationInfo.formattedAddress ?? "");
+    } catch (err) {
       props.showWarning(err);
     }
   }
@@ -127,7 +131,7 @@ export default function TravelPlanMap(props) {
       });
 
       props.setPlaceOrigin(locationInfo.formattedAddress)
-    } catch(err) {
+    } catch (err) {
       props.showWarning(err);
     }
   }
@@ -148,7 +152,7 @@ export default function TravelPlanMap(props) {
         }}
         defaultCenter={mapCenter}
         styles={mapStyles}
-        >
+      >
         <OriginMarker onDragend={onOriginDragend} marker={props.origin} />
         {props.destinations.map((destination, i) => (
           <DestinationMarker marker={destination} key={i} />

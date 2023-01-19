@@ -23,7 +23,6 @@ const withPlaces = (Component) => ({autocompleteInstance, defaultLocation, onPla
 
   useEffect(() => {
     if(autocompleteRef.current && autocomplete && autocompleteRef.current instanceof HTMLInputElement) {
-      console.log(defaultLocation);
       autocompleteRef.current.value = defaultLocation
     }
   }, [defaultLocation, autocomplete, autocompleteRef])

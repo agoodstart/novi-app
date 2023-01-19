@@ -21,11 +21,17 @@ import useLocalStorage from '../../hooks/useLocalStorage';
 import useTheme from '../../hooks/useTheme';
 import useAuth from '../../hooks/useAuth';
 
+import useAmadeusApi from '../../hooks/useAmadeusApi';
+
 export default function AddTravelPlan() {
   const suspender = useSuspense();
   const navigate = useNavigate();
   const { modalRef } = useAuth();
   const { colors } = useTheme();
+
+  // const am = useAmadeusApi();
+  // const lockedLocations = am.locations;
+  const lockedLocations = [];
 
   const [savedDestinations, setSavedDestinations] = useLocalStorage("destinations", []);
 
@@ -156,6 +162,7 @@ export default function AddTravelPlan() {
                   origin={origin}
                   setOrigin={setOrigin}
                   destinations={destinations}
+                  lockedLocations={lockedLocations}
                   setDestinations={setDestinations}
                   setPlaceOrigin={setPlaceOrigin} 
                   setPlaceCenter={setPlaceCenter} 

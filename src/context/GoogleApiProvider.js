@@ -53,7 +53,6 @@ export const GoogleApiProvider = ({ children }) => {
           }
         })
     }).then(results => {
-        console.log(results);
         const locationMatch = results.reduce((res, location) => {
           if(location.types.includes('locality') || 
           location.types.includes('postal_town')) {
@@ -64,7 +63,7 @@ export const GoogleApiProvider = ({ children }) => {
         }, null);
 
         if(!locationMatch) {
-          return Promise.reject('cannot resolve address');
+          return Promise.resolve({});
         } else {
           return Promise.resolve({
             country: locationMatch.address_components.find(location => location.types.includes('country')),
