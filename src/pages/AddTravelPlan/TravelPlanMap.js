@@ -7,7 +7,7 @@ import { DestinationMarker, OriginMarker } from '../../components/GoogleMaps/Mar
 import Box from '../../components/Box/Box';
 
 import useGoogleApi from '../../hooks/useGoogleApi';
-
+import useAmadeusApi from '../../hooks/useAmadeusApi';
 import mapStyles from '../../helpers/mapStyles';
 
 const { REACT_APP_OPENWEATHER_API_KEY } = process.env;
@@ -15,7 +15,9 @@ const { REACT_APP_OPENWEATHER_API_KEY } = process.env;
 export default function TravelPlanMap(props) {
   let location = props.deviceLocation.read();
 
-  const { api } = useGoogleApi();
+  const { api, placesService } = useGoogleApi();
+  const { amadeusApi } = useAmadeusApi();
+  // const amadeusApi = useAmadeusApi();
 
   const [mapZoom, setMapZoom] = useState(7);
   const [mapCenter, setMapCenter] = useState(location);
@@ -26,6 +28,8 @@ export default function TravelPlanMap(props) {
     try {
       let locationInfo = await api.getGeocodedAddress(latlng);
 
+      console.log(locationInfo)
+
       props.setOrigin({
         latlng,
         ...locationInfo,
@@ -34,6 +38,49 @@ export default function TravelPlanMap(props) {
       props.setPlaceOrigin(locationInfo.formattedAddress);
     } catch (err) {
       props.showWarning("Unable to fetch location")
+    }
+
+    try {
+      const lockedLocations = await amadeusApi.getLocationsInRadius();
+      console.log(lockedLocations);
+
+      // const result = lockedLocations.map(location => ({ latlng: {
+      //   lat: location.geoCode.latitude,
+      //   lng: location.geoCode.longitude
+      // }}));
+
+      props.setDestinations(lockedLocations.map(location => ({ latlng: {
+        lat: location.geoCode.latitude,
+        lng: location.geoCode.longitude
+      }})));
+
+      // let latlng = {
+      //   lat: lockedLocations[0].geoCode.latitude,
+      //   lng: lockedLocations[0].geoCode.longitude,
+      // }
+      // console.log(result);
+
+      // let formattedAddress = `${lockedLocations[0].address.cityName}, ${lockedLocations[0].address.countryName}`;
+
+      // let request = {
+      //   query: formattedAddress,
+      //   fields: ['name', 'formatted_address', 'place_id', 'geometry']
+      // }
+
+      // placesService.findPlaceFromQuery(request, (results, status) => {
+      //   if(status === "OK") {
+      //     console.log(results);
+      //   }
+      // });
+
+      // // const li = await api.getGeocodedAddress(latlng);
+
+      // // console.log(lockedLocations[0]);
+      // // console.log(li)
+      // console.log(formattedAddress);
+
+    } catch(err) {
+      props.showWarning(err);
     }
   }
 
@@ -109,6 +156,8 @@ export default function TravelPlanMap(props) {
 
   const onIdle = async () => {
     setMapCenter(api.map.getCenter().toJSON());
+
+    console.log('hello')
 
     try {
       const locationInfo = await api.getGeocodedAddress(api.map.getCenter().toJSON());

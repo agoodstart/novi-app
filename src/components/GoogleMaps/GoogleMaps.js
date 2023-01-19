@@ -38,12 +38,12 @@ export default function GoogleMaps({
 
   ...options
 }) {
-  const { map, createMap, api } = useGoogleApi();
+  const { map, createMap, api, placesService, createPlacesService } = useGoogleApi();
   const ref = useRef(null);
 
   useEffect(() => {
     if (ref.current && !map) {
-      createMap(ref.current)
+      createMap(ref.current);
     }
   }, [ref, map])
 
@@ -57,9 +57,15 @@ export default function GoogleMaps({
 
   useEffect(() => {
     if(ref.current && map) {
-      onMapsLoaded();
+      createPlacesService();
     }
   }, [ref, map])
+
+  useEffect(() => {
+    if(ref.current && map && placesService) {
+      onMapsLoaded();
+    }
+  }, [ref, map, placesService])
 
   useEffect(() => {
     if (map) {

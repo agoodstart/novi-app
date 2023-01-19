@@ -19,6 +19,7 @@ export const GoogleApiProvider = ({ children }) => {
   const [map, setMap] = useState();
   const [autocompleteCenter, setAutocompleteCenter] = useState();
   const [autocompleteGeo, setAutocompleteGeo] = useState();
+  const [placesService, setPlacesService] = useState();
   const [geocoder, setGeocoder] = useState();
 
   const createMap = (refEl, options = {}) => {
@@ -27,6 +28,10 @@ export const GoogleApiProvider = ({ children }) => {
 
   const getMap = () => {
     return map;
+  }
+
+  const createPlacesService = () => {
+    setPlacesService(new google.maps.places.PlacesService(map));
   }
   
   const createAutocompleteCenter = (refEl, options = {}) => {
@@ -53,6 +58,7 @@ export const GoogleApiProvider = ({ children }) => {
           }
         })
     }).then(results => {
+        console.log(results);
         const locationMatch = results.reduce((res, location) => {
           if(location.types.includes('locality') || 
           location.types.includes('postal_town')) {
@@ -107,7 +113,7 @@ export const GoogleApiProvider = ({ children }) => {
   }
 
   return (
-      <GoogleApiContext.Provider value={{ map, createMap, api }}>
+      <GoogleApiContext.Provider value={{ map, createMap, api, placesService, createPlacesService }}>
         <Wrapper apiKey={REACT_APP_GOOGLE_MAPS_API_KEY} render={render} libraries={["places"]} callback={checkStatus}  >
           {children}
         </Wrapper>

@@ -9,6 +9,8 @@ import { ParallaxProvider } from 'react-scroll-parallax';
 import { AuthProvider } from "./context/AuthProvider";
 import { ThemeProvider } from "./context/ThemeProvider";
 import { GoogleApiProvider } from "./context/GoogleApiProvider";
+import { AmadeusApiProvider } from './context/AmadeusApiProvider';
+
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import reportWebVitals from './reportWebVitals';
@@ -22,9 +24,11 @@ root.render(
       <ThemeProvider>
         <GoogleApiProvider>
           <AuthProvider>
-            <Routes>
-              <Route path="/*" element={<App />} />
-            </Routes>
+            <AmadeusApiProvider>
+              <Routes>
+                <Route path="/*" element={<App />} />
+              </Routes>
+            </AmadeusApiProvider>
           </AuthProvider>
         </GoogleApiProvider>
       </ThemeProvider>
