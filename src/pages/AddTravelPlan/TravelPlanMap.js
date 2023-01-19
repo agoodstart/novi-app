@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 import GoogleMaps from '../../components/GoogleMaps/GoogleMaps';
@@ -10,6 +10,8 @@ import useGoogleApi from '../../hooks/useGoogleApi';
 import useAmadeusApi from '../../hooks/useAmadeusApi';
 import mapStyles from '../../helpers/mapStyles';
 
+import { DistanceLine } from '../../components/GoogleMaps/DistanceLine';
+
 const { REACT_APP_OPENWEATHER_API_KEY } = process.env;
 
 export default function TravelPlanMap(props) {
@@ -17,10 +19,10 @@ export default function TravelPlanMap(props) {
 
   const { api, placesService } = useGoogleApi();
   const { amadeusApi } = useAmadeusApi();
-  // const amadeusApi = useAmadeusApi();
 
   const [mapZoom, setMapZoom] = useState(7);
   const [mapCenter, setMapCenter] = useState(location);
+  const [pointToPoint, setPointToPoint] = useState(null);
 
   const onMapsLoaded = async () => {
     const latlng = api.map.getCenter().toJSON();
@@ -41,18 +43,21 @@ export default function TravelPlanMap(props) {
     }
 
     try {
-      const lockedLocations = await amadeusApi.getLocationsInRadius();
-      console.log(lockedLocations);
+      const lockedLocations = await amadeusApi.getLocationsInRadius(latlng.lat, latlng.lng);
+
+      const newLocations = lockedLocations.map(location => ({ 
+        latlng: {
+          lat: location.geoCode.latitude,
+          lng: location.geoCode.longitude
+        },
+        formattedAddress: `${location.address.cityName}, ${location.address.countryName}`
+      }));
+      props.setDestinations(newLocations);
 
       // const result = lockedLocations.map(location => ({ latlng: {
       //   lat: location.geoCode.latitude,
       //   lng: location.geoCode.longitude
       // }}));
-
-      props.setDestinations(lockedLocations.map(location => ({ latlng: {
-        lat: location.geoCode.latitude,
-        lng: location.geoCode.longitude
-      }})));
 
       // let latlng = {
       //   lat: lockedLocations[0].geoCode.latitude,
@@ -121,65 +126,71 @@ export default function TravelPlanMap(props) {
     }
   }
 
-  const onClick = async (e) => {
-    toast.info('Creating destination...', {
-      position: toast.POSITION.TOP_CENTER,
-      autoClose: 1000
+  const onMarkerClick = async (marker) => {
+    console.log(marker);
+    console.log(props.origin);
+
+    let request = {
+      query: marker.formattedAddress,
+      fields: ['name', 'formatted_address', 'place_id', 'geometry']
+    }
+
+    placesService.findPlaceFromQuery(request, (results, status) => {
+      if(status === "OK") {
+        console.log(results);
+      }
     });
 
-    const latlng = {
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng(),
-    };
+    setPointToPoint([marker.latlng, props.origin.latlng]);
 
-    try {
-      const locationInfo = await api.getGeocodedAddress(latlng);
+    // try {
+    //   const locationInfo = await api.getGeocodedAddress(latlng);
 
-      if(Object.keys(locationInfo).length === 0) {
-        throw "Unable to fetch location";
-      }
+    //   if(Object.keys(locationInfo).length === 0) {
+    //     throw "Unable to fetch location";
+    //   }
 
-      if (props.destinations.some(destination => destination.placeId === locationInfo.placeId)) {
-        props.showWarning(`${locationInfo.formattedAddress} is already present in the list`)
-      } else {
-        createNewDestination(latlng, locationInfo);
-      }
+    //   if (props.destinations.some(destination => destination.placeId === locationInfo.placeId)) {
+    //     props.showWarning(`${locationInfo.formattedAddress} is already present in the list`)
+    //   } else {
+    //     createNewDestination(latlng, locationInfo);
+    //   }
 
-    } catch (err) {
-      props.showWarning(err)
-    }
+    // } catch (err) {
+    //   props.showWarning(err)
+    // }
   }
+
+  useEffect(() => {
+    console.log(pointToPoint)
+  }, [pointToPoint])
 
   const onZoomChange = () => {
     setMapZoom(api.map.getZoom());
   }
 
-  const onIdle = async () => {
-    setMapCenter(api.map.getCenter().toJSON());
-
-    console.log('hello')
-
-    try {
-      const locationInfo = await api.getGeocodedAddress(api.map.getCenter().toJSON());
-
-
-      props.setPlaceCenter(locationInfo.formattedAddress ?? "");
-    } catch (err) {
-      props.showWarning(err);
-    }
-  }
-
-  const onOriginDragend = async (e) => {
-    const latlng = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+  const onDragEnd = async () => {
+    console.log('ondragend');
+    const latlng = api.map.getCenter().toJSON();
+    setMapCenter(latlng);
 
     try {
       const locationInfo = await api.getGeocodedAddress(latlng);
-      props.setOrigin({
-        latlng,
-        ...locationInfo
-      });
+      props.setPlaceCenter(locationInfo.formattedAddress ?? "");
 
-      props.setPlaceOrigin(locationInfo.formattedAddress)
+      const lockedLocations = await amadeusApi.getLocationsInRadius(latlng.lat, latlng.lng);
+
+      // const existingLocations = props.destinations;
+      const newLocations = lockedLocations.map(location => ({ 
+        latlng: {
+          lat: location.geoCode.latitude,
+          lng: location.geoCode.longitude
+        },
+        formattedAddress: `${location.address.cityName}, ${location.address.countryName}`
+      }));
+      
+      // const uniqueUnion = [...new Set([...existingLocations, ...newLocations])];
+      props.setDestinations(newLocations);
     } catch (err) {
       props.showWarning(err);
     }
@@ -188,10 +199,9 @@ export default function TravelPlanMap(props) {
   return (
     <Box borderRadius={5}>
       <GoogleMaps
-        onClick={onClick}
+        onDragend={onDragEnd}
         onZoomChange={onZoomChange}
         onMapsLoaded={onMapsLoaded}
-        onIdle={onIdle}
         zoom={mapZoom}
         disableDefaultUI={true}
         zoomControl={true}
@@ -202,10 +212,11 @@ export default function TravelPlanMap(props) {
         defaultCenter={mapCenter}
         styles={mapStyles}
       >
-        <OriginMarker onDragend={onOriginDragend} marker={props.origin} />
+        <OriginMarker marker={props.origin} />
         {props.destinations.map((destination, i) => (
-          <DestinationMarker marker={destination} key={i} />
+          <DestinationMarker onClick={onMarkerClick} marker={destination} key={i} />
         ))}
+        {pointToPoint ? <DistanceLine pointToPoint={pointToPoint} /> : null}
       </GoogleMaps>
     </Box>
   )

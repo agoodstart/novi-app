@@ -60,12 +60,12 @@ export const AmadeusApiProvider = ({ children }) => {
     }
   }, [bearerToken]);
 
-  const getLocationsInRadius = () => {
+  const getLocationsInRadius = (lat, lng) => {
     const params = new URLSearchParams();
-    params.append('latitude', '52.3759');
-    params.append('longitude', '4.8975');
+    params.append('latitude', lat);
+    params.append('longitude', lng);
     params.append('radius', '500');
-    params.append('page[limit]', '10');
+    params.append('page[limit]', '30');
     params.append('sort', 'analytics.flights.score');
 
     return amadeus.get('/reference-data/locations/airports', {

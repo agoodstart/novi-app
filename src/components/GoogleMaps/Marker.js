@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import useGoogleApi from "../../hooks/useGoogleApi";
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faStar } from "@fortawesome/free-solid-svg-icons";
 
-export default function Marker({onDragend, index, ...options}) {
+export default function Marker({onClick, index, ...options}) {
   const [marker, setMarker] = useState();
 
   useEffect(() => {
@@ -24,23 +24,50 @@ export default function Marker({onDragend, index, ...options}) {
   }, [marker, options])
 
   useEffect(() => {
-    if(onDragend && marker) {
+    if(onClick && marker) {
       google.maps.event.clearInstanceListeners(marker);
     }
 
     if(marker) {
-      marker.addListener("dragend", (e) => onDragend(e))
+      marker.addListener("click", (e) => onClick(e))
     }
-  }, [marker, onDragend])
+  }, [marker, onClick])
 
   return null;
 }
 
-const withConfig = (isDraggable) => ({onDragend, marker}) => {
+export const OriginMarker = ({marker}) => {
   const { api } = useGoogleApi();
 
-  const triggerDragend = (e) => {
-    onDragend(e, marker.placeId);
+  return <Marker map={api.map} icon={{
+    path: faStar.icon[4],
+    fillColor: "#11151C",
+    fillOpacity: 1,
+    anchor: new google.maps.Point(
+      faStar.icon[0] / 2, // width
+      faStar.icon[1] // height
+    ),
+    strokeWeight: 2,
+    strokeColor: "#ffffff",
+    scale: 0.035,
+  }} position={marker.latlng} draggable={false} />
+};
+
+export const DestinationMarker = ({marker, onClick}) => {
+  const { api } = useGoogleApi();
+
+  const triggerClickEvent = () => {
+    onClick(marker);
+  }
+
+  const triggerMouseOverEvent = (e) => {
+    console.log('mouse over');
+    console.log(e);
+  }
+
+  const triggerMouseOutEvent = (e) => {
+    console.log('mouse out');
+    console.log(e);
   }
 
   return <Marker map={api.map} icon={{
@@ -54,9 +81,5 @@ const withConfig = (isDraggable) => ({onDragend, marker}) => {
     strokeWeight: 2,
     strokeColor: "#ffffff",
     scale: 0.035,
-  }} onDragend={triggerDragend} position={marker.latlng} draggable={isDraggable} />
+  }} onClick={triggerClickEvent} position={marker.latlng} draggable={false} />
 }
-
-export const OriginMarker = withConfig(true);
-
-export const DestinationMarker = withConfig(false);

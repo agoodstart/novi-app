@@ -28,6 +28,7 @@ export default function GoogleMaps({
   onIdle, 
   onMouseMove, 
   onZoomChange,
+  onDragend,
 
   onMapsLoaded,
 
@@ -73,7 +74,8 @@ export default function GoogleMaps({
         "click",
         "idle",
         "mousemove",
-        "zoom_changed"
+        "zoom_changed",
+        "dragend"
       ].forEach((eventName) =>
         google.maps.event.clearListeners(map, eventName)
       );
@@ -84,6 +86,10 @@ export default function GoogleMaps({
 
       if (onIdle) {
         map.addListener("idle", () => onIdle(map));
+      }
+
+      if (onDragend) {
+        map.addListener("dragend", () => onDragend(map));
       }
 
       if (onMouseMove) {
@@ -105,9 +111,6 @@ export default function GoogleMaps({
   ]);
 
   const mapSize = {
-    // borderRadius: '20px',
-    // boxShadow: 'rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px',
-    // boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
     height: '100%'
   }
 
