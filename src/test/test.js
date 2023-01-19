@@ -59,6 +59,6 @@ const getBoundingBox = (centerPoint, distance) => {
 };
 
 
-const bounds = getBoundingBox([52.3759, 4.8975], 500);
+const bounds = getBoundingBox([52.3759, 4.8975], 2000);
 
 console.log(bounds);
