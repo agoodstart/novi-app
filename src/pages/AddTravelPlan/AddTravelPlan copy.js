@@ -138,10 +138,10 @@ export default function AddTravelPlan() {
   return (
     <React.Fragment>
       <Parallax speed={-50}>
-        <Container element="section" backgroundColor={colors.background.black.alpha['15']} >
+        <Container element="section">
           <Grid gridRows={8} gridColumns={8} rowGap={15} columnGap={15}>
 
-            <GridItem rowStart={1} columnStart={1} rowEnd={1} columnEnd={9}>
+            <GridItem rowStart={1} columnStart={1} rowEnd={1} columnEnd={6}>
               <TravelPlanControl 
                 setOrigin={setOrigin} 
                 maxTravelDistance={maxTravelDistance} 
@@ -150,7 +150,7 @@ export default function AddTravelPlan() {
                 placeCenter={placeCenter} />
             </GridItem>
 
-            <GridItem rowStart={2} columnStart={1} rowEnd={8} columnEnd={9}>
+            <GridItem rowStart={2} columnStart={1} rowEnd={8} columnEnd={6}>
               <Suspense fallback={<Typography variant="h1">Loading Google Maps... </Typography>}>
                 <TravelPlanMap 
                   origin={origin}
@@ -163,6 +163,36 @@ export default function AddTravelPlan() {
                   deviceLocation={deviceLocation} />
               </Suspense>
             </GridItem>
+
+            <GridItem rowStart={1} columnStart={6} rowEnd={7} columnEnd={9}> 
+              <TravelPlanDestinations 
+                chosen={chosen} 
+                setChosen={setChosen} 
+                destinations={destinations} 
+                setDestinations={setDestinations}  />
+            </GridItem>
+
+            <GridItem rowStart={7} columnStart={6} rowEnd={9} columnEnd={9}>
+              <TravelPlanChoices
+                recommended={recommended}
+                chosen={chosen} />
+            </GridItem>
+
+            <GridItem rowStart={8} columnStart={1} rowEnd={8} columnEnd={6}>
+              <Button 
+                color={colors.background.primary.main} 
+                isDisabled={checkSaveButton}
+                size="large"
+                elevation={2}
+                onClick={handleOpenModal}
+                customStyles={{
+                  width: '100%',
+                  height: '100%'
+                }}
+                >
+                  Save chosen destination
+              </Button>
+            </GridItem>
           </Grid>
 
           <TravelPlanModal chosen={chosen} modalRef={modalRef} saveDestination={saveDestination} handleCloseModal={handleCloseModal} />
@@ -170,9 +200,9 @@ export default function AddTravelPlan() {
       </Parallax>
       <Parallax speed={30}
         translateY={['-100px', '100px', 'easeIn']}>
-      <Container element="section" backgroundColor={colors.background.white.main} customStyles={{
-        boxShadow: "0 -5px 5px -5px #333",
-        zIndex: "9999"
+      <Container element="section" customStyles={{
+        zIndex: "9999",
+        background: "red"
       }}>
 
       </Container>

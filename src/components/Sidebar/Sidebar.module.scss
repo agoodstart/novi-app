@@ -2,18 +2,23 @@
   &__sidebar {
     grid-area: sidebar;
     background: #d0d1d2;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-right: 1px solid #11151C60;
+    // box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     display: flex;
     flex-flow: column wrap;
     justify-content: space-evenly;
     z-index: 9999;
     // pointer-events: none;
     transition: all 0.3s ease-in-out;
+    position: fixed;
+    width: 80px;
+    height: 100%;
   }
 }
 
 .sidebarnav {
   min-width: 240px;
+  pointer-events: none;
 
   & ~ button span {
     opacity: 0;
@@ -88,6 +93,12 @@
 
 .drawer-done-enter {
   width: 240px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-right: unset;
+
+  & nav {
+    pointer-events: all;
+  }
 
   & nav ul li a span {
     opacity: 1;
@@ -115,10 +126,10 @@
 }
 
 .drawer-exit-active {
-  width: 100%;
+  width: 80px;
   transition: all 0.3s ease-in-out;
 }
 
 .drawer-done-exit {
-  width: 100%;
+  width: 80px;
 }

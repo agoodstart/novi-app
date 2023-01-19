@@ -22,7 +22,7 @@ export const GoogleApiProvider = ({ children }) => {
   const [geocoder, setGeocoder] = useState();
 
   const createMap = (refEl, options = {}) => {
-    setMap(new google.maps.Map(refEl, options))
+    setMap(new google.maps.Map(refEl, options));
   } 
 
   const getMap = () => {
@@ -42,6 +42,7 @@ export const GoogleApiProvider = ({ children }) => {
   }
 
   const getGeocodedAddress = (latlng) => {
+    console.log(latlng);
     return new Promise((resolve, reject) => {
       geocoder
         .geocode({ location: latlng }, (results, status) => {
@@ -74,10 +75,9 @@ export const GoogleApiProvider = ({ children }) => {
         }
       },
       err => {
-        console.log(err)
-      }).catch(err => {
-        console.error("Unable to fetch data, following error: ", err)
-      })
+        console.error(err);
+        return Promise.reject("unable to resolve address");
+      });
   }
 
   const api = {

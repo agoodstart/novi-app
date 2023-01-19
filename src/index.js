@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import './index.scss'
 import App from './App';
+import { ParallaxProvider } from 'react-scroll-parallax';
 import { AuthProvider } from "./context/AuthProvider";
 import { ThemeProvider } from "./context/ThemeProvider";
 import { GoogleApiProvider } from "./context/GoogleApiProvider";
@@ -17,15 +18,17 @@ const root = createRoot(rootElement);
 root.render(
   <BrowserRouter>
     <ToastContainer />
-    <ThemeProvider>
-      <GoogleApiProvider>
-        <AuthProvider>
-          <Routes>
-            <Route path="/*" element={<App />} />
-          </Routes>
-        </AuthProvider>
-      </GoogleApiProvider>
-    </ThemeProvider>
+    <ParallaxProvider>
+      <ThemeProvider>
+        <GoogleApiProvider>
+          <AuthProvider>
+            <Routes>
+              <Route path="/*" element={<App />} />
+            </Routes>
+          </AuthProvider>
+        </GoogleApiProvider>
+      </ThemeProvider>
+    </ParallaxProvider>
   </BrowserRouter>
 );
 

@@ -8,6 +8,8 @@ import Box from '../../components/Box/Box';
 
 import useGoogleApi from '../../hooks/useGoogleApi';
 
+import mapStyles from '../../helpers/mapStyles';
+
 const { REACT_APP_OPENWEATHER_API_KEY } = process.env;
 
 export default function TravelPlanMap(props) {
@@ -15,7 +17,7 @@ export default function TravelPlanMap(props) {
 
   const { api } = useGoogleApi();
 
-  const [mapZoom, setMapZoom] = useState(6);
+  const [mapZoom, setMapZoom] = useState(7);
   const [mapCenter, setMapCenter] = useState(location);
 
   const onMapsLoaded = async () => {
@@ -86,6 +88,8 @@ export default function TravelPlanMap(props) {
     try {
       const locationInfo = await api.getGeocodedAddress(latlng);
 
+      console.log(locationInfo);
+
       if (props.destinations.some(destination => destination.placeId === locationInfo.placeId)) {
         props.showWarning(`${locationInfo.formattedAddress} is already present in the list`)
       } else {
@@ -129,7 +133,7 @@ export default function TravelPlanMap(props) {
   }
 
   return (
-    <Box elevation={1} borderRadius={10}>
+    <Box borderRadius={5}>
       <GoogleMaps
         onClick={onClick}
         onZoomChange={onZoomChange}
@@ -138,7 +142,12 @@ export default function TravelPlanMap(props) {
         zoom={mapZoom}
         disableDefaultUI={true}
         zoomControl={true}
+        scrollwheel={false}
+        zoomControlOptions={{
+          style: google.maps.ZoomControlStyle.SMALL
+        }}
         defaultCenter={mapCenter}
+        styles={mapStyles}
         >
         <OriginMarker onDragend={onOriginDragend} marker={props.origin} />
         {props.destinations.map((destination, i) => (
