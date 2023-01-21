@@ -111,7 +111,8 @@ export default function GoogleMaps({
   ]);
 
   const mapSize = {
-    height: '100%'
+    height: '100%',
+    border: "none"
   }
 
   return (

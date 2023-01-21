@@ -31,14 +31,14 @@ export const DistanceLine = ({pointToPoint}) => {
   const lineSymbol = {
     path: "M 0,-1 0,1",
     strokeOpacity: 1,
-    scale: 4,
+    scale: 3,
   };
 
   return <Line map={api.map} path={pointToPoint} strokeOpacity={0} icons={[
     {
       icon: lineSymbol,
       offset: "0",
-      repeat: "20px"
+      repeat: "25px"
     }
   ]} />
 }

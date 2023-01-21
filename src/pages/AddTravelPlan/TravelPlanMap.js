@@ -17,7 +17,7 @@ const { REACT_APP_OPENWEATHER_API_KEY } = process.env;
 export default function TravelPlanMap(props) {
   let location = props.deviceLocation.read();
 
-  const { api, placesService } = useGoogleApi();
+  const { api, placesService, map } = useGoogleApi();
   const { amadeusApi } = useAmadeusApi();
 
   const [mapZoom, setMapZoom] = useState(7);
@@ -126,12 +126,9 @@ export default function TravelPlanMap(props) {
     }
   }
 
-  const onMarkerClick = async (marker) => {
-    console.log(marker);
-    console.log(props.origin);
-
+  const onMarkerClick = async (destination) => {
     let request = {
-      query: marker.formattedAddress,
+      query: destination.formattedAddress,
       fields: ['name', 'formatted_address', 'place_id', 'geometry']
     }
 
@@ -141,7 +138,7 @@ export default function TravelPlanMap(props) {
       }
     });
 
-    setPointToPoint([marker.latlng, props.origin.latlng]);
+    setPointToPoint([destination.latlng, props.origin.latlng]);
 
     // try {
     //   const locationInfo = await api.getGeocodedAddress(latlng);
@@ -160,10 +157,6 @@ export default function TravelPlanMap(props) {
     //   props.showWarning(err)
     // }
   }
-
-  useEffect(() => {
-    console.log(pointToPoint)
-  }, [pointToPoint])
 
   const onZoomChange = () => {
     setMapZoom(api.map.getZoom());
@@ -212,9 +205,9 @@ export default function TravelPlanMap(props) {
         defaultCenter={mapCenter}
         styles={mapStyles}
       >
-        <OriginMarker marker={props.origin} />
+        <OriginMarker location={props.origin} />
         {props.destinations.map((destination, i) => (
-          <DestinationMarker onClick={onMarkerClick} marker={destination} key={i} />
+          <DestinationMarker onClick={onMarkerClick} location={destination} key={i} />
         ))}
         {pointToPoint ? <DistanceLine pointToPoint={pointToPoint} /> : null}
       </GoogleMaps>
