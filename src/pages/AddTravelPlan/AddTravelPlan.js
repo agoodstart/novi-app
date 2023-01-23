@@ -29,11 +29,6 @@ export default function AddTravelPlan() {
   const { modalRef } = useAuth();
   const { colors } = useTheme();
 
-  // const am = useAmadeusApi();
-  // const lockedLocations = am.locations;
-  // // const lockedLocations = [];
-  // console.log(lockedLocations);
-
   const [savedDestinations, setSavedDestinations] = useLocalStorage("destinations", []);
 
   const [placeCenter, setPlaceCenter] = useState("");
@@ -43,6 +38,8 @@ export default function AddTravelPlan() {
 
   const [origin, setOrigin] = useState({});
   const [destinations, setDestinations] = useState([]);
+
+  const [chosenDestinations, setChosenDestinations] = useState([]);
 
   const [recommended, setRecommended] = useState({});
   const [chosen, setChosen] = useState({});
@@ -103,6 +100,8 @@ export default function AddTravelPlan() {
           return curr;
         }
       }))
+    } else {
+      setRecommended(null);
     }
   }, [destinations]);
 
@@ -163,10 +162,13 @@ export default function AddTravelPlan() {
                   origin={origin}
                   setOrigin={setOrigin}
                   destinations={destinations}
+                  chosenDestinations={chosenDestinations}
+                  setChosenDestinations={setChosenDestinations}
                   // lockedLocations={lockedLocations}
                   setDestinations={setDestinations}
                   setPlaceOrigin={setPlaceOrigin} 
                   setPlaceCenter={setPlaceCenter} 
+                  maxTravelDistance={maxTravelDistance}
                   showWarning={showWarning}
                   deviceLocation={deviceLocation} />
               </Suspense>
@@ -182,7 +184,12 @@ export default function AddTravelPlan() {
         boxShadow: "0 -5px 5px -5px #333",
         zIndex: "9999"
       }}>
-
+          <TravelPlanDestinations 
+            chosen={chosen} 
+            setChosen={setChosen} 
+            destinations={chosenDestinations} 
+            setDestinations={setChosenDestinations}  
+          />
       </Container>
       </Parallax>
     </React.Fragment>

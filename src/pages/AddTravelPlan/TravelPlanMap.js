@@ -24,13 +24,16 @@ export default function TravelPlanMap(props) {
   const [mapCenter, setMapCenter] = useState(location);
   const [pointToPoint, setPointToPoint] = useState(null);
 
+  const capitalize = (str) => {
+    return str.replace(/^(\w)(.+)/, (_match, p1, p2) => p1.toUpperCase() + p2.toLowerCase())
+  }
+
   const onMapsLoaded = async () => {
     const latlng = api.map.getCenter().toJSON();
 
     try {
       let locationInfo = await api.getGeocodedAddress(latlng);
-
-      console.log(locationInfo)
+      props.setPlaceCenter(locationInfo.formattedAddress ?? "");
 
       props.setOrigin({
         latlng,
@@ -45,12 +48,14 @@ export default function TravelPlanMap(props) {
     try {
       const lockedLocations = await amadeusApi.getLocationsInRadius(latlng.lat, latlng.lng);
 
-      const newLocations = lockedLocations.map(location => ({ 
+      const newLocations = lockedLocations.map(location => ({
         latlng: {
           lat: location.geoCode.latitude,
           lng: location.geoCode.longitude
         },
-        formattedAddress: `${location.address.cityName}, ${location.address.countryName}`
+        // Better formatted city and countrynames
+        formattedAddress: `${capitalize(location.address.cityName)}, ${capitalize(location.address.countryName)}`,
+        outsideTravelDistance: location.distance.value > props.maxTravelDistance
       }));
       props.setDestinations(newLocations);
 
@@ -84,7 +89,7 @@ export default function TravelPlanMap(props) {
       // // console.log(li)
       // console.log(formattedAddress);
 
-    } catch(err) {
+    } catch (err) {
       props.showWarning(err);
     }
   }
@@ -98,10 +103,12 @@ export default function TravelPlanMap(props) {
     var difflon = (latlng.lng - props.origin.latlng.lng) * (Math.PI / 180); // Radian difference (longitudes)
 
     var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat / 2) * Math.sin(difflat / 2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)));
-    return d.toFixed(2);
+    return Math.ceil(d);
   }
 
   const createNewDestination = async (latlng, locationInfo) => {
+    console.log(latlng);
+    console.log(locationInfo);
 
     try {
       const weatherInfo = await axios.get('https://api.openweathermap.org/data/3.0/onecall', {
@@ -114,31 +121,50 @@ export default function TravelPlanMap(props) {
       });
 
       const markerDistance = calculateMarkerDistance(latlng);
+      console.log(props.chosenDestinations)
 
-      props.setDestinations([...props.destinations, {
+      props.setChosenDestinations([...props.chosenDestinations, {
         latlng,
         ...locationInfo,
         distance: markerDistance,
         temperature: weatherInfo.data.current.temp,
       }]);
     } catch (err) {
+      console.error(err);
       props.showWarning("Unable to create new destination");
     }
   }
 
-  const onMarkerClick = async (destination) => {
+  const onMarkerClick = async (destination, marker) => {
     let request = {
       query: destination.formattedAddress,
-      fields: ['name', 'formatted_address', 'place_id', 'geometry']
+      fields: ['name', 'formatted_address', 'geometry', 'place_id', 'plus_code', 'types']
     }
 
     placesService.findPlaceFromQuery(request, (results, status) => {
-      if(status === "OK") {
-        console.log(results);
+      if (status === "OK") {
+        let latlng = {
+          lat: results[0].geometry.location.lat(),
+          lng: results[0].geometry.location.lng()
+        }
+
+        let [city, country] = results[0].formatted_address.split(", ");
+        let formattedAddress = results[0].formatted_address;
+        let placeId = results[0].place_id;
+        createNewDestination(latlng, {
+          country,
+          city,
+          formattedAddress,
+          placeId
+        });
+      } else {
+        props.showWarning("Unable to get location");
       }
     });
 
     setPointToPoint([destination.latlng, props.origin.latlng]);
+
+    // props.setChosenDestinations()
 
     // try {
     //   const locationInfo = await api.getGeocodedAddress(latlng);
@@ -163,7 +189,6 @@ export default function TravelPlanMap(props) {
   }
 
   const onDragEnd = async () => {
-    console.log('ondragend');
     const latlng = api.map.getCenter().toJSON();
     setMapCenter(latlng);
 
@@ -174,15 +199,21 @@ export default function TravelPlanMap(props) {
       const lockedLocations = await amadeusApi.getLocationsInRadius(latlng.lat, latlng.lng);
 
       // const existingLocations = props.destinations;
-      const newLocations = lockedLocations.map(location => ({ 
-        latlng: {
+      const newLocations = lockedLocations.map(location => {
+        let latlng = {
           lat: location.geoCode.latitude,
           lng: location.geoCode.longitude
-        },
-        formattedAddress: `${location.address.cityName}, ${location.address.countryName}`
-      }));
-      
-      // const uniqueUnion = [...new Set([...existingLocations, ...newLocations])];
+        }
+
+        let distance = calculateMarkerDistance(latlng);
+
+        return {
+          latlng,
+          formattedAddress: `${capitalize(location.address.cityName)}, ${capitalize(location.address.countryName)}`,
+          outsideTravelDistance: distance > props.maxTravelDistance
+        }
+      });
+
       props.setDestinations(newLocations);
     } catch (err) {
       props.showWarning(err);

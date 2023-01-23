@@ -26,9 +26,6 @@ export default function TravelPlanControl(props) {
       lng: place.geometry.location.lng()
     };
     // console.log(place.photos[0].getUrl());
-
-    // console.log(api.getMap());
-
     api.map.panTo(latlng);
 
     props.setOrigin({

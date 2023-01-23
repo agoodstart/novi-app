@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import useGoogleApi from "../../hooks/useGoogleApi";
-import { faCircle, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faStar, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 
 export default function Marker({
   onClick, 
@@ -44,8 +44,9 @@ export default function Marker({
         position: location.latlng,
         disableAutoPan: true,
         content: 
-        `<div id="content">
-          <h1 id="firstHeading" class="firstHeading">${location.formattedAddress}</h1>
+        `<div id="content" style="text-align: center;">
+          <h3 id="secondHeading" class="secondHeading">${location.formattedAddress}</h3>
+          ${location.outsideTravelDistance ? '<p style="color: red;">Location is outside travel distance!</p>' : ''}
         </div>`
       });
     }
@@ -71,7 +72,7 @@ export default function Marker({
     }
 
     if(onClick && marker) {
-      marker.addListener("click", () => onClick(location))
+      marker.addListener("click", () => onClick(location, marker))
     }
   }, [marker, infoWindow, onClick])
 
@@ -100,6 +101,7 @@ export const OriginMarker = ({location}) => {
 
 export const DestinationMarker = ({location, onClick}) => {
   const { map } = useGoogleApi();
+  // console.log(location.outsideTravelDistance);
 
   const triggerClickEvent = (location) => {
     onClick(location);
@@ -109,7 +111,7 @@ export const DestinationMarker = ({location, onClick}) => {
     map={map} 
     icon={{
       path: faCircle.icon[4],
-      fillColor: "#11151C",
+      fillColor: location.outsideTravelDistance ? "#ef6461" : "#11151C",
       fillOpacity: 1,
       anchor: new google.maps.Point(
         faCircle.icon[0] / 2, // width
