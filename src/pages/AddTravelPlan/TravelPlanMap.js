@@ -59,36 +59,6 @@ export default function TravelPlanMap(props) {
       }));
       props.setDestinations(newLocations);
 
-      // const result = lockedLocations.map(location => ({ latlng: {
-      //   lat: location.geoCode.latitude,
-      //   lng: location.geoCode.longitude
-      // }}));
-
-      // let latlng = {
-      //   lat: lockedLocations[0].geoCode.latitude,
-      //   lng: lockedLocations[0].geoCode.longitude,
-      // }
-      // console.log(result);
-
-      // let formattedAddress = `${lockedLocations[0].address.cityName}, ${lockedLocations[0].address.countryName}`;
-
-      // let request = {
-      //   query: formattedAddress,
-      //   fields: ['name', 'formatted_address', 'place_id', 'geometry']
-      // }
-
-      // placesService.findPlaceFromQuery(request, (results, status) => {
-      //   if(status === "OK") {
-      //     console.log(results);
-      //   }
-      // });
-
-      // // const li = await api.getGeocodedAddress(latlng);
-
-      // // console.log(lockedLocations[0]);
-      // // console.log(li)
-      // console.log(formattedAddress);
-
     } catch (err) {
       props.showWarning(err);
     }
@@ -151,37 +121,23 @@ export default function TravelPlanMap(props) {
         let [city, country] = results[0].formatted_address.split(", ");
         let formattedAddress = results[0].formatted_address;
         let placeId = results[0].place_id;
-        createNewDestination(latlng, {
-          country,
-          city,
-          formattedAddress,
-          placeId
-        });
+
+        if (props.chosenDestinations.some(destination => destination.placeId === placeId)) {
+          props.showWarning(`${locationInfo.formattedAddress} is already present in the list`)
+        } else {
+          createNewDestination(latlng, {
+            country,
+            city,
+            formattedAddress,
+            placeId
+          });
+        }
       } else {
         props.showWarning("Unable to get location");
       }
     });
 
     setPointToPoint([destination.latlng, props.origin.latlng]);
-
-    // props.setChosenDestinations()
-
-    // try {
-    //   const locationInfo = await api.getGeocodedAddress(latlng);
-
-    //   if(Object.keys(locationInfo).length === 0) {
-    //     throw "Unable to fetch location";
-    //   }
-
-    //   if (props.destinations.some(destination => destination.placeId === locationInfo.placeId)) {
-    //     props.showWarning(`${locationInfo.formattedAddress} is already present in the list`)
-    //   } else {
-    //     createNewDestination(latlng, locationInfo);
-    //   }
-
-    // } catch (err) {
-    //   props.showWarning(err)
-    // }
   }
 
   const onZoomChange = () => {
