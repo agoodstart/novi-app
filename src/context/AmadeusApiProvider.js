@@ -47,7 +47,6 @@ export const AmadeusApiProvider = ({ children }) => {
         'content-type': 'application/x-www-form-urlencoded'
       }
     }).then(res => {
-      console.log('called from useeffect');
       setBearerToken(res.data.access_token)
     }).catch(err => {
       console.log(err);
@@ -61,6 +60,7 @@ export const AmadeusApiProvider = ({ children }) => {
   }, [bearerToken]);
 
   const getLocationsInRadius = (lat, lng) => {
+    console.log('test');
     const params = new URLSearchParams();
     params.append('latitude', lat);
     params.append('longitude', lng);
@@ -77,13 +77,9 @@ export const AmadeusApiProvider = ({ children }) => {
       Promise.reject("unable to fetch nearby locations")
     });
   }
-
-  const amadeusApi = {
-    getLocationsInRadius
-  }
   
   return (
-      <AmadeusApiContext.Provider value={{ amadeusApi }}>
+      <AmadeusApiContext.Provider value={{ getLocationsInRadius }}>
           {children}
       </AmadeusApiContext.Provider>
   )

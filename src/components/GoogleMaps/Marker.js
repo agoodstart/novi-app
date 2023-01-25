@@ -72,7 +72,7 @@ export default function Marker({
     }
 
     if(onClick && marker) {
-      marker.addListener("click", () => onClick(location, marker))
+      marker.addListener("click", () => onClick(location))
     }
   }, [marker, infoWindow, onClick])
 
@@ -80,10 +80,10 @@ export default function Marker({
 }
 
 export const OriginMarker = ({location}) => {
-  const { api } = useGoogleApi();
+  const { map } = useGoogleApi();
 
   return <Marker 
-    map={api.map} 
+    map={map} 
     icon={{
       path: faStar.icon[4],
       fillColor: "#11151C",

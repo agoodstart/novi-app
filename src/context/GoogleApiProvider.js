@@ -47,7 +47,6 @@ export const GoogleApiProvider = ({ children }) => {
   }
 
   const getGeocodedAddress = (latlng) => {
-    console.log(latlng);
     return new Promise((resolve, reject) => {
       geocoder
         .geocode({ location: latlng }, (results, status) => {
@@ -58,7 +57,6 @@ export const GoogleApiProvider = ({ children }) => {
           }
         })
     }).then(results => {
-        console.log(results);
         const locationMatch = results.reduce((res, location) => {
           if(location.types.includes('locality') || 
           location.types.includes('postal_town')) {
@@ -113,7 +111,20 @@ export const GoogleApiProvider = ({ children }) => {
   }
 
   return (
-      <GoogleApiContext.Provider value={{ map, createMap, api, placesService, createPlacesService }}>
+      <GoogleApiContext.Provider value={{ 
+        map, 
+        createMap, 
+        getGeocodedAddress, 
+        api, 
+
+        autocompleteGeo,
+        createAutocompleteGeo,
+
+        autocompleteCenter,
+        createAutocompleteCenter,
+
+        placesService, 
+        createPlacesService }}>
         <Wrapper apiKey={REACT_APP_GOOGLE_MAPS_API_KEY} render={render} libraries={["places"]} callback={checkStatus}  >
           {children}
         </Wrapper>

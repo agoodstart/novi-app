@@ -12,30 +12,43 @@ import useTheme from '../../hooks/useTheme';
 import useGoogleApi from "../../hooks/useGoogleApi";
 import Typography from '../../components/Typography/Typography';
 
-export default function TravelPlanDestinations(props) {
+export default function TravelPlanDestinations({states, dispatch}) {
   const { colors } = useTheme();
-  const { api } = useGoogleApi();
+  const { map } = useGoogleApi();
 
-  const updateChosen = (destinationMarker) => {
-    if(destinationMarker.placeId === props.chosen.placeId) {
-      props.setChosen({})
-    } else {
-      props.setChosen(destinationMarker);
-    }
+  const updateChosen = (destination) => {
+    // if(destination.placeId === props.chosen.placeId) {
+    //   props.setChosen({})
+    // } else {
+    //   props.setChosen(destination);
+    // }
   }
 
-  const onLocationCenter = (destinationMarker) => {
-    api.map.panTo(destinationMarker.latlng);
+  const onLocationCenter = (destination) => {
+    // map.panTo(destination.latlng);
+
+    // dispatch({
+    //   type: 'mapcenter_changed',
+    //   payload: {
+
+    //   }
+    // })
   }
 
-  const onLocationRemove = (destinationMarker) => {
-    props.setDestinations(props.destinations.filter(destination => destination.placeId !== destinationMarker.placeId))
+  const onLocationRemove = (destination) => {
+    // dispatch({
+    //   type: 'remove_destination',
+    //   payload: {
+
+    //   }
+    // })
+    // props.setDestinations(props.destinations.filter(destination => destination.placeId !== destination.placeId))
   }
 
   return (
     <Box backgroundColor={colors.background.gray.alpha['15']} elevation={1} borderRadius={10} padding={15}>
       <Grid gridRows={5} rowGap={20}> 
-        {props.destinations.map((destination, i) => (
+        {states.chosenDestinations.map((destination, i) => (
           <GridItem key={i} rowStart={i}>
             <Box flexDirection="row" justifyContent="space-between" padding={10} alignItems="center" borderRadius={5} elevation={1} backgroundColor={colors.background.gray.alpha['30']}>
               <Box flexDirection="column" justifyContent="center" width={65}>

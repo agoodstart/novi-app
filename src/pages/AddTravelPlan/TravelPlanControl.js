@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useEffect, useState } from "react";
+import React, {useCallback} from "react";
 
 import Typography from "../../components/Typography/Typography";
 import TextInputWithGooglePlaces from "../../components/GoogleMaps/TextInputWithGooglePlaces";
@@ -7,38 +7,96 @@ import Box from "../../components/Box/Box";
 
 import useTheme from '../../hooks/useTheme';
 import useGoogleApi from "../../hooks/useGoogleApi";
+import useAmadeusApi from '../../hooks/useAmadeusApi';
 
-export default function TravelPlanControl(props) {
+const capitalize = (str) => {
+  return str.replace(/^(\w)(.+)/, (_match, p1, p2) => p1.toUpperCase() + p2.toLowerCase())
+}
+
+export default function TravelPlanControl({
+  states,
+  dispatch
+}) {
   const { colors } = useTheme();
-  const { api } = useGoogleApi();
+  const 
+  { 
+    map, 
+    autocompleteGeo, 
+    createAutocompleteGeo, 
+    autocompleteCenter,
+    createAutocompleteCenter 
+  } = useGoogleApi();
+  const { getLocationsInRadius } = useAmadeusApi();
 
-  const onPlaceChange = (autocomplete) => {
-    const place = autocomplete.getPlace();
-    
-    api.map.panTo({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()})
-  }
+
+  const onPlaceChange = async (autocomplete) => {
+    try {
+      const place = autocomplete.getPlace();
+
+      const latlng = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng()
+      };
+      
+      map.panTo(latlng)
+      // const lockedLocations = await getLocationsInRadius(latlng.lat, latlng.lng);
   
-  const onOriginPlaceChange = (autocomplete) => {
-    const place = autocomplete.getPlace();
-    console.log(place);
-    const latlng = {
-      lat: place.geometry.location.lat(),
-      lng: place.geometry.location.lng()
-    };
-    // console.log(place.photos[0].getUrl());
-    api.map.panTo(latlng);
+      // const newLocations = lockedLocations.map(location => ({
+      //   latlng: {
+      //     lat: location.geoCode.latitude,
+      //     lng: location.geoCode.longitude
+      //   },
+      //   formattedAddress: `${capitalize(location.address.cityName)}, ${capitalize(location.address.countryName)}`,
+      //   outsideTravelDistance: location.distance.value > states.maxTravelDistance 
+      // }));
+        
+      dispatch({
+        type: 'map_center_changed',
+        payload: {
+          latlng: latlng,
+          formattedAddress: place.formatted_address,
+          lockedDestinations: [],
+        }
+      })
+    } catch(err) {
+      console.error(err);
+    }
+  };
+  
+  const onOriginPlaceChange = async (autocomplete) => {
+    try {
+      const place = autocomplete.getPlace();
+      const latlng = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng()
+      };
 
-    props.setOrigin({
-      latlng,
-      country: place.address_components.find(location => location.types.includes('country')),
-      city: place.address_components.find(location => location.types.includes('locality') || location.types.includes('postal_town') || location.types.includes('administrative_area_level_3')),
-      formattedAddress: place.formatted_address,
-      placeId: place.placeId
-    })
+      map.panTo(latlng);
+      
+      dispatch({
+        type: 'map_origin_changed',
+        payload: {
+          country: place.address_components.find(location => location.types.includes('country')),
+          city: place.address_components.find(location => location.types.includes('locality') || location.types.includes('postal_town') || location.types.includes('administrative_area_level_3')),
+          latlng: latlng,
+          formattedAddress: place.formatted_address,
+          placeId: place.placeId,
+          lockedDestinations: [],
+        }
+      })
+    } catch(err) {
+      console.error(err);
+    }
+    // console.log(place.photos[0].getUrl());
   };
 
   const onDistanceChange = (e) => {
-    props.setMaxTravelDistance(e.target.value);
+    dispatch({
+      type: 'traveldistance_changed',
+      payload: {
+        maxTravelDistance: e.target.value
+      }
+    })
   }
 
   return (
@@ -53,9 +111,12 @@ export default function TravelPlanControl(props) {
         </Typography>
 
         <TextInputWithGooglePlaces 
-          autocompleteInstance={api.autocomplete.geo} 
+          autocompleteInstance={{
+            autocomplete: autocompleteGeo,
+            createAutocomplete: createAutocompleteGeo,
+          }} 
           onPlaceChange={onOriginPlaceChange}
-          defaultLocation={props.placeOrigin}
+          defaultLocation={states.placeOrigin}
           types={['(cities)']}
           customStyles={{
             borderRadius: "3px",
@@ -77,9 +138,12 @@ export default function TravelPlanControl(props) {
             Current center: 
         </Typography>
         <TextInputWithGooglePlaces 
-          autocompleteInstance={api.autocomplete.center} 
+          autocompleteInstance={{
+            autocomplete: autocompleteCenter,
+            createAutocomplete: createAutocompleteCenter,
+          }} 
           onPlaceChange={onPlaceChange}
-          defaultLocation={props.placeCenter}
+          defaultLocation={states.placeCenter}
           types={['(cities)']}
           customStyles={{
             borderRadius: "3px",
@@ -100,7 +164,7 @@ export default function TravelPlanControl(props) {
           Max travel distance
         </Typography>
         <NumberInput 
-          value={props.maxTravelDistance}
+          value={states.maxTravelDistance}
           onChange={onDistanceChange}
           customStyles={{
             borderRadius: "3px",

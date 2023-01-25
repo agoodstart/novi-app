@@ -39,7 +39,7 @@ export default function GoogleMaps({
 
   ...options
 }) {
-  const { map, createMap, api, placesService, createPlacesService } = useGoogleApi();
+  const { map, createMap, placesService, createPlacesService } = useGoogleApi();
   const ref = useRef(null);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export default function GoogleMaps({
 
   useEffect(() => {
     if(ref.current && map && placesService) {
-      onMapsLoaded();
+      onMapsLoaded(map.getCenter());
     }
   }, [ref, map, placesService])
 

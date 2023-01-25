@@ -1,7 +1,7 @@
-import React, { useEffect, useState, Suspense, useMemo } from 'react';
+import React, { useEffect, useState, Suspense, useMemo, useReducer } from 'react';
 import { toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
 
 import { Parallax } from 'react-scroll-parallax';
 
@@ -21,7 +21,152 @@ import useLocalStorage from '../../hooks/useLocalStorage';
 import useTheme from '../../hooks/useTheme';
 import useAuth from '../../hooks/useAuth';
 
-import useAmadeusApi from '../../hooks/useAmadeusApi';
+const calculateDistanceScore = (distance, maxTravelDistance) => {
+  let score = 0;
+  let [q1, q2, q3, q4] = [maxTravelDistance / 4, maxTravelDistance / 3, maxTravelDistance / 2, maxTravelDistance];
+
+  if(distance > 0 && distance < q1) {
+    score = 4;
+  } else if(distance > q1 && distance < q2) {
+    score = 3;
+  } else if(distance > q2 && distance < q3) {
+    score = 2;
+  } else if(distance > q3 && distance < q4) {
+    score = 1;
+  } else if(distance > q4) {
+    score = -1;
+  }
+
+  return score;
+}
+
+const calculateWeatherScore = (temperature) => {
+  let score = 0;
+  let [q1, q2, q3, q4] = [30, 25, 20, 15];
+
+  if(temperature > q2 && temperature < q1) {
+    score = 4;
+  } else if(temperature > q3 && temperature < q2) {
+    score = 3;
+  } else if(temperature > q4 && temperature < q3) {
+    score = 1; 
+  } else if(temperature > q1) {
+    score = 2
+  }
+
+  return score;
+}
+
+const initialStates = {
+  // 
+  placeOrigin: "",
+  placeCenter: "",
+
+  maxTravelDistance: 1000,
+  mapZoom: 7,
+  mapCenter: {},
+  pointToPoint: [],
+
+  origin: {},
+  lockedDestinations: [],
+  chosenDestinations: [],
+
+  recommendedDestination: {},
+  favoriteDestination: {},
+}
+
+const reducer = (states, action) => {
+  switch(action.type) {
+    case 'traveldistance_changed':
+      return {
+        ...states,
+
+        maxTravelDistance: action.payload.maxTravelDistance
+      }
+    case 'destination_added':
+      return {
+        ...states,
+
+        chosenDestinations:  [{
+          latlng: action.payload.latlng,
+          city: action.payload.city,
+          country: action.payload.country,
+          formattedAddress: action.payload.formattedAddress,
+          placeId: action.payload.placeId,
+          distance: action.payload.distance,
+          temperature: action.payload.temperature
+        }, ...states.chosenDestinations]
+      }
+    // triggers when the userlocation changes. happens when the page loads for the first time, or when user changes their current location
+    case 'map_origin_changed':
+      return {
+        ...states,
+
+        placeOrigin: action.payload.formattedAddress,
+        placeCenter: action.payload.formattedAddress,
+        origin: {
+          city: action.payload.city,
+          country: action.payload.country,
+          latlng: action.payload.latlng,
+          formattedAddress: action.payload.formattedAddress,
+          placeId: action.payload.placeId
+        },
+
+        lockedDestinations: action.payload.lockedDestinations,
+        mapCenter: action.payload.latlng,
+      }
+    // same as map_origin_changed, but without modifying the user location.
+    // happens when dragging the map, changing the center in autocomplete, or by clicking on the 'center button' on one of the chosen destinations
+    case 'map_center_changed':
+      return {
+        ...states,
+
+        placeCenter: action.payload.formattedAddress,
+        lockedDestinations: action.payload.lockedDestinations,
+        mapCenter: action.payload.latlng,
+      }
+    case 'map_zoomed':
+      return {
+        ...states,
+
+        mapZoom: action.payload.mapZoom,
+      }
+    case 'map_dragged':
+      return {
+        ...states,
+
+        mapCenter: action.payload.mapCenter,
+        placeCenter: action.payload.formattedAddress,
+        lockedDestinations: action.payload.lockedDestinations,
+      }
+    case 'show_recommended':
+      return {
+        ...states,
+
+        recommendedDestination: states.chosenDestinations.reduce((prev, curr) => {
+          let [
+            prevScore, 
+            currScore
+          ] = [
+            calculateDistanceScore(prev.distance, states.maxTravelDistance) + calculateWeatherScore(prev.temperature), 
+            calculateDistanceScore(curr.distance, states.maxTravelDistance) + calculateWeatherScore(curr.temperature)
+          ];
+  
+          if(prevScore > currScore) {
+            return prev;
+          } else {
+            return curr;
+          }
+        })
+      }
+    case 'remove_recommended':
+      return {
+        ...states,
+
+        recommendedDestination: {},
+      }
+  }
+}
 
 export default function AddTravelPlan() {
   const suspender = useSuspense();
@@ -29,20 +174,8 @@ export default function AddTravelPlan() {
   const { modalRef } = useAuth();
   const { colors } = useTheme();
 
+  const [states, dispatch] = useReducer(reducer, initialStates)
   const [savedDestinations, setSavedDestinations] = useLocalStorage("destinations", []);
-
-  const [placeCenter, setPlaceCenter] = useState("");
-  const [placeOrigin, setPlaceOrigin] = useState("");
-
-  const [maxTravelDistance, setMaxTravelDistance] = useState(1000);
-
-  const [origin, setOrigin] = useState({});
-  const [destinations, setDestinations] = useState([]);
-
-  const [chosenDestinations, setChosenDestinations] = useState([]);
-
-  const [recommended, setRecommended] = useState({});
-  const [chosen, setChosen] = useState({});
 
   const deviceLocation = useMemo(() => {
     return suspender.fetchCurrentLocation({ lat: 52.132633, lng: 5.2912659 });
@@ -61,12 +194,12 @@ export default function AddTravelPlan() {
   }
 
   const saveDestination = () => {
-    setSavedDestinations(savedDestinations.concat([chosen]));
+    setSavedDestinations(savedDestinations.concat([states.chosen]));
     navigate('/destinations');
   }
 
   const checkSaveButton = (target) => {
-    if(Object.keys(chosen).length === 0) {
+    if(Object.keys(states.chosen).length === 0) {
       target.disabled = true;
     } else {
       target.disabled = false;
@@ -74,72 +207,30 @@ export default function AddTravelPlan() {
   }
 
   useEffect(() => {
-    if(destinations.length > 0) {
-      destinations.forEach(destination => {
-        if(destination.distance >= parseInt(maxTravelDistance) || !maxTravelDistance) {
+    console.log(states.mapCenter);
+  }, [states.mapCenter])
+
+  useEffect(() => {
+    if(states.chosenDestinations.length > 0) {
+      states.chosenDestinations.forEach(destination => {
+        if(destination.distance >= parseInt(states.maxTravelDistance) || !states.maxTravelDistance) {
           showWarning(`${destination.formattedAddress} is not within the specified travel distance range`);
         }
       })
     }
-  }, [destinations, maxTravelDistance]);
+  }, [states.chosenDestinations, states.maxTravelDistance]);
 
   useEffect(() => {
-    if(destinations.length >= 2) {
-      setRecommended(destinations.reduce((prev, curr) => {
-        let [
-          prevScore, 
-          currScore
-        ] = [
-          calculateDistanceScore(prev.distance) + calculateWeatherScore(prev.temperature), 
-          calculateDistanceScore(curr.distance) + calculateWeatherScore(curr.temperature)
-        ];
-
-        if(prevScore > currScore) {
-          return prev;
-        } else {
-          return curr;
-        }
-      }))
+    if(states.chosenDestinations.length >= 2) {
+      dispatch({
+        type: 'show_recommended',
+      })
     } else {
-      setRecommended(null);
+      dispatch({
+        type: 'remove_recommended'
+      })
     }
-  }, [destinations]);
-
-  const calculateDistanceScore = (distance) => {
-    let score = 0;
-    let [q1, q2, q3, q4] = [maxTravelDistance / 4, maxTravelDistance / 3, maxTravelDistance / 2, maxTravelDistance];
-
-    if(distance > 0 && distance < q1) {
-      score = 4;
-    } else if(distance > q1 && distance < q2) {
-      score = 3;
-    } else if(distance > q2 && distance < q3) {
-      score = 2;
-    } else if(distance > q3 && distance < q4) {
-      score = 1;
-    } else if(distance > q4) {
-      score = -1;
-    }
-
-    return score;
-  }
-
-  const calculateWeatherScore = (temperature) => {
-    let score = 0;
-    let [q1, q2, q3, q4] = [30, 25, 20, 15];
-
-    if(temperature > q2 && temperature < q1) {
-      score = 4;
-    } else if(temperature > q3 && temperature < q2) {
-      score = 3;
-    } else if(temperature > q4 && temperature < q3) {
-      score = 1; 
-    } else if(temperature > q1) {
-      score = 2
-    }
-
-    return score;
-  }
+  }, [states.chosenDestinations]);
 
   return (
     <React.Fragment>
@@ -149,33 +240,22 @@ export default function AddTravelPlan() {
 
             <GridItem rowStart={1} columnStart={1} rowEnd={1} columnEnd={9}>
               <TravelPlanControl 
-                setOrigin={setOrigin} 
-                maxTravelDistance={maxTravelDistance} 
-                setMaxTravelDistance={setMaxTravelDistance} 
-                placeOrigin={placeOrigin} 
-                placeCenter={placeCenter} />
+                states={states}
+                dispatch={dispatch} />
             </GridItem>
 
             <GridItem rowStart={2} columnStart={1} rowEnd={8} columnEnd={9}>
               <Suspense fallback={<Typography variant="h1">Loading Google Maps... </Typography>}>
                 <TravelPlanMap 
-                  origin={origin}
-                  setOrigin={setOrigin}
-                  destinations={destinations}
-                  chosenDestinations={chosenDestinations}
-                  setChosenDestinations={setChosenDestinations}
-                  // lockedLocations={lockedLocations}
-                  setDestinations={setDestinations}
-                  setPlaceOrigin={setPlaceOrigin} 
-                  setPlaceCenter={setPlaceCenter} 
-                  maxTravelDistance={maxTravelDistance}
-                  showWarning={showWarning}
-                  deviceLocation={deviceLocation} />
+                  dispatch={dispatch}
+                  states={states}
+                  deviceLocation={deviceLocation}
+                  showWarning={showWarning} />
               </Suspense>
             </GridItem>
           </Grid>
 
-          <TravelPlanModal chosen={chosen} modalRef={modalRef} saveDestination={saveDestination} handleCloseModal={handleCloseModal} />
+          {/* <TravelPlanModal chosen={states.chosen} modalRef={modalRef} saveDestination={saveDestination} handleCloseModal={handleCloseModal} /> */}
         </Container>
       </Parallax>
       <Parallax speed={30}
@@ -184,12 +264,10 @@ export default function AddTravelPlan() {
         boxShadow: "0 -5px 5px -5px #333",
         zIndex: "9999"
       }}>
-          <TravelPlanDestinations 
-            chosen={chosen} 
-            setChosen={setChosen} 
-            destinations={chosenDestinations} 
-            setDestinations={setChosenDestinations}  
-          />
+          {/* <TravelPlanDestinations 
+            states={states}
+            dispatch={dispatch}
+          /> */}
       </Container>
       </Parallax>
     </React.Fragment>
