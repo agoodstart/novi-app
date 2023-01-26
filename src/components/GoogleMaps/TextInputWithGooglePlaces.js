@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { TextInput } from "../Form/Form";
 import useGoogleApi from "../../hooks/useGoogleApi";
 
@@ -6,6 +6,7 @@ const withPlaces = (Component) => ({autocompleteInstance, defaultLocation, onPla
   const { map } = useGoogleApi();
   const { autocomplete, createAutocomplete } = autocompleteInstance;
   const autocompleteRef = useRef(null);
+  const [listener, setListener] = useState(false);
 
   useEffect(() => {
     if(autocompleteRef.current && !autocomplete && autocompleteRef.current instanceof HTMLInputElement) {
@@ -28,13 +29,13 @@ const withPlaces = (Component) => ({autocompleteInstance, defaultLocation, onPla
   }, [defaultLocation, autocomplete, autocompleteRef])
 
   useEffect(() => {
-    if(autocomplete && map) {
-      if(onPlaceChange) {
-        console.log('place changed');
-        autocomplete.addListener("place_changed", () => onPlaceChange(autocomplete))
-      }
+    if(autocomplete && map && !listener) {
+      autocomplete.addListener("place_changed", () => {
+        setListener(true);
+        onPlaceChange(autocomplete)
+      })
     }
-  }, [autocomplete, onPlaceChange, map])
+  }, [listener, autocomplete, map])
 
   return (
     <Component iRef={autocompleteRef} />

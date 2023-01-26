@@ -36,12 +36,12 @@ export default function TravelPlanDestinations({states, dispatch}) {
   }
 
   const onLocationRemove = (destination) => {
-    // dispatch({
-    //   type: 'remove_destination',
-    //   payload: {
-
-    //   }
-    // })
+    dispatch({
+      type: 'remove_destination',
+      payload: {
+        placeId: destination.placeId
+      }
+    })
     // props.setDestinations(props.destinations.filter(destination => destination.placeId !== destination.placeId))
   }
 

@@ -60,7 +60,6 @@ export const AmadeusApiProvider = ({ children }) => {
   }, [bearerToken]);
 
   const getLocationsInRadius = (lat, lng) => {
-    console.log('test');
     const params = new URLSearchParams();
     params.append('latitude', lat);
     params.append('longitude', lng);

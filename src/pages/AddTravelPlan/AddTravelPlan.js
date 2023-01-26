@@ -21,6 +21,18 @@ import useLocalStorage from '../../hooks/useLocalStorage';
 import useTheme from '../../hooks/useTheme';
 import useAuth from '../../hooks/useAuth';
 
+const calculateMarkerDistance = (origin, destination) => {
+  const R = 6371.0710 // Radius of earth in km
+  // var R = 3958.8; // Radius of the Earth in miles
+  var rlat1 = origin.lat * (Math.PI / 180); // Convert degrees to radians
+  var rlat2 = destination.lat * (Math.PI / 180); // Convert degrees to radians
+  var difflat = rlat2 - rlat1; // Radian difference (latitudes)
+  var difflon = (destination.lng - origin.lng) * (Math.PI / 180); // Radian difference (longitudes)
+
+  var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat / 2) * Math.sin(difflat / 2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)));
+  return Math.ceil(d);
+}
+
 const calculateDistanceScore = (distance, maxTravelDistance) => {
   let score = 0;
   let [q1, q2, q3, q4] = [maxTravelDistance / 4, maxTravelDistance / 3, maxTravelDistance / 2, maxTravelDistance];
@@ -83,7 +95,7 @@ const reducer = (states, action) => {
 
         maxTravelDistance: action.payload.maxTravelDistance
       }
-    case 'destination_added':
+    case 'add_destination':
       return {
         ...states,
 
@@ -97,7 +109,33 @@ const reducer = (states, action) => {
           temperature: action.payload.temperature
         }, ...states.chosenDestinations]
       }
-    // triggers when the userlocation changes. happens when the page loads for the first time, or when user changes their current location
+    case 'remove_destination':
+      return {
+        ...states,
+
+        chosenDestinations: states.chosenDestinations.filter(chosenDestination => chosenDestination.placeId !== action.payload.placeId),
+      }
+    case 'center_destination':
+      return {
+        ...states,
+
+
+      }
+    case 'before_maps_loaded':
+      return {
+        ...states,
+
+        origin: {
+          city: action.payload.city,
+          country: action.payload.country,
+          latlng: action.payload.latlng,
+          formattedAddress: action.payload.formattedAddress,
+          placeId: action.payload.placeId
+        },
+
+        mapCenter: action.payload.latlng,
+      }
+    // triggers when the userlocation changes. happens when user changes their current location
     case 'map_origin_changed':
       return {
         ...states,
@@ -130,14 +168,6 @@ const reducer = (states, action) => {
         ...states,
 
         mapZoom: action.payload.mapZoom,
-      }
-    case 'map_dragged':
-      return {
-        ...states,
-
-        mapCenter: action.payload.mapCenter,
-        placeCenter: action.payload.formattedAddress,
-        lockedDestinations: action.payload.lockedDestinations,
       }
     case 'show_recommended':
       return {
@@ -207,10 +237,6 @@ export default function AddTravelPlan() {
   }
 
   useEffect(() => {
-    console.log(states.mapCenter);
-  }, [states.mapCenter])
-
-  useEffect(() => {
     if(states.chosenDestinations.length > 0) {
       states.chosenDestinations.forEach(destination => {
         if(destination.distance >= parseInt(states.maxTravelDistance) || !states.maxTravelDistance) {
@@ -241,7 +267,8 @@ export default function AddTravelPlan() {
             <GridItem rowStart={1} columnStart={1} rowEnd={1} columnEnd={9}>
               <TravelPlanControl 
                 states={states}
-                dispatch={dispatch} />
+                dispatch={dispatch}
+                calculateMarkerDistance={calculateMarkerDistance} />
             </GridItem>
 
             <GridItem rowStart={2} columnStart={1} rowEnd={8} columnEnd={9}>
@@ -250,6 +277,7 @@ export default function AddTravelPlan() {
                   dispatch={dispatch}
                   states={states}
                   deviceLocation={deviceLocation}
+                  calculateMarkerDistance={calculateMarkerDistance}
                   showWarning={showWarning} />
               </Suspense>
             </GridItem>
@@ -264,10 +292,10 @@ export default function AddTravelPlan() {
         boxShadow: "0 -5px 5px -5px #333",
         zIndex: "9999"
       }}>
-          {/* <TravelPlanDestinations 
+          <TravelPlanDestinations 
             states={states}
             dispatch={dispatch}
-          /> */}
+          />
       </Container>
       </Parallax>
     </React.Fragment>

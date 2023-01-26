@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React from "react";
 
 import Typography from "../../components/Typography/Typography";
 import TextInputWithGooglePlaces from "../../components/GoogleMaps/TextInputWithGooglePlaces";
@@ -15,7 +15,8 @@ const capitalize = (str) => {
 
 export default function TravelPlanControl({
   states,
-  dispatch
+  dispatch,
+  calculateMarkerDistance
 }) {
   const { colors } = useTheme();
   const 
@@ -39,23 +40,30 @@ export default function TravelPlanControl({
       };
       
       map.panTo(latlng)
-      // const lockedLocations = await getLocationsInRadius(latlng.lat, latlng.lng);
+      const lockedLocations = await getLocationsInRadius(latlng.lat, latlng.lng);
+      console.log(states.origin);
   
-      // const newLocations = lockedLocations.map(location => ({
-      //   latlng: {
-      //     lat: location.geoCode.latitude,
-      //     lng: location.geoCode.longitude
-      //   },
-      //   formattedAddress: `${capitalize(location.address.cityName)}, ${capitalize(location.address.countryName)}`,
-      //   outsideTravelDistance: location.distance.value > states.maxTravelDistance 
-      // }));
+      const newLocations = lockedLocations.map(location => {
+        let latlng = {
+          lat: location.geoCode.latitude,
+          lng: location.geoCode.longitude
+        }
+
+        let distance = calculateMarkerDistance(states.origin.latlng, latlng);
+
+        return {
+          latlng,
+          formattedAddress: `${capitalize(location.address.cityName)}, ${capitalize(location.address.countryName)}`,
+          outsideTravelDistance: distance > states.maxTravelDistance
+        }
+      });
         
       dispatch({
         type: 'map_center_changed',
         payload: {
           latlng: latlng,
           formattedAddress: place.formatted_address,
-          lockedDestinations: [],
+          lockedDestinations: newLocations,
         }
       })
     } catch(err) {
@@ -72,6 +80,22 @@ export default function TravelPlanControl({
       };
 
       map.panTo(latlng);
+      const lockedLocations = await getLocationsInRadius(latlng.lat, latlng.lng);
+  
+      const newLocations = lockedLocations.map(location => {
+        let latlng = {
+          lat: location.geoCode.latitude,
+          lng: location.geoCode.longitude
+        }
+
+        let distance = calculateMarkerDistance(states.origin.latlng, latlng);
+
+        return {
+          latlng,
+          formattedAddress: `${capitalize(location.address.cityName)}, ${capitalize(location.address.countryName)}`,
+          outsideTravelDistance: distance > states.maxTravelDistance
+        }
+      });
       
       dispatch({
         type: 'map_origin_changed',
@@ -81,7 +105,7 @@ export default function TravelPlanControl({
           latlng: latlng,
           formattedAddress: place.formatted_address,
           placeId: place.placeId,
-          lockedDestinations: [],
+          lockedDestinations: newLocations,
         }
       })
     } catch(err) {

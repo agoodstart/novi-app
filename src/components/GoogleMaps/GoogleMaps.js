@@ -63,12 +63,6 @@ export default function GoogleMaps({
   }, [ref, map])
 
   useEffect(() => {
-    if(ref.current && map && placesService) {
-      onMapsLoaded(map.getCenter());
-    }
-  }, [ref, map, placesService])
-
-  useEffect(() => {
     if (map) {
       [
         "click",
