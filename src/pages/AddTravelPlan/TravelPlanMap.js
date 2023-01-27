@@ -14,7 +14,7 @@ import mapStyles from '../../helpers/mapStyles';
 import { DistanceLine } from '../../components/GoogleMaps/DistanceLine';
 import Typography from '../../components/Typography/Typography';
 
-const { REACT_APP_OPENWEATHER_API_KEY } = process.env;
+const { REACT_APP_OPENWEATHER_API_KEY, REACT_APP_PEXELS_API_KEY } = process.env;
 
 export default function TravelPlanMap({
   states,
@@ -84,35 +84,60 @@ export default function TravelPlanMap({
   }, [beforeMapsLoad]);
 
   const createNewDestination = async (latlng, locationInfo) => {
-    console.log(locationInfo);
-    try {
-      const weatherInfo = await axios.get('https://api.openweathermap.org/data/3.0/onecall', {
-        params: {
-          lat: latlng.lat,
-          lon: latlng.lng,
-          units: 'metric',
-          appid: REACT_APP_OPENWEATHER_API_KEY,
-        }
-      });
+    const markerDistance = calculateMarkerDistance(states.origin.latlng, latlng);
 
-      const markerDistance = calculateMarkerDistance(states.origin.latlng, latlng);
+    dispatch({
+      type: 'add_destination',
+      payload: {
+        latlng,
+        country: locationInfo.country,
+        city: locationInfo.city,
+        formattedAddress: locationInfo.formattedAddress,
+        placeId: locationInfo.placeId,
+        distance: markerDistance,
+        // temperature: weatherInfo.data.current.temp
+      }
+    });
 
-      dispatch({
-        type: 'add_destination',
-        payload: {
-          latlng,
-          country: locationInfo.country,
-          city: locationInfo.city,
-          formattedAddress: locationInfo.formattedAddress,
-          placeId: locationInfo.placeId,
-          distance: markerDistance,
-          temperature: weatherInfo.data.current.temp
-        }
-      });
-    } catch (err) {
-      console.error(err);
-      showWarning("Unable to create new destination");
-    }
+    // console.log(locationInfo);
+    // try {
+    //   const weatherInfo = await axios.get('https://api.openweathermap.org/data/3.0/onecall', {
+    //     params: {
+    //       lat: latlng.lat,
+    //       lon: latlng.lng,
+    //       units: 'metric',
+    //       appid: REACT_APP_OPENWEATHER_API_KEY,
+    //     }
+    //   });
+
+    //   console.log(locationInfo.city);
+
+
+    //   const image = await axios.get(`https://api.pexels.com/v1/search?orientation=landscape&query=${locationInfo.city}`, {
+    //     headers: {
+    //       "Authorization": REACT_APP_PEXELS_API_KEY
+    //     }
+    //   });
+    //   console.log(image);
+
+    //   const markerDistance = calculateMarkerDistance(states.origin.latlng, latlng);
+
+    //   dispatch({
+    //     type: 'add_destination',
+    //     payload: {
+    //       latlng,
+    //       country: locationInfo.country,
+    //       city: locationInfo.city,
+    //       formattedAddress: locationInfo.formattedAddress,
+    //       placeId: locationInfo.placeId,
+    //       distance: markerDistance,
+    //       temperature: weatherInfo.data.current.temp
+    //     }
+    //   });
+    // } catch (err) {
+    //   console.error(err);
+    //   showWarning("Unable to create new destination");
+    // }
   }
 
   const onMarkerClick = async (destination) => {

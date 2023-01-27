@@ -265,20 +265,13 @@ export default function AddTravelPlan() {
           <Grid gridRows={8} gridColumns={8} rowGap={15} columnGap={15}>
 
             <GridItem rowStart={1} columnStart={1} rowEnd={1} columnEnd={9}>
-              <TravelPlanControl 
-                states={states}
-                dispatch={dispatch}
-                calculateMarkerDistance={calculateMarkerDistance} />
+              <TravelPlanControl states={states} dispatch={dispatch} calculateMarkerDistance={calculateMarkerDistance} />
             </GridItem>
 
             <GridItem rowStart={2} columnStart={1} rowEnd={8} columnEnd={9}>
               <Suspense fallback={<Typography variant="h1">Loading Google Maps... </Typography>}>
                 <TravelPlanMap 
-                  dispatch={dispatch}
-                  states={states}
-                  deviceLocation={deviceLocation}
-                  calculateMarkerDistance={calculateMarkerDistance}
-                  showWarning={showWarning} />
+                  dispatch={dispatch} states={states} deviceLocation={deviceLocation} calculateMarkerDistance={calculateMarkerDistance} showWarning={showWarning} />
               </Suspense>
             </GridItem>
           </Grid>
@@ -292,10 +285,11 @@ export default function AddTravelPlan() {
         boxShadow: "0 -5px 5px -5px #333",
         zIndex: "9999"
       }}>
-          <TravelPlanDestinations 
-            states={states}
-            dispatch={dispatch}
-          />
+        <Grid gridRows={8} gridColumns={8} rowGap={15} columnGap={15}>
+          <GridItem rowStart={1} columnStart={1} rowEnd={9} columnEnd={5}>
+            <TravelPlanDestinations states={states} dispatch={dispatch} />
+          </GridItem>
+        </Grid>
       </Container>
       </Parallax>
     </React.Fragment>
