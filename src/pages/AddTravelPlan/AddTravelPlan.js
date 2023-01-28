@@ -106,7 +106,8 @@ const reducer = (states, action) => {
           formattedAddress: action.payload.formattedAddress,
           placeId: action.payload.placeId,
           distance: action.payload.distance,
-          temperature: action.payload.temperature
+          temperature: action.payload.temperature,
+          image: action.payload.image
         }, ...states.chosenDestinations]
       }
     case 'remove_destination':
@@ -286,7 +287,11 @@ export default function AddTravelPlan() {
         zIndex: "9999"
       }}>
         <Grid gridRows={8} gridColumns={8} rowGap={15} columnGap={15}>
-          <GridItem rowStart={1} columnStart={1} rowEnd={9} columnEnd={5}>
+          <GridItem rowStart={1} columnStart={1} rowEnd={9} columnEnd={4}>
+            <Typography  variant={"h1"} customStyles={{
+              textAlign: 'center',
+              marginBottom: '20px'
+            }}>Chosen Destinations</Typography>
             <TravelPlanDestinations states={states} dispatch={dispatch} />
           </GridItem>
         </Grid>

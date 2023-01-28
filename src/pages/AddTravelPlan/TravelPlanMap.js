@@ -85,6 +85,32 @@ export default function TravelPlanMap({
 
   const createNewDestination = async (latlng, locationInfo) => {
     const markerDistance = calculateMarkerDistance(states.origin.latlng, latlng);
+    let imageInfo, weatherInfo;
+
+    try {
+      weatherInfo = await axios.get('https://api.openweathermap.org/data/3.0/onecall', {
+        params: {
+          lat: latlng.lat,
+          lon: latlng.lng,
+          units: 'metric',
+          appid: REACT_APP_OPENWEATHER_API_KEY,
+        }
+      });
+    } catch (err) {
+      console.error(err);
+      showWarning("Unable to create new destination");
+    }
+
+    try {
+      imageInfo = await axios.get(`https://api.pexels.com/v1/search?orientation=landscape&query=${locationInfo.city}`, {
+        headers: {
+          "Authorization": REACT_APP_PEXELS_API_KEY
+        }
+      });
+    } catch(err) {
+      console.error(err);
+      showWarning("Unable to create new destination");
+    }
 
     dispatch({
       type: 'add_destination',
@@ -95,49 +121,10 @@ export default function TravelPlanMap({
         formattedAddress: locationInfo.formattedAddress,
         placeId: locationInfo.placeId,
         distance: markerDistance,
-        // temperature: weatherInfo.data.current.temp
+        temperature: weatherInfo.data.current.temp,
+        image: imageInfo.data.photos[0].src.landscape
       }
     });
-
-    // console.log(locationInfo);
-    // try {
-    //   const weatherInfo = await axios.get('https://api.openweathermap.org/data/3.0/onecall', {
-    //     params: {
-    //       lat: latlng.lat,
-    //       lon: latlng.lng,
-    //       units: 'metric',
-    //       appid: REACT_APP_OPENWEATHER_API_KEY,
-    //     }
-    //   });
-
-    //   console.log(locationInfo.city);
-
-
-    //   const image = await axios.get(`https://api.pexels.com/v1/search?orientation=landscape&query=${locationInfo.city}`, {
-    //     headers: {
-    //       "Authorization": REACT_APP_PEXELS_API_KEY
-    //     }
-    //   });
-    //   console.log(image);
-
-    //   const markerDistance = calculateMarkerDistance(states.origin.latlng, latlng);
-
-    //   dispatch({
-    //     type: 'add_destination',
-    //     payload: {
-    //       latlng,
-    //       country: locationInfo.country,
-    //       city: locationInfo.city,
-    //       formattedAddress: locationInfo.formattedAddress,
-    //       placeId: locationInfo.placeId,
-    //       distance: markerDistance,
-    //       temperature: weatherInfo.data.current.temp
-    //     }
-    //   });
-    // } catch (err) {
-    //   console.error(err);
-    //   showWarning("Unable to create new destination");
-    // }
   }
 
   const onMarkerClick = async (destination) => {
