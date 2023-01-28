@@ -1,4 +1,5 @@
-import React, { useEffect, useState, Suspense, useMemo, useReducer } from 'react';
+import axios from 'axios';
+import React, { useEffect, Suspense, useMemo, useReducer } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
@@ -20,6 +21,13 @@ import useSuspense from '../../hooks/useSuspense';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import useTheme from '../../hooks/useTheme';
 import useAuth from '../../hooks/useAuth';
+import useAmadeusApi from '../../hooks/useAmadeusApi';
+
+const { REACT_APP_OPENWEATHER_API_KEY, REACT_APP_PEXELS_API_KEY } = process.env;
+
+const capitalize = (str) => {
+  return str.replace(/^(\w)(.+)/, (_match, p1, p2) => p1.toUpperCase() + p2.toLowerCase())
+}
 
 const calculateMarkerDistance = (origin, destination) => {
   const R = 6371.0710 // Radius of earth in km
@@ -71,15 +79,12 @@ const calculateWeatherScore = (temperature) => {
 
 const initialStates = {
   // 
-  placeOrigin: "",
-  placeCenter: "",
-
+  origin: {},
   maxTravelDistance: 1000,
   mapZoom: 7,
-  mapCenter: {},
+  mapCenter: null,
   pointToPoint: [],
 
-  origin: {},
   lockedDestinations: [],
   chosenDestinations: [],
 
@@ -92,13 +97,11 @@ const reducer = (states, action) => {
     case 'traveldistance_changed':
       return {
         ...states,
-
         maxTravelDistance: action.payload.maxTravelDistance
       }
     case 'add_destination':
       return {
         ...states,
-
         chosenDestinations:  [{
           latlng: action.payload.latlng,
           city: action.payload.city,
@@ -113,36 +116,15 @@ const reducer = (states, action) => {
     case 'remove_destination':
       return {
         ...states,
-
         chosenDestinations: states.chosenDestinations.filter(chosenDestination => chosenDestination.placeId !== action.payload.placeId),
       }
     case 'center_destination':
       return {
         ...states,
-
-
       }
-    case 'before_maps_loaded':
-      return {
-        ...states,
-
-        origin: {
-          city: action.payload.city,
-          country: action.payload.country,
-          latlng: action.payload.latlng,
-          formattedAddress: action.payload.formattedAddress,
-          placeId: action.payload.placeId
-        },
-
-        mapCenter: action.payload.latlng,
-      }
-    // triggers when the userlocation changes. happens when user changes their current location
     case 'map_origin_changed':
       return {
         ...states,
-
-        placeOrigin: action.payload.formattedAddress,
-        placeCenter: action.payload.formattedAddress,
         origin: {
           city: action.payload.city,
           country: action.payload.country,
@@ -150,30 +132,26 @@ const reducer = (states, action) => {
           formattedAddress: action.payload.formattedAddress,
           placeId: action.payload.placeId
         },
-
-        lockedDestinations: action.payload.lockedDestinations,
         mapCenter: action.payload.latlng,
       }
-    // same as map_origin_changed, but without modifying the user location.
-    // happens when dragging the map, changing the center in autocomplete, or by clicking on the 'center button' on one of the chosen destinations
     case 'map_center_changed':
       return {
         ...states,
-
-        placeCenter: action.payload.formattedAddress,
-        lockedDestinations: action.payload.lockedDestinations,
-        mapCenter: action.payload.latlng,
+        mapCenter: action.payload.mapCenter,
       }
     case 'map_zoomed':
       return {
         ...states,
-
         mapZoom: action.payload.mapZoom,
+      }
+    case 'set_locked_destinations':
+      return {
+        ...states,
+        lockedDestinations: action.payload.lockedDestinations
       }
     case 'show_recommended':
       return {
         ...states,
-
         recommendedDestination: states.chosenDestinations.reduce((prev, curr) => {
           let [
             prevScore, 
@@ -193,7 +171,6 @@ const reducer = (states, action) => {
     case 'remove_recommended':
       return {
         ...states,
-
         recommendedDestination: {},
       }
   }
@@ -204,6 +181,7 @@ export default function AddTravelPlan() {
   const navigate = useNavigate();
   const { modalRef } = useAuth();
   const { colors } = useTheme();
+  const { getLocationsInRadius } = useAmadeusApi();
 
   const [states, dispatch] = useReducer(reducer, initialStates)
   const [savedDestinations, setSavedDestinations] = useLocalStorage("destinations", []);
@@ -212,8 +190,48 @@ export default function AddTravelPlan() {
     return suspender.fetchCurrentLocation({ lat: 52.132633, lng: 5.2912659 });
   }, []);
 
-  const showWarning = (text) => {
-    toast.warn(text);
+  const createNewDestination = async (latlng, locationInfo) => {
+    const markerDistance = calculateMarkerDistance(states.origin.latlng, latlng);
+    let imageInfo, weatherInfo;
+
+    try {
+      weatherInfo = await axios.get('https://api.openweathermap.org/data/3.0/onecall', {
+        params: {
+          lat: latlng.lat,
+          lon: latlng.lng,
+          units: 'metric',
+          appid: REACT_APP_OPENWEATHER_API_KEY,
+        }
+      });
+    } catch (err) {
+      console.error(err);
+      toast.warn("Unable to create new destination");
+    }
+
+    try {
+      imageInfo = await axios.get(`https://api.pexels.com/v1/search?orientation=landscape&query=${locationInfo.city}`, {
+        headers: {
+          "Authorization": REACT_APP_PEXELS_API_KEY
+        }
+      });
+    } catch(err) {
+      console.error(err);
+      toast.warn("Unable to create new destination");
+    }
+
+    dispatch({
+      type: 'add_destination',
+      payload: {
+        latlng,
+        country: locationInfo.country,
+        city: locationInfo.city,
+        formattedAddress: locationInfo.formattedAddress,
+        placeId: locationInfo.placeId,
+        distance: markerDistance,
+        temperature: weatherInfo.data.current.temp,
+        image: imageInfo.data.photos[0].src.landscape
+      }
+    });
   }
 
   const handleOpenModal = () => {
@@ -241,11 +259,46 @@ export default function AddTravelPlan() {
     if(states.chosenDestinations.length > 0) {
       states.chosenDestinations.forEach(destination => {
         if(destination.distance >= parseInt(states.maxTravelDistance) || !states.maxTravelDistance) {
-          showWarning(`${destination.formattedAddress} is not within the specified travel distance range`);
+          toast.warn(`${destination.formattedAddress} is not within the specified travel distance range`);
         }
       })
     }
   }, [states.chosenDestinations, states.maxTravelDistance]);
+
+  useEffect(() => {
+    const fetchLockedDestinations = async () => {
+      const locations = await getLocationsInRadius(states.mapCenter);
+    
+      const lockedDestinations = locations.map(location => {
+        let toLatLng = {
+          lat: location.geoCode.latitude,
+          lng: location.geoCode.longitude
+        }
+    
+        let distance = calculateMarkerDistance(states.origin.latlng, toLatLng);
+    
+        return {
+          latlng: toLatLng,
+          formattedAddress: `${capitalize(location.address.cityName)}, ${capitalize(location.address.countryName)}`,
+          outsideTravelDistance: distance > states.maxTravelDistance
+        }
+      });
+     
+      dispatch({
+        type: 'set_locked_destinations',
+        payload: {
+          lockedDestinations,
+        }
+      })
+    }
+
+    if(states.maxTravelDistance && states.mapCenter) {
+      fetchLockedDestinations()
+        .catch(() => {
+        toast.warn('unable to fetch possible destinations');
+      })
+    }
+  }, [states.maxTravelDistance, states.mapCenter])
 
   useEffect(() => {
     if(states.chosenDestinations.length >= 2) {
@@ -266,13 +319,12 @@ export default function AddTravelPlan() {
           <Grid gridRows={8} gridColumns={8} rowGap={15} columnGap={15}>
 
             <GridItem rowStart={1} columnStart={1} rowEnd={1} columnEnd={9}>
-              <TravelPlanControl states={states} dispatch={dispatch} calculateMarkerDistance={calculateMarkerDistance} />
+              <TravelPlanControl states={states} dispatch={dispatch} />
             </GridItem>
 
             <GridItem rowStart={2} columnStart={1} rowEnd={8} columnEnd={9}>
               <Suspense fallback={<Typography variant="h1">Loading Google Maps... </Typography>}>
-                <TravelPlanMap 
-                  dispatch={dispatch} states={states} deviceLocation={deviceLocation} calculateMarkerDistance={calculateMarkerDistance} showWarning={showWarning} />
+                <TravelPlanMap dispatch={dispatch} states={states} deviceLocation={deviceLocation} createNewDestination={createNewDestination} />
               </Suspense>
             </GridItem>
           </Grid>
@@ -282,16 +334,10 @@ export default function AddTravelPlan() {
       </Parallax>
       <Parallax speed={30}
         translateY={['-100px', '100px', 'easeIn']}>
-      <Container element="section" backgroundColor={colors.background.white.main} customStyles={{
-        boxShadow: "0 -5px 5px -5px #333",
-        zIndex: "9999"
-      }}>
+      <Container element="section" backgroundColor={colors.background.white.main} customStyles={{ boxShadow: "0 -5px 5px -5px #333", zIndex: "9999" }}>
         <Grid gridRows={8} gridColumns={8} rowGap={15} columnGap={15}>
           <GridItem rowStart={1} columnStart={1} rowEnd={9} columnEnd={4}>
-            <Typography  variant={"h1"} customStyles={{
-              textAlign: 'center',
-              marginBottom: '20px'
-            }}>Chosen Destinations</Typography>
+            <Typography  variant={"h1"} customStyles={{ textAlign: 'center', marginBottom: '20px' }}>Chosen Destinations</Typography>
             <TravelPlanDestinations states={states} dispatch={dispatch} />
           </GridItem>
         </Grid>

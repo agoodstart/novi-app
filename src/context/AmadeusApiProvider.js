@@ -59,10 +59,10 @@ export const AmadeusApiProvider = ({ children }) => {
     }
   }, [bearerToken]);
 
-  const getLocationsInRadius = (lat, lng) => {
+  const getLocationsInRadius = (latlng) => {
     const params = new URLSearchParams();
-    params.append('latitude', lat);
-    params.append('longitude', lng);
+    params.append('latitude', latlng.lat);
+    params.append('longitude', latlng.lng);
     params.append('radius', '500');
     params.append('page[limit]', '30');
     params.append('sort', 'analytics.flights.score');

@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import { TextInput } from "../Form/Form";
 import useGoogleApi from "../../hooks/useGoogleApi";
 
-const withPlaces = (Component) => ({autocompleteInstance, defaultLocation, onPlaceChange, types, customStyles}) => {
+const withPlaces = (Component) => ({autocompleteInstance, instanceName, defaultLocation, onInput, types, customStyles}) => {
   const { map } = useGoogleApi();
   const { autocomplete, createAutocomplete } = autocompleteInstance;
   const autocompleteRef = useRef(null);
@@ -23,7 +23,7 @@ const withPlaces = (Component) => ({autocompleteInstance, defaultLocation, onPla
   }, [autocompleteRef, customStyles])
 
   useEffect(() => {
-    if(autocompleteRef.current && autocomplete && autocompleteRef.current instanceof HTMLInputElement) {
+    if(autocompleteRef.current && autocomplete && autocompleteRef.current instanceof HTMLInputElement && defaultLocation) {
       autocompleteRef.current.value = defaultLocation
     }
   }, [defaultLocation, autocomplete, autocompleteRef])
@@ -32,7 +32,7 @@ const withPlaces = (Component) => ({autocompleteInstance, defaultLocation, onPla
     if(autocomplete && map && !listener) {
       autocomplete.addListener("place_changed", () => {
         setListener(true);
-        onPlaceChange(autocomplete)
+        onInput(autocomplete, instanceName)
       })
     }
   }, [listener, autocomplete, map])

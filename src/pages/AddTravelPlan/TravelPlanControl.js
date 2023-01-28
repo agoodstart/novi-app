@@ -7,16 +7,10 @@ import Box from "../../components/Box/Box";
 
 import useTheme from '../../hooks/useTheme';
 import useGoogleApi from "../../hooks/useGoogleApi";
-import useAmadeusApi from '../../hooks/useAmadeusApi';
-
-const capitalize = (str) => {
-  return str.replace(/^(\w)(.+)/, (_match, p1, p2) => p1.toUpperCase() + p2.toLowerCase())
-}
 
 export default function TravelPlanControl({
   states,
-  dispatch,
-  calculateMarkerDistance
+  dispatch
 }) {
   const { colors } = useTheme();
   const 
@@ -27,76 +21,18 @@ export default function TravelPlanControl({
     autocompleteCenter,
     createAutocompleteCenter 
   } = useGoogleApi();
-  const { getLocationsInRadius } = useAmadeusApi();
 
+  const onInput = (autocomplete, instanceName) => {
+    const place = autocomplete.getPlace();
 
-  const onPlaceChange = async (autocomplete) => {
-    try {
-      const place = autocomplete.getPlace();
+    const latlng = {
+      lat: place.geometry.location.lat(),
+      lng: place.geometry.location.lng()
+    };
+    
+    map.panTo(latlng)
 
-      const latlng = {
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng()
-      };
-      
-      map.panTo(latlng)
-      const lockedLocations = await getLocationsInRadius(latlng.lat, latlng.lng);
-      console.log(states.origin);
-  
-      const newLocations = lockedLocations.map(location => {
-        let latlng = {
-          lat: location.geoCode.latitude,
-          lng: location.geoCode.longitude
-        }
-
-        let distance = calculateMarkerDistance(states.origin.latlng, latlng);
-
-        return {
-          latlng,
-          formattedAddress: `${capitalize(location.address.cityName)}, ${capitalize(location.address.countryName)}`,
-          outsideTravelDistance: distance > states.maxTravelDistance
-        }
-      });
-        
-      dispatch({
-        type: 'map_center_changed',
-        payload: {
-          latlng: latlng,
-          formattedAddress: place.formatted_address,
-          lockedDestinations: newLocations,
-        }
-      })
-    } catch(err) {
-      console.error(err);
-    }
-  };
-  
-  const onOriginPlaceChange = async (autocomplete) => {
-    try {
-      const place = autocomplete.getPlace();
-      const latlng = {
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng()
-      };
-
-      map.panTo(latlng);
-      const lockedLocations = await getLocationsInRadius(latlng.lat, latlng.lng);
-  
-      const newLocations = lockedLocations.map(location => {
-        let latlng = {
-          lat: location.geoCode.latitude,
-          lng: location.geoCode.longitude
-        }
-
-        let distance = calculateMarkerDistance(states.origin.latlng, latlng);
-
-        return {
-          latlng,
-          formattedAddress: `${capitalize(location.address.cityName)}, ${capitalize(location.address.countryName)}`,
-          outsideTravelDistance: distance > states.maxTravelDistance
-        }
-      });
-      
+    if(instanceName === 'origin') {
       dispatch({
         type: 'map_origin_changed',
         payload: {
@@ -105,14 +41,17 @@ export default function TravelPlanControl({
           latlng: latlng,
           formattedAddress: place.formatted_address,
           placeId: place.placeId,
-          lockedDestinations: newLocations,
         }
       })
-    } catch(err) {
-      console.error(err);
+    } else {
+      dispatch({
+        type: 'map_center_changed',
+        payload: {
+          latlng: latlng
+        }
+      })
     }
-    // console.log(place.photos[0].getUrl());
-  };
+  }
 
   const onDistanceChange = (e) => {
     dispatch({
@@ -125,12 +64,8 @@ export default function TravelPlanControl({
 
   return (
     <Box flexDirection="row" borderRadius={5} padding={10} backgroundColor={colors.background.white.alpha['60']}>
-      <Box flexDirection="column" width={30} customStyles={{
-        flexGrow: "1"
-      }}>
-        <Typography variant="xl" fontWeight={300} customStyles={{
-              marginLeft: '5px'
-          }}>
+      <Box flexDirection="column" width={30} customStyles={{ flexGrow: "1" }}>
+        <Typography variant="xl" fontWeight={300} customStyles={{ marginLeft: '5px' }}>
             Your current location: 
         </Typography>
 
@@ -138,9 +73,10 @@ export default function TravelPlanControl({
           autocompleteInstance={{
             autocomplete: autocompleteGeo,
             createAutocomplete: createAutocompleteGeo,
-          }} 
-          onPlaceChange={onOriginPlaceChange}
-          defaultLocation={states.placeOrigin}
+          }}
+          instanceName={'origin'}
+          onInput={onInput}
+          defaultLocation={states.origin.formattedAddress}
           types={['(cities)']}
           customStyles={{
             borderRadius: "3px",
@@ -152,22 +88,17 @@ export default function TravelPlanControl({
         />
       </Box>
 
-      <Box flexDirection="column" width={30} customStyles={{
-        marginLeft: "5px",
-        flexGrow: "1"
-      }}>
-        <Typography variant="xl" fontWeight={300} customStyles={{
-            marginLeft: '5px'
-          }}>
-            Current center: 
+      <Box flexDirection="column" width={30} customStyles={{ marginLeft: "5px", flexGrow: "1" }}>
+        <Typography variant="xl" fontWeight={300} customStyles={{ marginLeft: '5px' }}>
+            Where do you want to go?
         </Typography>
         <TextInputWithGooglePlaces 
           autocompleteInstance={{
             autocomplete: autocompleteCenter,
             createAutocomplete: createAutocompleteCenter,
           }} 
-          onPlaceChange={onPlaceChange}
-          defaultLocation={states.placeCenter}
+          instanceName={'destination'}
+          onInput={onInput}
           types={['(cities)']}
           customStyles={{
             borderRadius: "3px",
@@ -179,12 +110,8 @@ export default function TravelPlanControl({
         />
       </Box>
 
-      <Box flexDirection="column" width={30} customStyles={{
-        marginLeft: "5px"
-      }}>
-        <Typography variant="xl" fontWeight={300} customStyles={{
-          marginLeft: '5px'
-        }}>
+      <Box flexDirection="column" width={30} customStyles={{ marginLeft: "5px" }}>
+        <Typography variant="xl" fontWeight={300} customStyles={{ marginLeft: '5px' }}>
           Max travel distance
         </Typography>
         <NumberInput 

@@ -26,7 +26,7 @@ export default function Line({...options}) {
 }
 
 export const DistanceLine = ({pointToPoint}) => {
-  const { api } = useGoogleApi();
+  const { map } = useGoogleApi();
 
   const lineSymbol = {
     path: "M 0,-1 0,1",
@@ -34,7 +34,7 @@ export const DistanceLine = ({pointToPoint}) => {
     scale: 3,
   };
 
-  return <Line map={api.map} path={pointToPoint} strokeOpacity={0} icons={[
+  return <Line map={map} path={pointToPoint} strokeOpacity={0} icons={[
     {
       icon: lineSymbol,
       offset: "0",
