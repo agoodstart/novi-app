@@ -9,13 +9,15 @@ import { Parallax } from 'react-scroll-parallax';
 import TravelPlanMap from './TravelPlanMap';
 import TravelPlanControl from './TravelPlanControl';
 import TravelPlanDestinations from './TravelPlanDestinations';
-import TravelPlanChoices from './TravelPlanChoices';
+import { Chosen, Recommended} from './TravelPlanChoices';
 import TravelPlanModal from './TravelPlanModal';
 
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
+import Box from '../../components/Box/Box';
 import { Grid, GridItem } from '../../components/Grid/Grid';
 import Typography from '../../components/Typography/Typography';
+import Divider from '../../components/Divider/Divider';
 
 import useSuspense from '../../hooks/useSuspense';
 import useLocalStorage from '../../hooks/useLocalStorage';
@@ -72,6 +74,8 @@ const calculateWeatherScore = (temperature) => {
     score = 1; 
   } else if(temperature > q1) {
     score = 2
+  } else if(temperature < q4) {
+    score = -1
   }
 
   return score;
@@ -88,8 +92,8 @@ const initialStates = {
   lockedDestinations: [],
   chosenDestinations: [],
 
-  recommendedDestination: {},
-  favoriteDestination: {},
+  recommended: {},
+  chosen: {},
 }
 
 const reducer = (states, action) => {
@@ -149,10 +153,15 @@ const reducer = (states, action) => {
         ...states,
         lockedDestinations: action.payload.lockedDestinations
       }
+    case 'set_chosen':
+      return {
+        ...states,
+        chosen: action.payload.chosen
+      }
     case 'show_recommended':
       return {
         ...states,
-        recommendedDestination: states.chosenDestinations.reduce((prev, curr) => {
+        recommended: states.chosenDestinations.reduce((prev, curr) => {
           let [
             prevScore, 
             currScore
@@ -171,7 +180,7 @@ const reducer = (states, action) => {
     case 'remove_recommended':
       return {
         ...states,
-        recommendedDestination: {},
+        recommended: {},
       }
   }
 }
@@ -294,8 +303,19 @@ export default function AddTravelPlan() {
 
     if(states.maxTravelDistance && states.mapCenter) {
       fetchLockedDestinations()
-        .catch(() => {
-        toast.warn('unable to fetch possible destinations');
+      .then(() => {
+        if(states.chosenDestinations.length >= 2) {
+          dispatch({
+            type: 'show_recommended',
+          })
+        } else {
+          dispatch({
+            type: 'remove_recommended'
+          })
+        }
+      })
+      .catch(() => {
+      toast.warn('unable to fetch possible destinations');
       })
     }
   }, [states.maxTravelDistance, states.mapCenter])
@@ -314,6 +334,7 @@ export default function AddTravelPlan() {
 
   return (
     <React.Fragment>
+      <TravelPlanModal chosen={states.chosen} modalRef={modalRef} saveDestination={saveDestination} handleCloseModal={handleCloseModal} />
       <Parallax speed={-50}>
         <Container element="section" backgroundColor={colors.background.black.alpha['15']} >
           <Grid gridRows={8} gridColumns={8} rowGap={15} columnGap={15}>
@@ -329,17 +350,64 @@ export default function AddTravelPlan() {
             </GridItem>
           </Grid>
 
-          {/* <TravelPlanModal chosen={states.chosen} modalRef={modalRef} saveDestination={saveDestination} handleCloseModal={handleCloseModal} /> */}
         </Container>
       </Parallax>
+
       <Parallax speed={30}
         translateY={['-100px', '100px', 'easeIn']}>
       <Container element="section" backgroundColor={colors.background.white.main} customStyles={{ boxShadow: "0 -5px 5px -5px #333", zIndex: "9999" }}>
-        <Grid gridRows={8} gridColumns={8} rowGap={15} columnGap={15}>
+        <Grid gridRows={9} gridColumns={8} rowGap={15} columnGap={15}>
           <GridItem rowStart={1} columnStart={1} rowEnd={9} columnEnd={4}>
-            <Typography  variant={"h1"} customStyles={{ textAlign: 'center', marginBottom: '20px' }}>Chosen Destinations</Typography>
+            <Typography 
+              textColor={colors.text.black.alpha['50']} 
+              fontWeight={700} letterSpacing={3} 
+              variant={"h1"} 
+              customStyles={{ textAlign: 'center', marginBottom: '20px' }}
+            >Chosen Destinations</Typography>
             <TravelPlanDestinations states={states} dispatch={dispatch} />
           </GridItem>
+
+          <GridItem rowStart={1} columnStart={4} rowEnd={10} columnEnd={4}>
+            <Box flexDirection={'row'} justifyContent='center' alignItems={'center'}>
+              <Divider orientation={'vertical'} size={100} thickness={10} color={colors.background.black.alpha['30']} />
+            </Box>
+          </GridItem>
+
+          <GridItem rowStart={1} columnStart={5} rowEnd={4} columnEnd={9}>
+          <Typography 
+              textColor={colors.text.black.alpha['50']} 
+              fontWeight={700} letterSpacing={3} 
+              variant={"h1"} 
+              customStyles={{ textAlign: 'center'}}
+            >We recommend</Typography>
+            <Recommended recommended={states.recommended} />
+          </GridItem>
+
+          <GridItem rowStart={5} columnStart={5} rowEnd={8} columnEnd={9}>
+          <Typography 
+              textColor={colors.text.black.alpha['50']} 
+              fontWeight={700} letterSpacing={3} 
+              variant={"h1"} 
+              customStyles={{ textAlign: 'center' }}
+            >Your Choice</Typography>
+            <Chosen chosen={states.chosen} />
+          </GridItem>
+
+          <GridItem rowStart={9} columnStart={5} rowEnd={9} columnEnd={9}>
+          <Button 
+            color={colors.background.primary.main} 
+            fullWidth
+            isDisabled={checkSaveButton}
+            size="large"
+            elevation={2}
+            onClick={handleOpenModal}
+            customStyles={{
+              marginTop: '20px'
+            }}
+            >
+              Save chosen destination
+          </Button>
+        </GridItem>
         </Grid>
       </Container>
       </Parallax>

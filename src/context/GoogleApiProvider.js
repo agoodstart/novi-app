@@ -26,6 +26,13 @@ export const GoogleApiProvider = ({ children }) => {
     setMap(new google.maps.Map(refEl, options));
   } 
 
+  const unsetMap = () => {
+    setMap(null);
+    setAutocompleteCenter(null);
+    setAutocompleteGeo(null);
+    setPlacesService(null);
+  }
+
   const getMap = () => {
     return map;
   }
@@ -114,6 +121,7 @@ export const GoogleApiProvider = ({ children }) => {
       <GoogleApiContext.Provider value={{ 
         map, 
         createMap, 
+        unsetMap,
         getGeocodedAddress, 
         api, 
 

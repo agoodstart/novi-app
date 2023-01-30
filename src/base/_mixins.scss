@@ -63,6 +63,40 @@
   }
 }
 
+@mixin divider {
+  .divider {
+    border-radius: 20px;
+
+    &__horizontal {
+      @for $i from 1 through 20 {
+        &--size-#{$i * 5} {
+          width: percentage(math.div($i * 5, 100));
+        }
+      }
+
+      @for $j from 1 through 20 {
+        &--thickness-#{$j * 5} {
+          height: math.div($j * 5, 100) * 1px;
+        }
+      }
+    }
+
+    &__vertical {
+      @for $k from 1 through 20 {
+        &--size-#{$k * 5} {
+          height: percentage(math.div($k * 5, 100));
+        }
+
+        @for $l from 1 through 20 {
+          &--size-#{$l * 5} {
+            height: math.div($l * 5, 100) * 1px;
+          }
+        }
+      }
+    }
+  }
+}
+
 @mixin sizes {
   &--width-auto {
     width: auto;

@@ -17,10 +17,6 @@ export default function Destination() {
   const imageSource = resource.read();
   const weather = weatherResource.read();
 
-  const [alerts, setAlerts] = useState(weather.alerts ?? []);
-
-  console.log(weather.alerts)
-
   const dateTimeToLocaleString = (datetime) => {
     const d = new Date(datetime * 1000);
     return d.toLocaleDateString("en-GB", {
@@ -30,16 +26,6 @@ export default function Destination() {
       year: 'numeric',
     });
   }
-
-  useEffect(() => {
-    if(alerts.length > 0) {
-      alerts.forEach(alert => {
-        console.log(dateTimeToLocaleString(alert.start));
-        console.log("\n");
-      })
-    }
-  }, [])
-
 
   return(
     <Container id={"destination-" + destination?.city?.long_name} element="section" backgroundColor={colors.background.black.alpha['15']}>

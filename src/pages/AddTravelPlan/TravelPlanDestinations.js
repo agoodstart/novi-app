@@ -22,7 +22,7 @@ export default function TravelPlanDestinations({states, dispatch}) {
       <Grid gridRows={5} rowGap={20}> 
         {states.chosenDestinations.map((destination, i) => (
           <GridItem key={i} rowStart={i}>
-            <TravelPlanDestination dispatch={dispatch} destination={destination} />
+            <TravelPlanDestination dispatch={dispatch} destination={destination} chosen={states.chosen} />
           </GridItem>
         ))}
       </Grid>
@@ -30,15 +30,26 @@ export default function TravelPlanDestinations({states, dispatch}) {
   )
 }
 
-function TravelPlanDestination({dispatch, destination}) {
+function TravelPlanDestination({dispatch, chosen, destination}) {
   const { colors } = useTheme();
 
-  const updateChosen = (destination) => {
-    // if(destination.placeId === props.chosen.placeId) {
-    //   props.setChosen({})
-    // } else {
-    //   props.setChosen(destination);
-    // }
+  const updateChosen = () => {
+
+    if(destination.placeId === chosen.placeId) {
+      dispatch({
+        type: 'set_chosen',
+        payload: {
+          chosen: {}
+        }
+      })
+    } else {
+      dispatch({
+        type: 'set_chosen',
+        payload: {
+          chosen: destination
+        }
+      })
+    }
   }
 
   const onLocationCenter = (destination) => {

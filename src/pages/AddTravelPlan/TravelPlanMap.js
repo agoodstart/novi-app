@@ -26,6 +26,7 @@ export default function TravelPlanMap({
   { 
     placesService, 
     map, 
+    unsetMap,
     getGeocodedAddress 
   } = useGoogleApi();
 
@@ -47,6 +48,10 @@ export default function TravelPlanMap({
 
   useEffect(() => {
     beforeMapsLoad(userLocation);
+
+    return () => {
+      unsetMap();
+    }
   }, [beforeMapsLoad]);
 
   const onMarkerClick = async (destination) => {
