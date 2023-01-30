@@ -1,9 +1,4 @@
 import React from 'react';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faLocationCrosshairs, faStar } from '@fortawesome/free-solid-svg-icons';
-
 import Typography from '../../components/Typography/Typography';
 import Box from '../../components/Box/Box';
 import { Grid, GridItem } from '../../components/Grid/Grid';
@@ -14,9 +9,6 @@ import useTheme from '../../hooks/useTheme';
 import useGoogleApi from "../../hooks/useGoogleApi";
 
 export default function TravelPlanDestinations({states, dispatch}) {
-  const { colors } = useTheme();
-  const { map } = useGoogleApi();
-
   return (
     <Box>
       <Grid gridRows={5} rowGap={20}> 

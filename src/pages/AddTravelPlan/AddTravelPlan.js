@@ -343,6 +343,18 @@ export default function AddTravelPlan() {
               <TravelPlanControl states={states} dispatch={dispatch} />
             </GridItem>
 
+            {/* <GridItem rowStart={2} columnStart={1} rowEnd={3} columnEnd={3}>
+              <Box backgroundColor={colors.background.black.alpha['15']} borderRadius={5}>
+                <Typography>Select one of the markers on the map</Typography>
+              </Box>
+            </GridItem>
+
+            <GridItem rowStart={3} columnStart={1} rowEnd={4} columnEnd={3}>
+              <Box backgroundColor={colors.background.black.alpha['15']} borderRadius={5}>
+                <Typography>Select one of the markers on the map</Typography>
+              </Box>
+            </GridItem> */}
+
             <GridItem rowStart={2} columnStart={1} rowEnd={8} columnEnd={9}>
               <Suspense fallback={<Typography variant="h1">Loading Google Maps... </Typography>}>
                 <TravelPlanMap dispatch={dispatch} states={states} deviceLocation={deviceLocation} createNewDestination={createNewDestination} />
