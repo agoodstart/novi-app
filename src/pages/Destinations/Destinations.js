@@ -1,6 +1,4 @@
 import React from "react";
-
-
 import { useNavigate } from "react-router-dom";
 import useTheme from "../../hooks/useTheme";
 import useLocalStorage from "../../hooks/useLocalStorage";
@@ -13,8 +11,6 @@ import Button from "../../components/Button/Button";
 import Container from "../../components/Container/Container";
 
 export default function Destinations() {
-  console.log('bruh')
-
   const navigate = useNavigate();
   const {colors} = useTheme();
   const [destinations, setDestinations] = useLocalStorage("destinations", []);

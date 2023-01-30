@@ -7,7 +7,7 @@ export default function DestinationRouting() {
   const suspender = useSuspense();
   const location = useLocation();
   console.log(location)
-  const resource = suspender.fetchPexelsAPI(location.state.city.short_name);
+  const resource = suspender.fetchPexelsAPI(location.state.city);
   const weatherResource = suspender.fetchOpenWeatherAPI(location.state.latlng)
 
   return (

@@ -1,0 +1,52 @@
+@use "sass:math";
+@use "../../base/mixins";
+@use "../../base/functions";
+@use "../../base/variables";
+
+// @include mixins.divider;
+
+// .divider {
+//   background-color: #11151C20;
+
+//   &__horizontal {
+//     width: 100%;
+//     height: 10px;
+//   }
+
+//   &__vertical {
+//     width: 10px;
+//     height: 100%;
+//   }
+// }
+
+.divider {
+  border-radius: 20px;
+
+  &__horizontal {
+    @for $i from 1 through 20 {
+      &--size-#{$i * 5} {
+        width: percentage(math.div($i * 5, 100));
+      }
+    }
+
+    @for $j from 1 through 20 {
+      &--thickness-#{$j * 5} {
+        height: math.div($j * 5, 100) * 100px;
+      }
+    }
+  }
+
+  &__vertical {
+    @for $k from 1 through 20 {
+      &--size-#{$k * 5} {
+        height: percentage(math.div($k * 5, 100));
+      }
+
+      @for $l from 1 through 20 {
+        &--thickness-#{$l * 5} {
+          width: math.div($l * 5, 100) * 100px;
+        }
+      }
+    }
+  }
+}

@@ -4,7 +4,7 @@ import styles from './Container.module.scss';
 /**
  * A generic container with preset values
  */
- export default function Container({children, element, backgroundColor, id}) {
+ export default function Container({children, element, backgroundColor, id, customStyles}) {
   const containerRef = useRef();
 
   useEffect(() => {
@@ -22,19 +22,19 @@ import styles from './Container.module.scss';
   switch (element) {
     case 'main':
       return (
-        <main ref={containerRef}>
+        <main ref={containerRef} style={customStyles}>
           {children}
         </main>
       )
     case 'section':
       return (
-        <section ref={containerRef}>
+        <section ref={containerRef} style={customStyles}>
           {children}
         </section>
       )
     case 'div':
       return (
-        <div ref={containerRef}>
+        <div ref={containerRef} style={customStyles}>
           {children}
         </div>
       )

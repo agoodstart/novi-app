@@ -1,150 +1,134 @@
-import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import GoogleMaps from '../../components/GoogleMaps/GoogleMaps';
 import { DestinationMarker, OriginMarker } from '../../components/GoogleMaps/Marker';
 import Box from '../../components/Box/Box';
 
 import useGoogleApi from '../../hooks/useGoogleApi';
+import mapStyles from '../../helpers/mapStyles';
 
-const { REACT_APP_OPENWEATHER_API_KEY } = process.env;
+import { DistanceLine } from '../../components/GoogleMaps/DistanceLine';
+import Typography from '../../components/Typography/Typography';
 
-export default function TravelPlanMap(props) {
-  let location = props.deviceLocation.read();
+export default function TravelPlanMap({
+  states,
+  dispatch,
+  deviceLocation,
+  createNewDestination
+}) {
+  const userLocation = useMemo(() => {
+    return deviceLocation.read();
+  }, []);
 
-  const { api } = useGoogleApi();
+  const 
+  { 
+    placesService, 
+    map, 
+    unsetMap,
+    getGeocodedAddress 
+  } = useGoogleApi();
 
-  const [mapZoom, setMapZoom] = useState(6);
-  const [mapCenter, setMapCenter] = useState(location);
+  const [pointToPoint, setPointToPoint] = useState(null);
 
-  const onMapsLoaded = async () => {
-    const latlng = api.map.getCenter().toJSON();
-    
-    try {
-      let locationInfo = await api.getGeocodedAddress(latlng);
+  const beforeMapsLoad = useCallback(async (userLocation) => {
+    const locationInfo = await getGeocodedAddress(userLocation);
+    dispatch({
+      type: 'map_origin_changed',
+      payload: {
+        formattedAddress: locationInfo.formattedAddress ?? "",
+        city: locationInfo.city,
+        country: locationInfo.country,
+        latlng: userLocation,
+        placeId: locationInfo.placeId,
+      },
+    });
+  }, [])
 
-      props.setOrigin({
-        latlng,
-        ...locationInfo,
-      });
-  
-      props.setPlaceOrigin(locationInfo.formattedAddress);
-    } catch(err) {
-      props.showWarning("Unable to fetch location")
+  useEffect(() => {
+    beforeMapsLoad(userLocation);
+
+    return () => {
+      unsetMap();
     }
-  }
+  }, [beforeMapsLoad]);
 
-  const calculateMarkerDistance = (latlng) => {
-    const R = 6371.0710 // Radius of earth in km
-    // var R = 3958.8; // Radius of the Earth in miles
-    var rlat1 = props.origin.latlng.lat * (Math.PI/180); // Convert degrees to radians
-    var rlat2 = latlng.lat * (Math.PI/180); // Convert degrees to radians
-    var difflat = rlat2-rlat1; // Radian difference (latitudes)
-    var difflon = (latlng.lng-props.origin.latlng.lng) * (Math.PI/180); // Radian difference (longitudes)
-  
-    var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat/2)*Math.sin(difflat/2)+Math.cos(rlat1)*Math.cos(rlat2)*Math.sin(difflon/2)*Math.sin(difflon/2)));
-    return d.toFixed(2);
-  }
+  const onMarkerClick = async (destination) => {
+    let request = {
+      query: destination.formattedAddress,
+      fields: ['name', 'formatted_address', 'geometry', 'place_id', 'plus_code', 'types']
+    }
 
-  const createNewDestination = async (latlng, locationInfo) => {
-
-    try {
-      const weatherInfo = await axios.get('https://api.openweathermap.org/data/3.0/onecall', {
-        params: {
-          lat: latlng.lat,
-          lon: latlng.lng,
-          units: 'metric',
-          appid: REACT_APP_OPENWEATHER_API_KEY,
+    placesService.findPlaceFromQuery(request, async (results, status) => {
+      if (status === "OK") {
+        let latlng = {
+          lat: results[0].geometry.location.lat(),
+          lng: results[0].geometry.location.lng()
         }
-      });
-  
-      const markerDistance = calculateMarkerDistance(latlng);
 
-      props.setDestinations([...props.destinations, {
-        latlng,
-        ...locationInfo,
-        distance: markerDistance,
-        temperature: weatherInfo.data.current.temp,
-      }]);
-    } catch(err) {
-      props.showWarning("Unable to create new destination");
-    }
-  }
+        let [city, country] = results[0].formatted_address.split(", ");
+        let formattedAddress = results[0].formatted_address;
+        let placeId = results[0].place_id;
 
-  const onClick = async (e) => {
-    toast.info('Creating destination...', {
-      position: toast.POSITION.TOP_CENTER,
-      autoClose: 1000
+        if (states.chosenDestinations.some(destination => destination.placeId === placeId)) {
+          toast.warn(`${formattedAddress} is already present in the list`)
+        } else {
+          await createNewDestination(latlng, {
+            country,
+            city,
+            formattedAddress,
+            placeId
+          });
+        }
+      } else {
+        toast.warn("Unable to get location");
+      }
     });
 
-    const latlng = {
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng(),
-    };
-
-    try {
-      const locationInfo = await api.getGeocodedAddress(latlng);
-
-      if (props.destinations.some(destination => destination.placeId === locationInfo.placeId)) {
-        props.showWarning(`${locationInfo.formattedAddress} is already present in the list`)
-      } else {
-        createNewDestination(latlng, locationInfo);
-      }
-
-    } catch(err) {
-      props.showWarning("Unable to fetch location")
-    }
+    setPointToPoint([destination.latlng, states.origin.latlng]);
   }
 
   const onZoomChange = () => {
-    setMapZoom(api.map.getZoom());
+    dispatch({
+      type: 'map_zoomed',
+      payload: {
+        mapZoom: map.getZoom(),
+      }
+    })
   }
 
-  const onIdle = async () => {
-    setMapCenter(api.map.getCenter().toJSON());
-
-    try {
-      const locationInfo = await api.getGeocodedAddress(api.map.getCenter().toJSON());
-      props.setPlaceCenter(locationInfo.formattedAddress);
-    } catch(err) {
-      props.showWarning(err);
-    }
-  }
-
-  const onOriginDragend = async (e) => {
-    const latlng = { lat: e.latLng.lat(), lng: e.latLng.lng() };
-
-    try {
-      const locationInfo = await api.getGeocodedAddress(latlng);
-      props.setOrigin({
-        latlng,
-        ...locationInfo
-      });
-
-      props.setPlaceOrigin(locationInfo.formattedAddress)
-    } catch(err) {
-      props.showWarning(err);
-    }
+  const onDragEnd = () => {
+    const latlng = map.getCenter().toJSON();
+    dispatch({
+      type: 'map_center_changed',
+      payload: {
+        mapCenter: latlng
+      }
+    })
   }
 
   return (
-    <Box elevation={1} borderRadius={10}>
-      <GoogleMaps
-        onClick={onClick}
+    <Box borderRadius={5}>
+      {Object.keys(states.origin).length !== 0 ? <GoogleMaps
+        onDragend={onDragEnd}
         onZoomChange={onZoomChange}
-        onMapsLoaded={onMapsLoaded}
-        onIdle={onIdle}
-        zoom={mapZoom}
+        zoom={states.mapZoom}
         disableDefaultUI={true}
         zoomControl={true}
-        defaultCenter={mapCenter}
-        >
-        <OriginMarker onDragend={onOriginDragend} marker={props.origin} />
-        {props.destinations.map((destination, i) => (
-          <DestinationMarker marker={destination} key={i} />
+        scrollwheel={false}
+        zoomControlOptions={{
+          style: google.maps.ZoomControlStyle.SMALL
+        }}
+        defaultCenter={states.mapCenter}
+        styles={mapStyles}
+      >
+        <OriginMarker location={states.origin} />
+        {states.lockedDestinations.map((destination, i) => (
+          <DestinationMarker onClick={onMarkerClick} location={destination} key={i} />
         ))}
-      </GoogleMaps>
+        {pointToPoint ? <DistanceLine pointToPoint={pointToPoint} /> : null}
+      </GoogleMaps> : <Typography>Setting origin data...</Typography>}
     </Box>
   )
 }

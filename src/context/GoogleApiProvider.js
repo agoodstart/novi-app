@@ -19,14 +19,26 @@ export const GoogleApiProvider = ({ children }) => {
   const [map, setMap] = useState();
   const [autocompleteCenter, setAutocompleteCenter] = useState();
   const [autocompleteGeo, setAutocompleteGeo] = useState();
+  const [placesService, setPlacesService] = useState();
   const [geocoder, setGeocoder] = useState();
 
   const createMap = (refEl, options = {}) => {
-    setMap(new google.maps.Map(refEl, options))
+    setMap(new google.maps.Map(refEl, options));
   } 
+
+  const unsetMap = () => {
+    setMap(null);
+    setAutocompleteCenter(null);
+    setAutocompleteGeo(null);
+    setPlacesService(null);
+  }
 
   const getMap = () => {
     return map;
+  }
+
+  const createPlacesService = () => {
+    setPlacesService(new google.maps.places.PlacesService(map));
   }
   
   const createAutocompleteCenter = (refEl, options = {}) => {
@@ -52,7 +64,6 @@ export const GoogleApiProvider = ({ children }) => {
           }
         })
     }).then(results => {
-        console.log(results);
         const locationMatch = results.reduce((res, location) => {
           if(location.types.includes('locality') || 
           location.types.includes('postal_town')) {
@@ -63,7 +74,7 @@ export const GoogleApiProvider = ({ children }) => {
         }, null);
 
         if(!locationMatch) {
-          return Promise.reject('cannot resolve address');
+          return Promise.resolve({});
         } else {
           return Promise.resolve({
             country: locationMatch.address_components.find(location => location.types.includes('country')),
@@ -74,10 +85,9 @@ export const GoogleApiProvider = ({ children }) => {
         }
       },
       err => {
-        console.log(err)
-      }).catch(err => {
-        console.error("Unable to fetch data, following error: ", err)
-      })
+        console.error(err);
+        return Promise.reject("unable to resolve address");
+      });
   }
 
   const api = {
@@ -108,7 +118,21 @@ export const GoogleApiProvider = ({ children }) => {
   }
 
   return (
-      <GoogleApiContext.Provider value={{ map, createMap, api }}>
+      <GoogleApiContext.Provider value={{ 
+        map, 
+        createMap, 
+        unsetMap,
+        getGeocodedAddress, 
+        api, 
+
+        autocompleteGeo,
+        createAutocompleteGeo,
+
+        autocompleteCenter,
+        createAutocompleteCenter,
+
+        placesService, 
+        createPlacesService }}>
         <Wrapper apiKey={REACT_APP_GOOGLE_MAPS_API_KEY} render={render} libraries={["places"]} callback={checkStatus}  >
           {children}
         </Wrapper>

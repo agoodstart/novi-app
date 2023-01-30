@@ -2,8 +2,6 @@ import { useOutletContext } from "react-router-dom";
 
 import useTheme from '../../../hooks/useTheme';
 
-import { useEffect, useState } from "react";
-
 import Typography from '../../../components/Typography/Typography';
 import Box from "../../../components/Box/Box";
 import { Image } from '../../../components/Media/Media';
@@ -17,10 +15,6 @@ export default function Destination() {
   const imageSource = resource.read();
   const weather = weatherResource.read();
 
-  const [alerts, setAlerts] = useState(weather.alerts ?? []);
-
-  console.log(weather.alerts)
-
   const dateTimeToLocaleString = (datetime) => {
     const d = new Date(datetime * 1000);
     return d.toLocaleDateString("en-GB", {
@@ -31,29 +25,19 @@ export default function Destination() {
     });
   }
 
-  useEffect(() => {
-    if(alerts.length > 0) {
-      alerts.forEach(alert => {
-        console.log(dateTimeToLocaleString(alert.start));
-        console.log("\n");
-      })
-    }
-  }, [])
-
-
   return(
-    <Container id={"destination-" + destination?.city?.long_name} element="section" backgroundColor={colors.background.black.alpha['15']}>
+    <Container id={"destination-" + destination?.city} element="section" backgroundColor={colors.background.black.alpha['15']}>
       <Box width={100} height={50}>
         <Image source={imageSource} width={100} height={100} />
 
         <Center>
           <Typography fontWeight="700" elevation={3} textColor={colors.text.white.main} variant="h1">
-            {destination?.city.long_name}
+            {destination?.city}
           </Typography>
 
           <Typography elevation={3} fontWeight="500" textColor={colors.text.white.main} variant="h2">
             {/* countries like "Kosovo" doesn't show up */}
-            {destination?.country?.long_name}
+            {destination?.country}
           </Typography>
         </Center>
       </Box>
