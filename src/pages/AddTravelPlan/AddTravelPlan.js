@@ -264,6 +264,32 @@ export default function AddTravelPlan() {
     }
   }
 
+  const fetchLockedDestinations = async () => {
+    const locations = await getLocationsInRadius(states.mapCenter);
+  
+    const lockedDestinations = locations.map(location => {
+      let toLatLng = {
+        lat: location.geoCode.latitude,
+        lng: location.geoCode.longitude
+      }
+  
+      let distance = calculateMarkerDistance(states.origin.latlng, toLatLng);
+  
+      return {
+        latlng: toLatLng,
+        formattedAddress: `${capitalize(location.address.cityName)}, ${capitalize(location.address.countryName)}`,
+        outsideTravelDistance: distance > states.maxTravelDistance
+      }
+    });
+   
+    dispatch({
+      type: 'set_locked_destinations',
+      payload: {
+        lockedDestinations,
+      }
+    })
+  }
+
   useEffect(() => {
     if(states.chosenDestinations.length > 0) {
       states.chosenDestinations.forEach(destination => {
@@ -274,33 +300,18 @@ export default function AddTravelPlan() {
     }
   }, [states.chosenDestinations, states.maxTravelDistance]);
 
+
   useEffect(() => {
-    const fetchLockedDestinations = async () => {
-      const locations = await getLocationsInRadius(states.mapCenter);
-    
-      const lockedDestinations = locations.map(location => {
-        let toLatLng = {
-          lat: location.geoCode.latitude,
-          lng: location.geoCode.longitude
-        }
-    
-        let distance = calculateMarkerDistance(states.origin.latlng, toLatLng);
-    
-        return {
-          latlng: toLatLng,
-          formattedAddress: `${capitalize(location.address.cityName)}, ${capitalize(location.address.countryName)}`,
-          outsideTravelDistance: distance > states.maxTravelDistance
-        }
-      });
-     
-      dispatch({
-        type: 'set_locked_destinations',
-        payload: {
-          lockedDestinations,
-        }
+    if(states.mapCenter) {
+      fetchLockedDestinations().then(() => {
+        console.log("Destinations updated")
+      }).catch(() => {
+        toast.warn('unable to fetch possible destinations');
       })
     }
+  }, [states.mapCenter])
 
+  useEffect(() => {
     if(states.maxTravelDistance && states.mapCenter) {
       fetchLockedDestinations()
       .then(() => {
@@ -342,18 +353,6 @@ export default function AddTravelPlan() {
             <GridItem rowStart={1} columnStart={1} rowEnd={1} columnEnd={9}>
               <TravelPlanControl states={states} dispatch={dispatch} />
             </GridItem>
-
-            {/* <GridItem rowStart={2} columnStart={1} rowEnd={3} columnEnd={3}>
-              <Box backgroundColor={colors.background.black.alpha['15']} borderRadius={5}>
-                <Typography>Select one of the markers on the map</Typography>
-              </Box>
-            </GridItem>
-
-            <GridItem rowStart={3} columnStart={1} rowEnd={4} columnEnd={3}>
-              <Box backgroundColor={colors.background.black.alpha['15']} borderRadius={5}>
-                <Typography>Select one of the markers on the map</Typography>
-              </Box>
-            </GridItem> */}
 
             <GridItem rowStart={2} columnStart={1} rowEnd={8} columnEnd={9}>
               <Suspense fallback={<Typography variant="h1">Loading Google Maps... </Typography>}>

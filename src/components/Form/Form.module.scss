@@ -20,6 +20,15 @@
     }
   }
 
+  &__flex {
+    display: flex;
+    justify-content: space-between;
+
+    & > * {
+      margin-bottom: unset !important;
+    }
+  }
+
   &__input {
     padding: 1rem 1.5rem;
     border-radius: 2px;

@@ -40,13 +40,12 @@ export default function Social() {
         </GridItem>
 
         <GridItem rowStart={2} columnStart={1} rowEnd={9} columnEnd={8}> 
-          <Box height={100} scrollable>
+          <Box height={100} padding={10} scrollable>
             {!users.length ?
               <Typography variant="h2" textColor={colors.text.gray.main}>There are no users registered</Typography> :
               users.map((user, i) => (
-                <Box key={i} height="auto" width={95} elevation={2} borderRadius={5} flexDirection="column" justifyContent="space-between" padding={30} backgroundColor={colors.background.white.main} customStyles={{
+                <Box key={i} height="auto" width={95} elevation={2} borderRadius={30} flexDirection="column" justifyContent="space-between" padding={30} backgroundColor={colors.background.primary.alpha['20']} customStyles={{
                   marginTop: '2rem',
-                  border: '1px solid rgba(0, 0, 0, .50)'
                 }}>
                   <Typography variant="h4" textColor={colors.text.black.alpha['50']}>
                     {user.email}

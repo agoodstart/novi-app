@@ -3,7 +3,6 @@ import { useOutletContext, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 
 import Container from '../../components/Container/Container';
-import Modal from '../../components/Modal/Modal';
 import Typography from '../../components/Typography/Typography';
 import { Grid, GridItem } from '../../components/Grid/Grid';
 import Form, { FormControl, TextInput, PasswordInput, ImageInput } from '../../components/Form/Form';
@@ -22,7 +21,7 @@ export default function Profile() {
   const infoRef = useRef();
   const imageInputRef = useRef();
 
-  const { auth, modalRef } = useAuth(); 
+  const { auth } = useAuth(); 
   const navigate = useNavigate();
   const { colors } = useTheme();
 
@@ -45,10 +44,6 @@ export default function Profile() {
     } else {
       target.disabled = false;
     }
-  }
-
-  const handleOpenModal = () => {
-    modalRef.current.openModal();
   }
 
   const updateProfile = async (input) => {
@@ -105,86 +100,98 @@ export default function Profile() {
     <Container element="section" id="profile" backgroundColor={colors.background.black.alpha['15']}>
       <Grid gridRows={8} gridColumns={8} rowGap={30} columnGap={30}>
         <GridItem rowStart={1} columnStart={1} rowEnd={1} columnEnd={8}>
-          <Typography textColor={colors.text.black.alpha['50']} variant="h1">
-            My Profile
+          <Typography fontWeight={700} letterSpacing={2} textColor={colors.text.black.alpha['60']} variant="h1">
+            Profile
           </Typography>
         </GridItem>
 
-        <GridItem rowStart={2} columnStart={1} rowEnd={2} columnEnd={3}>
-          <Box flexDirection="column">
-            <Typography textColor={colors.text.black.alpha['50']} fontWeight={700} variant="h4">
-              Username
+        <GridItem rowStart={2} columnStart={1} rowEnd={6} columnEnd={4}>
+          <Box flexDirection="column" alignItems={'center'} borderRadius={30} padding={30} backgroundColor={colors.background.white.alpha['30']} elevation={2}>
+            <Typography textColor={colors.text.black.main} variant="h2" customStyles={{ textAlign: 'center' }}>
+              Your Profile Picture
             </Typography>
-
-            <TextInput readonly iRef={usernameRef} />
+            <Image height="auto" width={40} source={imageSource} />
           </Box>
         </GridItem>
 
-        <GridItem rowStart={3} columnStart={1} rowEnd={3} columnEnd={3}>
-          <Box flexDirection="column">
-            <Typography textColor={colors.text.black.alpha['50']} fontWeight={700} variant="h4">
-              Email
-            </Typography>
-
-            <Form onSubmit={updateProfile} onValidate={(isValid) => { setEmailFormValid(isValid) }} customStyles={{ padding: '0' }}>
-              <FormControl validations={[ Validate.isRequired(), Validate.isEmail()]}>
-                <TextInput iRef={emailRef} name="email" />
-              </FormControl>
-              
-              <Button color={colors.background.primary.alpha['80']} 
-                elevation={1} 
-                customStyles={{ width: '100%' }} 
-                isDisabled={(target) => { checkButtonDisabled(target, emailFormValid) }}>Change</Button>
-            </Form>
-          </Box>
-        </GridItem>
-
-        <GridItem rowStart={4} columnStart={1} rowEnd={4} columnEnd={3}>
-          <Box flexDirection="column">
-            <Typography textColor={colors.text.black.alpha['50']} fontWeight={700} variant="h4">
-              Info
-            </Typography>
-
-            <Form onSubmit={updateProfile} onValidate={(isValid) => { setInfoFormValid(isValid) }} customStyles={{ padding: '0' }}>
-              <FormControl validations={[ Validate.isRequired() ]}>
-                <TextInput iRef={infoRef} name="info" />
-              </FormControl>
-              
-              <Button color={colors.background.primary.alpha['80']} 
-                elevation={1} 
-                customStyles={{ width: '100%' }} 
-                isDisabled={(target) => { checkButtonDisabled(target, infoFormValid) }}>Change</Button>
-            </Form>
-          </Box>
-        </GridItem>
-
-        <GridItem rowStart={6} columnStart={1} rowEnd={6} columnEnd={3}>
-          <Box flexDirection="column">
-            <Button size="large" color={colors.background.secondary.alpha['80']} onClick={() => { handleOpenModal() }} elevation={3} customStyles={{marginTop: '1rem'}}>Change Password</Button>
-          </Box>
-        </GridItem>
-
-        <GridItem rowStart={2} columnStart={4} rowEnd={6} columnEnd={8}>
-          <Box flexDirection="column">
-            <Image width="auto" source={imageSource} />
-            
+        <GridItem rowStart={4} columnStart={4} rowEnd={6} columnEnd={6}>
+          <Box flexDirection="column" alignItems={'center'} borderRadius={30} padding={30} backgroundColor={colors.background.white.alpha['30']} elevation={2}>
             <Form onSubmit={updateProfilePicture} customStyles={{ padding: '0' }}>
               <ImageInput onChange={checkInput} iRef={imageInputRef} />
-              <Button size="large" color={colors.background.secondary.alpha['80']} elevation={3} customStyles={{marginTop: '1rem', width: '100%'}}>Change Profile image</Button>
+              <Button size="medium" fullWidth textColor={"black"} color={colors.background.tertiary.main} elevation={3} customStyles={{marginTop: '1rem', color: '#11151C'}}>Change Profile image</Button>
             </Form>
           </Box>
         </GridItem>
-      </Grid>
 
-      <Modal ref={modalRef}>
-        <Box backgroundColor={colors.background.white.alpha['70']} borderRadius={10} padding={50}>
-          <Form onSubmit={updateProfile} onValidate={(isValid) => { setPasswordFormValid(isValid) }} customStyles={{padding: '0', width: '30rem'}}>
+        <GridItem rowStart={6} columnStart={1} rowEnd={9} columnEnd={4}>
+          <Box flexDirection="column" justifyContent={"space-between"} borderRadius={30} padding={30} backgroundColor={colors.background.white.alpha['30']} elevation={2}>
+            <Box>
+              <Typography textColor={colors.text.black.alpha['50']} fontWeight={400} variant="h5">
+                Username
+              </Typography>
+              <TextInput readonly iRef={usernameRef} customStyles={{
+                border: '2px solid rgba(0, 0, 0, .50)',
+                borderRadius: '5px'
+              }}/>
+            </Box>
+
+            <Box>
+              <Typography textColor={colors.text.black.alpha['50']} fontWeight={400} variant="h5">
+                Email
+              </Typography>
+              <Form onSubmit={updateProfile} onValidate={(isValid) => { setEmailFormValid(isValid) }} customStyles={{ padding: '0' }} flex>
+                <FormControl validations={[ Validate.isRequired(), Validate.isEmail()]}>
+                  <TextInput iRef={emailRef} name="email" customStyles={{
+                    width: '20rem',
+                    border: '2px solid rgba(0, 0, 0, .50)',
+                    borderRadius: '5px'
+                  }} />
+                </FormControl>
+                
+                <Button color={colors.background.tertiary.main} 
+                  isDisabled={(target) => { checkButtonDisabled(target, emailFormValid) }}>Change</Button>
+              </Form>
+            </Box>
+
+            <Box>
+              <Typography textColor={colors.text.black.alpha['50']} fontWeight={400} variant="h5">
+                Info
+              </Typography>
+
+              <Form onSubmit={updateProfile} onValidate={(isValid) => { setInfoFormValid(isValid) }} customStyles={{ padding: '0' }} flex>
+                <FormControl validations={[ Validate.isRequired() ]}>
+                  <TextInput iRef={infoRef} name="info" customStyles={{
+                    width: '20rem',
+                    border: '2px solid rgba(0, 0, 0, .50)',
+                    borderRadius: '5px'
+                  }} />
+                </FormControl>
+                
+                <Button 
+                  color={colors.background.tertiary.main}
+                  isDisabled={(target) => { checkButtonDisabled(target, infoFormValid) }}>Change</Button>
+              </Form>
+            </Box>
+          </Box>
+        </GridItem>
+
+        <GridItem rowStart={6} columnStart={4} rowEnd={9} columnEnd={7}>
+        <Box backgroundColor={colors.background.white.alpha['30']} elevation={2} borderRadius={30} padding={50}>
+          <Form onSubmit={updateProfile} onValidate={(isValid) => { setPasswordFormValid(isValid) }} customStyles={{padding: '0'}}>
             <FormControl validations={[ Validate.isRequired(), Validate.minLength(6) ]}>
-              <PasswordInput placeholder="Password" name="password" />
+              <PasswordInput placeholder="Password" name="password" customStyles={{
+                    width: '100%',
+                    border: '2px solid rgba(0, 0, 0, .50)',
+                    borderRadius: '5px'
+                  }} />
             </FormControl>
 
             <FormControl validations={[ Validate.isRequired(), Validate.passwordMatch("password") ]}>
-              <PasswordInput placeholder="Confirm Password" name="repeatedPassword" />
+              <PasswordInput placeholder="Confirm Password" name="repeatedPassword" customStyles={{
+                    width: '100%',
+                    border: '2px solid rgba(0, 0, 0, .50)',
+                    borderRadius: '5px'
+                  }} />
             </FormControl>  
 
             <Button color={colors.background.primary.dark}
@@ -196,7 +203,8 @@ export default function Profile() {
             }}>Update Password</Button>
           </Form>
         </Box>
-      </Modal>
+        </GridItem>
+      </Grid>
     </Container>
   );
 }

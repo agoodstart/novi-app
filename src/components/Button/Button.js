@@ -2,7 +2,7 @@ import styles from './Button.module.scss';
 import { useRef, useEffect } from 'react';
 import useTheme from '../../hooks/useTheme';
 
-export default function Button({color, size, pill, fullWidth, elevation, onClick, customStyles, isDisabled, children}) {
+export default function Button({textColor, color, size, pill, fullWidth, elevation, onClick, customStyles, isDisabled, children}) {
   const { colors } = useTheme();
 
   const buttonRef = useRef();
@@ -40,6 +40,16 @@ export default function Button({color, size, pill, fullWidth, elevation, onClick
         
     if(fullWidth) {
       buttonRef.current.classList.add(styles['btn--w100'])
+    }
+
+    if(textColor) {
+      if(textColor === 'black') {
+        buttonRef.current.classList.add(styles['btn--text-black'])
+      } else if(textColor === 'white') {
+        buttonRef.current.classList.add(styles['btn--text-white'])
+      }
+    } else {
+      buttonRef.current.classList.add(styles['btn--text-white'])
     }
     // console.log(isDisabled);
   }, [])

@@ -47,7 +47,7 @@ export default function TravelPlanControl({
       dispatch({
         type: 'map_center_changed',
         payload: {
-          latlng: latlng
+          mapCenter: latlng
         }
       })
     }

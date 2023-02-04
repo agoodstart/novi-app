@@ -9,6 +9,7 @@ import Typography from "../../components/Typography/Typography"
 import Box from "../../components/Box/Box";
 import Button from "../../components/Button/Button";
 import Container from "../../components/Container/Container";
+import { Image } from "../../components/Media/Media";
 
 export default function Destinations() {
   const navigate = useNavigate();
@@ -40,24 +41,31 @@ export default function Destinations() {
         </GridItem>
 
         <GridItem rowStart={2} columnStart={1} rowEnd={9} columnEnd={8}> 
-          <Box height={100} scrollable>
+          <Box height={100} scrollable padding={10}>
             {!destinations.length ?
               <Typography variant="h2" textColor={colors.text.gray.main}>There are no destinations set yet</Typography> :
               destinations.map((destination, i) => (
-                <Box key={i} height="auto" width={95} elevation={2} borderRadius={5} flexDirection="row" justifyContent="space-between" padding={30} backgroundColor={colors.background.white.main} customStyles={{
+                <Box key={i} height="auto" width={95} elevation={2} borderRadius={30} flexDirection="row" justifyContent="space-between" padding={30} backgroundColor={colors.background.white.main} customStyles={{
                   marginTop: '2rem',
-                  border: '1px solid rgba(0, 0, 0, .50)'
+                  position: 'relative'
                 }}>
-                  <Typography variant="h4" customStyles={{ paddingLeft: '15px' }}>
+                  <Image source={destination.image} customStyles={{
+                  position: 'absolute',
+                  top: '0',
+                  left: '0',
+                  borderRadius: '30px',
+                  opacity: '0.5'
+                  }} />
+                  <Typography variant="h4" fontWeight={400} elevation={2} customStyles={{ paddingLeft: '15px' }}>
                     {destination.formattedAddress}
                   </Typography>
 
                   <Box width="auto">
-                    <Button color={colors.background.primary.main} customStyles={{ marginRight: '20px' }} onClick={viewDestination.bind(null, destination)}>
+                    <Button color={colors.background.primary.main} textColor={'black'} customStyles={{ marginRight: '20px' }} onClick={viewDestination.bind(null, destination)} elevation={2}>
                       View Destination
                     </Button>
 
-                    <Button color={colors.background.secondary.main} onClick={removeDestination.bind(null, destination)}>
+                    <Button color={colors.background.secondary.main} onClick={removeDestination.bind(null, destination)} elevation={2} textColor={'black'} >
                       Remove Destination
                     </Button>
                   </Box>

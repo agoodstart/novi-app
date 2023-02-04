@@ -5,6 +5,8 @@ export default function Typography({children, variant, uppercase, elevation, tex
   const typographyRef = useRef();
 
   useEffect(() => {
+    typographyRef.current.classList.add(styles['typography'])
+
     if(typographyRef.current.tagName.startsWith("H")) {
       const elementSplit = typographyRef.current.tagName.split('')
       typographyRef.current.classList.add(styles[`typography__heading`], styles[`typography__heading-${elementSplit[1]}`])

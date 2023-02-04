@@ -183,7 +183,8 @@ const validationReducer = (_state, action) => {
   }
 }
 
-const Form = ({children, onSubmit, onValidate, customStyles}) => {
+const Form = ({children, onSubmit, onValidate, customStyles, flex}) => {
+  const formRef = useRef();
   let realIndex = 0;
   const [formElementsValid, setFormElementsValid] = useState(Array.from(children, (child, i) => child.type === FormControl ? false : null).filter(el => el !== null));
 
@@ -196,6 +197,12 @@ const Form = ({children, onSubmit, onValidate, customStyles}) => {
       return el;
     }));
   }
+
+  useEffect(() => {
+    if(flex) {
+      formRef.current.classList.add(styles[`form__flex`])
+    }
+  }, [])
 
   useEffect(() => {
     if(onValidate) {
@@ -213,7 +220,7 @@ const Form = ({children, onSubmit, onValidate, customStyles}) => {
 
   return (
     <div className={styles['form__wrapper']} style={customStyles}>
-      <form className="" onSubmit={formSubmission}>
+      <form ref={formRef} className="" onSubmit={formSubmission}>
         {Children.map(children, (child) => {
           if(child.type === FormControl) {
             return React.cloneElement(child, { index: realIndex++, changeFormElementStatus })
