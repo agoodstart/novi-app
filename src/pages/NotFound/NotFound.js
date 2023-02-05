@@ -31,7 +31,7 @@ export default function NotFound() {
         color={colors.background.primary.main}
         size="large"
         elevation="2"
-        onClick={() => navigate(-1)}
+        onClick={() => navigate('/')}
         customStyles={{
           marginTop: '1rem',
           width: '100%'

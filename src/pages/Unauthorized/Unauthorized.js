@@ -33,7 +33,7 @@ export default function Unauthorized() {
             width: '100%'
           }}
           >
-          Go Back
+          Back to Home
         </Button>
       </Center>
   </React.Fragment>

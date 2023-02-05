@@ -1,18 +1,20 @@
 import { useState, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 import { NavLink } from "react-router-dom";
-import Button from "../../components/Button/Button";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEarthEurope, faGauge, faUser, faUserGroup, faRoute, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
-import useTheme from "../../hooks/useTheme";
 import useAuth from "../../hooks/useAuth";
 
 import styles from './Sidebar.module.scss';
 
 export default function Sidebar() {
   const nodeRef = useRef(null);
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+
+  const signoutUser = () => {
+    
+  }
 
   const handleOpenDrawer = (e) => {
     setIsOpen(true)
@@ -22,7 +24,6 @@ export default function Sidebar() {
     setIsOpen(false);
   }
 
-  const { colors } = useTheme();
   const { auth } = useAuth();
 
   const checkIfActive = ({ isActive }) => ( `${styles['sidebarnav__link']} ` + ( isActive ? `${styles['sidebarnav__link--active']}` : "" ) );

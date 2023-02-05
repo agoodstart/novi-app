@@ -3,6 +3,7 @@ Een frontend applicatie, geschreven in Reactjs, in opdracht van NOVI Hogeschool.
 Link naar de git repo: https://github.com/agoodstart/novi-app
 
 ![Important page](https://raw.githubusercontent.com/agoodstart/novi-app/master/screenshots/important.png)
+![Important page 2](https://raw.githubusercontent.com/agoodstart/novi-app/master/screenshots/important2.png)
 ## Inleiding
 Deze applicatie bestaat uit 2 delen:
 * De website: openbaar

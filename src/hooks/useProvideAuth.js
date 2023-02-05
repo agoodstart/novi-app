@@ -95,8 +95,8 @@ export default function useProvideAuth() {
     }
 
     const signout = () => {
+        navigate('/');
         setUser(null);
-        navigate('/')
     }
 
     const signup = (credentials) => {

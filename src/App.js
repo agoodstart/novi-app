@@ -10,7 +10,6 @@ import Unauthorized from './pages/Unauthorized/Unauthorized';
 import NotFound from './pages/NotFound/NotFound';
 import Profile from './pages/Profile/Profile';
 import Social from './pages/Social/Social';
-import Test from './pages/Test/Test'
 import AddTravelPlan from './pages/AddTravelPlan/AddTravelPlan';
 import Destinations from './pages/Destinations/Destinations';
 import Destination from './pages/Destinations/Destination/Destination';
@@ -29,7 +28,6 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />
-        <Route path="test" element={<Test />} />
       </Route>
 
       {/* User authentication beyond this point */}
