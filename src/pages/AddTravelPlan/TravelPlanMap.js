@@ -7,7 +7,7 @@ import { DestinationMarker, OriginMarker } from '../../components/GoogleMaps/Mar
 import Box from '../../components/Box/Box';
 
 import useGoogleApi from '../../hooks/useGoogleApi';
-import mapStyles from '../../helpers/mapStyles';
+import mapStyles from '../../mapStyles';
 
 import { DistanceLine } from '../../components/GoogleMaps/DistanceLine';
 import Typography from '../../components/Typography/Typography';
