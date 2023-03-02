@@ -17,7 +17,7 @@ export default function TravelPlanModal({chosen, modalRef, saveDestination, hand
         
         <Box flexDirection="row" justifyContent="space-around" height={75} padding={20}>
           <Button
-
+            type="button"
             onClick={handleCloseModal}
             color={colors.background.secondary.main}
             size="medium"
@@ -29,6 +29,7 @@ export default function TravelPlanModal({chosen, modalRef, saveDestination, hand
             No
           </Button>
           <Button
+            type="button"
             onClick={saveDestination}
             color={colors.background.primary.main}
             size="medium"

@@ -61,25 +61,25 @@ export default function About() {
             <div className="box">
               <Typography variant="h4">Contact a specialist</Typography>
               <Typography fontWeight={300}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi aut explicabo dolorum eos suscipit qui minus doloribus</Typography>
-              <Button color={colors.background.primary.main} fullWidth customStyles={{ borderRadius: '3px'}}>Talk to us</Button>
+              <Button type="button" color={colors.background.primary.main} fullWidth customStyles={{ borderRadius: '3px'}}>Talk to us</Button>
             </div>
 
             <div className="box">
               <Typography variant="h4">Get support</Typography>
               <Typography fontWeight={300}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi aut explicabo dolorum eos suscipit qui minus doloribus</Typography>
-              <Button color={colors.background.primary.main} fullWidth customStyles={{ borderRadius: '3px'}}>Get Support</Button>
+              <Button type="button" color={colors.background.primary.main} fullWidth customStyles={{ borderRadius: '3px'}}>Get Support</Button>
             </div>
 
             <div className="box">
               <Typography variant="h4">Contact a specialist</Typography>
               <Typography fontWeight={300}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi aut explicabo dolorum eos suscipit qui minus doloribus</Typography>
-              <Button color={colors.background.primary.main} fullWidth customStyles={{ borderRadius: '3px'}}>Talk to us</Button>
+              <Button type="button" color={colors.background.primary.main} fullWidth customStyles={{ borderRadius: '3px'}}>Talk to us</Button>
             </div>
 
             <div className="box">
               <Typography variant="h4">Get support</Typography>
               <Typography fontWeight={300}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi aut explicabo dolorum eos suscipit qui minus doloribus</Typography>
-              <Button color={colors.background.primary.main} fullWidth customStyles={{ borderRadius: '3px'}}>Get Support</Button>
+              <Button type="button" color={colors.background.primary.main} fullWidth customStyles={{ borderRadius: '3px'}}>Get Support</Button>
             </div>
 
           </div>

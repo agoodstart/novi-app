@@ -84,7 +84,7 @@ export default function DashboardHome() {
               <Typography variant="h3" fontWeight={700} textColor={colors.text.black.alpha['80']}>{profileInformation?.username}</Typography>
               <Typography variant="h3">{profileInformation?.email}</Typography>
 
-              <Button customStyles={{
+              <Button type="button" customStyles={{
                 marginTop: '2rem'
               }} color={colors.background.primary.light} elevation={1} size="large" onClick={() => { navigate('/profile')}}>Edit Profile</Button>
             </Box>
@@ -103,7 +103,7 @@ export default function DashboardHome() {
           </GridItem>
 
           <GridItem columnStart={1} columnEnd={3} rowStart={8} rowEnd={9} >
-              <Button pill color={colors.background.primary.light} elevation={2} size="medium-large" onClick={() => { navigate('/addtravelplan'); }} customStyles={{width: '100%'}}>
+              <Button type="button" pill color={colors.background.primary.light} elevation={2} size="medium-large" onClick={() => { navigate('/addtravelplan'); }} customStyles={{width: '100%'}}>
                 Add new Travel Plan
               </Button>
           </GridItem>

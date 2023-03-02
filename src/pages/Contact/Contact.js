@@ -56,6 +56,7 @@ export default function Contact() {
                 </FormControl>
 
                 <Button
+                  type="submit"
                   fullWidth
                   color={colors.background.tertiary.main}>
                     Send Message

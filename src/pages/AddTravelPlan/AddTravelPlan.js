@@ -406,6 +406,7 @@ export default function AddTravelPlan() {
 
           <GridItem rowStart={9} columnStart={5} rowEnd={9} columnEnd={9}>
           <Button 
+            type="button"
             color={colors.background.primary.main} 
             fullWidth
             isDisabled={checkSaveButton}

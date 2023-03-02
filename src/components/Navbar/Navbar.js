@@ -55,6 +55,7 @@ const Navbar = () => {
         {user ? 
           <li className={styles.navigation__item}>
             <Button
+            type="button"
             color={colors.background.tertiary.main}
             pill
             size="medium"
@@ -69,6 +70,7 @@ const Navbar = () => {
             <li className={styles.navigation__item}>
 
               <Button
+              type="button"
                 color={colors.background.primary.main}
                 pill
                 size="medium"
@@ -80,6 +82,7 @@ const Navbar = () => {
             </li>
             <li className={styles.navigation__item}>
               <Button
+                type="button"
                 color={colors.background.tertiary.main}
                 pill
                 size="medium"

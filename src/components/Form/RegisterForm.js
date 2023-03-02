@@ -75,6 +75,7 @@ export default function RegisterForm() {
       <Button color={colors.background.primary.dark}
       isDisabled={checkButtonDisabled}
       size="medium"
+      type="submit"
       elevation={2}
       customStyles={{
           width: '100%'

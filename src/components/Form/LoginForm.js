@@ -73,6 +73,7 @@ export default function LoginForm() {
       isDisabled={checkButtonDisabled}
       size="medium"
       elevation={2}
+      type="submit"
       customStyles={{
         width: '100%'
       }}>Login</Button>

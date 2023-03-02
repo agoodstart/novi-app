@@ -2,7 +2,7 @@ import styles from './Button.module.scss';
 import { useRef, useEffect } from 'react';
 import useTheme from '../../hooks/useTheme';
 
-export default function Button({textColor, color, size, pill, fullWidth, elevation, onClick, customStyles, isDisabled, children}) {
+export default function Button({textColor, color, size, pill, fullWidth, elevation, onClick, customStyles, isDisabled, type, children}) {
   const { colors } = useTheme();
 
   const buttonRef = useRef();
@@ -55,7 +55,7 @@ export default function Button({textColor, color, size, pill, fullWidth, elevati
   }, [])
 
   return (
-    <button ref={buttonRef} style={customStyles} onClick={onClick}>
+    <button ref={buttonRef} type={type} style={customStyles} onClick={onClick}>
       {children}
     </button>
   )

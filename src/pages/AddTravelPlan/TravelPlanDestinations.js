@@ -92,7 +92,7 @@ function TravelPlanDestination({dispatch, chosen, destination}) {
       </Box>
 
       <Box flexDirection="column" width={35} alignItems="center" justifyContent="space-around">
-        <Button color={colors.background.quaternary.light} elevation={1} size="large" onClick={updateChosen.bind(null, destination)} 
+        <Button type="button" color={colors.background.quaternary.light} elevation={1} size="large" onClick={updateChosen.bind(null, destination)} 
           customStyles={{
             marginRight: '20px',
             width: '75%',
@@ -104,6 +104,7 @@ function TravelPlanDestination({dispatch, chosen, destination}) {
 
 
         <Button 
+          type="button"
           color={colors.background.secondary.main}
           size="large"
           elevation={1}

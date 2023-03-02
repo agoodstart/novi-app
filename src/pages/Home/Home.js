@@ -45,6 +45,7 @@ export default function Home() {
 
           {user ? 
             <Button 
+            type="button"
             color={colors.background.tertiary.main}
             size="large"
             pill
@@ -57,6 +58,7 @@ export default function Home() {
             </Button> :
 
             <Button 
+            type="button"
             color={colors.background.primary.main}
             size="large"
             pill

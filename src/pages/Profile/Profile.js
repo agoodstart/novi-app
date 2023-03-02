@@ -118,7 +118,7 @@ export default function Profile() {
           <Box flexDirection="column" alignItems={'center'} borderRadius={30} padding={30} backgroundColor={colors.background.white.alpha['30']} elevation={2}>
             <Form onSubmit={updateProfilePicture} customStyles={{ padding: '0' }}>
               <ImageInput onChange={checkInput} iRef={imageInputRef} />
-              <Button size="medium" fullWidth textColor={"black"} color={colors.background.tertiary.main} elevation={3} customStyles={{marginTop: '1rem', color: '#11151C'}}>Change Profile image</Button>
+              <Button type="submit" size="medium" fullWidth textColor={"black"} color={colors.background.tertiary.main} elevation={3} customStyles={{marginTop: '1rem', color: '#11151C'}}>Change Profile image</Button>
             </Form>
           </Box>
         </GridItem>
@@ -148,7 +148,7 @@ export default function Profile() {
                   }} />
                 </FormControl>
                 
-                <Button color={colors.background.tertiary.main} 
+                <Button type="submit" color={colors.background.tertiary.main} 
                   isDisabled={(target) => { checkButtonDisabled(target, emailFormValid) }}>Change</Button>
               </Form>
             </Box>
@@ -168,6 +168,7 @@ export default function Profile() {
                 </FormControl>
                 
                 <Button 
+                  type="submit"
                   color={colors.background.tertiary.main}
                   isDisabled={(target) => { checkButtonDisabled(target, infoFormValid) }}>Change</Button>
               </Form>
@@ -194,7 +195,7 @@ export default function Profile() {
                   }} />
             </FormControl>  
 
-            <Button color={colors.background.primary.dark}
+            <Button type="submit" color={colors.background.primary.dark}
             isDisabled={(target) => { checkButtonDisabled(target, passwordFormValid) }}
             size="medium"
             elevation={2}

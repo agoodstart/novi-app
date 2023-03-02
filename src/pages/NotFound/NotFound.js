@@ -27,7 +27,8 @@ export default function NotFound() {
         this page does not exist
       </Typography>
       
-      <Button 
+      <Button
+        type="button"
         color={colors.background.primary.main}
         size="large"
         elevation="2"

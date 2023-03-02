@@ -61,11 +61,11 @@ export default function Destinations() {
                   </Typography>
 
                   <Box width="auto">
-                    <Button color={colors.background.primary.main} textColor={'black'} customStyles={{ marginRight: '20px' }} onClick={viewDestination.bind(null, destination)} elevation={2}>
+                    <Button type="button" color={colors.background.primary.main} textColor={'black'} customStyles={{ marginRight: '20px' }} onClick={viewDestination.bind(null, destination)} elevation={2}>
                       View Destination
                     </Button>
 
-                    <Button color={colors.background.secondary.main} onClick={removeDestination.bind(null, destination)} elevation={2} textColor={'black'} >
+                    <Button type="button" color={colors.background.secondary.main} onClick={removeDestination.bind(null, destination)} elevation={2} textColor={'black'} >
                       Remove Destination
                     </Button>
                   </Box>

@@ -87,6 +87,7 @@ const Location = ({
       </div>
       <div className={styles['location__buttons']}>
       <Button 
+          type="button"
           color={colors.tertiary.dark}
           variant="contained"
           size="small"
@@ -101,6 +102,7 @@ const Location = ({
         </Button>
 
         <Button 
+        type="button"
           color={colors.secondary.medium}
           variant="contained"
           size="small"

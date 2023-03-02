@@ -24,6 +24,7 @@ export default function Unauthorized() {
         </Typography>
 
         <Button 
+          type="button"
           color={colors.background.primary.main}
           size="large"
           elevation="2"

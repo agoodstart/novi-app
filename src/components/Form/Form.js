@@ -210,13 +210,30 @@ const Form = ({children, onSubmit, onValidate, customStyles, flex}) => {
     }
   }, [formElementsValid])
 
+  // const formSubmission = (e) => {
+  //   e.preventDefault();
+  //   console.log(e.target.elements);
+  //   const formData = new FormData(e.target);
+  //   console.log(Array(formData.entries()));
+  //   const formProps = Object.fromEntries(formData);
+
+  //   onSubmit(formProps)
+  // }
+
   const formSubmission = (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const formProps = Object.fromEntries(formData);
+    let elements = e.target.elements;
+    let formProps = {};
 
+    for(let i = 0 ; i < elements.length - 1; i++){
+      let item = elements.item(i);
+      formProps[item.name] = item.value;
+    }
+
+    console.log(formProps);
     onSubmit(formProps)
   }
+
 
   return (
     <div className={styles['form__wrapper']} style={customStyles}>
